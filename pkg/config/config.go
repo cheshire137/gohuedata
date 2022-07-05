@@ -3,17 +3,12 @@ package config
 import (
 	"os"
 
+	"github.com/cheshire137/gohuedata/pkg/hueapi"
 	"gopkg.in/yaml.v3"
 )
 
-type Bridge struct {
-	Name      string `yaml:"name"`
-	IPAddress string `yaml:"ip_address"`
-	Username  string `yaml:"username"`
-}
-
 type Config struct {
-	Bridges []Bridge `yaml:"bridges"`
+	Bridges []hueapi.Bridge `yaml:"bridges"`
 }
 
 func NewConfig(path string) (*Config, error) {
