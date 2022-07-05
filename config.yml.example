@@ -1,0 +1,4 @@
+bridges:
+- name: "Name of your Philips Hue bridge"
+  ip_address: "IP address of your bridge, e.g., 192.168.1.2"
+  username: "username registered on your bridge, see https://developers.meethue.com/develop/get-started-2/"
