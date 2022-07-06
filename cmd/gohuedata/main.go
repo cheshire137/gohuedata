@@ -69,13 +69,13 @@ func main() {
 	}
 	fmt.Println("✅ Selected bridge:", bridge.Name)
 
-	bridgeUrl, err := bridge.GetUrl()
+	bridgeApiUrl, err := bridge.GetApiUrl()
 	if err != nil {
 		fmt.Println("❌ Failed to get bridge URL:", err)
 		return
 	}
 
-	hueClient := hueapi.NewClient(bridgeUrl.String(), bridge.Username)
+	hueClient := hueapi.NewClient(bridgeApiUrl, bridge.Username)
 	lights, err := hueClient.GetLights()
 	if err != nil {
 		fmt.Println("❌ Failed to get lights:", err)

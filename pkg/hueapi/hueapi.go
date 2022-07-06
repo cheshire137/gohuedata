@@ -9,12 +9,12 @@ import (
 )
 
 type Client struct {
-	URL      string
+	ApiURL   string
 	Username string
 }
 
-func NewClient(url string, username string) *Client {
-	return &Client{URL: url, Username: username}
+func NewClient(apiURL string, username string) *Client {
+	return &Client{ApiURL: apiURL, Username: username}
 }
 
 func (a *Client) GetLights() ([]Light, error) {
@@ -49,7 +49,7 @@ func (a *Client) post(path string, body io.Reader) ([]byte, error) {
 }
 
 func (a *Client) urlFor(path string) string {
-	return fmt.Sprintf("%s/api/%s%s", a.URL, a.Username, path)
+	return fmt.Sprintf("%s/%s%s", a.ApiURL, a.Username, path)
 }
 
 func (a *Client) makeRequest(request *http.Request) ([]byte, error) {

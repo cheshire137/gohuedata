@@ -11,8 +11,12 @@ type Bridge struct {
 	Username  string `yaml:"username"`
 }
 
-func (b *Bridge) GetUrl() (*url.URL, error) {
-	return url.Parse("http://" + b.IPAddress)
+func (b *Bridge) GetApiUrl() (string, error) {
+	uri, err := url.Parse("http://" + b.IPAddress + "/api")
+	if err != nil {
+		return "", err
+	}
+	return uri.String(), nil
 }
 
 func (b *Bridge) String() string {
