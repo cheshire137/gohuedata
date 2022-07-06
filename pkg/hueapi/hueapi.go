@@ -37,7 +37,7 @@ func (a *Client) get(path string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return a.makeRequest(request)
+	return makeRequest(request)
 }
 
 func (a *Client) post(path string, body io.Reader) ([]byte, error) {
@@ -45,10 +45,10 @@ func (a *Client) post(path string, body io.Reader) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return a.makeRequest(request)
+	return makeRequest(request)
 }
 
-func (a *Client) makeRequest(request *http.Request) ([]byte, error) {
+func makeRequest(request *http.Request) ([]byte, error) {
 	client := &http.Client{}
 	response, err := client.Do(request)
 	if err != nil {
