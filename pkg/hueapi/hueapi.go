@@ -23,9 +23,11 @@ func (a *Client) GetLights() ([]Light, error) {
 	}
 	var lightResponse map[string]Light
 	err = json.Unmarshal(body, &lightResponse)
-	lights := make([]Light, len(lightResponse))
+	lights := []Light{}
 	for _, light := range lightResponse {
-		lights = append(lights, light)
+		if light.UniqueID != "" {
+			lights = append(lights, light)
+		}
 	}
 	return lights, nil
 }
