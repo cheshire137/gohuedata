@@ -35,6 +35,24 @@ func (c *Client) GetLights() ([]Light, error) {
 	return lights, nil
 }
 
+// https://developers.meethue.com/develop/hue-api/5-sensors-api/#get-all-sensors
+func (c *Client) GetSensors() ([]Sensor, error) {
+	body, err := c.get("/sensors")
+	if err != nil {
+		return nil, err
+	}
+	var sensorResponse map[string]Sensor
+	err = json.Unmarshal(body, &sensorResponse)
+	if err != nil {
+		return nil, err
+	}
+	sensors := make([]Sensor, 0, len(sensorResponse))
+	for _, sensor := range sensorResponse {
+		sensors = append(sensors, sensor)
+	}
+	return sensors, nil
+}
+
 func (c *Client) get(path string) ([]byte, error) {
 	request, err := http.NewRequest(http.MethodGet, c.ApiURL+path, nil)
 	if err != nil {
