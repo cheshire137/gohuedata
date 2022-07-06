@@ -26,8 +26,26 @@ func (b *Bridge) GetApiUrl() (string, error) {
 }
 
 func (b *Bridge) String() string {
-	if b.Username != "" {
+	if b.Username != "" && b.IPAddress != "" && b.Name != "" {
 		return fmt.Sprintf("%s -- %s via %s", b.Name, b.IPAddress, b.Username)
 	}
-	return fmt.Sprintf("%s -- %s", b.Name, b.IPAddress)
+	if b.Name != "" && b.IPAddress != "" {
+		return fmt.Sprintf("%s -- %s", b.Name, b.IPAddress)
+	}
+	if b.Name != "" && b.Username != "" {
+		return fmt.Sprintf("%s via %s", b.Name, b.Username)
+	}
+	if b.IPAddress != "" && b.Username != "" {
+		return fmt.Sprintf("%s via %s", b.IPAddress, b.Username)
+	}
+	if b.Name != "" {
+		return b.Name
+	}
+	if b.IPAddress != "" {
+		return b.IPAddress
+	}
+	if b.Username != "" {
+		return "Unnamed bridge via " + b.Username
+	}
+	return "Unnamed bridge"
 }
