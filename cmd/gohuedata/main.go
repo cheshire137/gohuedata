@@ -11,7 +11,7 @@ import (
 func displayBridgePrompt(bridges []hueapi.Bridge) {
 	fmt.Println("\nChoose a Philips Hue bridge:")
 	for i, bridge := range bridges {
-		fmt.Printf("%d. %s -- %s via %s\n", i+1, bridge.Name, bridge.IPAddress, bridge.Username)
+		fmt.Printf("%d. %s\n", i+1, bridge.String())
 	}
 }
 

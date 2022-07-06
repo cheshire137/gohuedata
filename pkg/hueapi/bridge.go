@@ -1,6 +1,9 @@
 package hueapi
 
-import "net/url"
+import (
+	"fmt"
+	"net/url"
+)
 
 type Bridge struct {
 	Name      string `yaml:"name"`
@@ -10,4 +13,11 @@ type Bridge struct {
 
 func (b *Bridge) GetUrl() (*url.URL, error) {
 	return url.Parse("http://" + b.IPAddress)
+}
+
+func (b *Bridge) String() string {
+	if b.Username != "" {
+		return fmt.Sprintf("%s -- %s via %s", b.Name, b.IPAddress, b.Username)
+	}
+	return fmt.Sprintf("%s -- %s", b.Name, b.IPAddress)
 }
