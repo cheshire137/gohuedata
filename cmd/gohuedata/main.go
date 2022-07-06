@@ -68,4 +68,21 @@ func main() {
 		bridge = getBridgeSelectionFromUser(config.Bridges)
 	}
 	fmt.Println("✅ Selected bridge:", bridge.Name)
+
+	bridgeUrl, err := bridge.GetUrl()
+	if err != nil {
+		fmt.Println("❌ Failed to get bridge URL:", err)
+		return
+	}
+
+	hueClient := hueapi.NewClient(bridgeUrl.String(), bridge.Username)
+	lights, err := hueClient.GetLights()
+	if err != nil {
+		fmt.Println("❌ Failed to get lights:", err)
+		return
+	}
+	fmt.Printf("✅ Got %d lights:\n", len(lights))
+	for i, light := range lights {
+		fmt.Printf("%d. %s\n", i+1, light.Name)
+	}
 }
