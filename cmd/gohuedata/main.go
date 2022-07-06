@@ -83,6 +83,6 @@ func main() {
 	}
 	fmt.Printf("✅ Got %d lights:\n", len(lights))
 	for i, light := range lights {
-		fmt.Printf("%d. %s\n", i+1, light.Name)
+		fmt.Printf("%d. %s\n", i+1, light.String())
 	}
 }
