@@ -23,6 +23,9 @@ func (c *Client) GetLights() ([]Light, error) {
 	}
 	var lightResponse map[string]Light
 	err = json.Unmarshal(body, &lightResponse)
+	if err != nil {
+		return nil, err
+	}
 	lights := []Light{}
 	for _, light := range lightResponse {
 		if light.UniqueID != "" {
