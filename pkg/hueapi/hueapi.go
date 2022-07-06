@@ -16,8 +16,8 @@ func NewClient(apiURL string) *Client {
 	return &Client{ApiURL: apiURL}
 }
 
-func (a *Client) GetLights() ([]Light, error) {
-	body, err := a.get("/lights")
+func (c *Client) GetLights() ([]Light, error) {
+	body, err := c.get("/lights")
 	if err != nil {
 		return nil, err
 	}
@@ -32,16 +32,16 @@ func (a *Client) GetLights() ([]Light, error) {
 	return lights, nil
 }
 
-func (a *Client) get(path string) ([]byte, error) {
-	request, err := http.NewRequest(http.MethodGet, a.ApiURL+path, nil)
+func (c *Client) get(path string) ([]byte, error) {
+	request, err := http.NewRequest(http.MethodGet, c.ApiURL+path, nil)
 	if err != nil {
 		return nil, err
 	}
 	return makeRequest(request)
 }
 
-func (a *Client) post(path string, body io.Reader) ([]byte, error) {
-	request, err := http.NewRequest(http.MethodPost, a.ApiURL+path, body)
+func (c *Client) post(path string, body io.Reader) ([]byte, error) {
+	request, err := http.NewRequest(http.MethodPost, c.ApiURL+path, body)
 	if err != nil {
 		return nil, err
 	}
