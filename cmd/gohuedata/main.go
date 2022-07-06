@@ -60,6 +60,12 @@ func main() {
 	}
 	fmt.Println("✅ Loaded configuration")
 
-	bridge := getBridgeSelectionFromUser(config.Bridges)
+	bridges := config.Bridges
+	var bridge *hueapi.Bridge
+	if len(bridges) == 1 {
+		bridge = &bridges[0]
+	} else {
+		bridge = getBridgeSelectionFromUser(config.Bridges)
+	}
 	fmt.Println("✅ Selected bridge:", bridge.Name)
 }
