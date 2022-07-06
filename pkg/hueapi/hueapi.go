@@ -16,6 +16,7 @@ func NewClient(apiURL string) *Client {
 	return &Client{ApiURL: apiURL}
 }
 
+// https://developers.meethue.com/develop/hue-api/lights-api/#get-all-lights
 func (c *Client) GetLights() ([]Light, error) {
 	body, err := c.get("/lights")
 	if err != nil {
