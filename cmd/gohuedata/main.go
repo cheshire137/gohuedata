@@ -76,12 +76,13 @@ func main() {
 	}
 
 	hueClient := hueapi.NewClient(bridgeApiUrl)
+
 	lights, err := hueClient.GetLights()
 	if err != nil {
 		fmt.Println("❌ Failed to get lights:", err)
 		return
 	}
-	fmt.Printf("✅ Got %d lights:\n", len(lights))
+	fmt.Printf("✅ Got %d light(s):\n", len(lights))
 	for i, light := range lights {
 		fmt.Printf("%d. %s\n", i+1, light.String())
 	}
