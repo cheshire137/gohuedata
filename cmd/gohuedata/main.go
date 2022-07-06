@@ -86,4 +86,14 @@ func main() {
 	for i, light := range lights {
 		fmt.Printf("%d. %s\n", i+1, light.String())
 	}
+
+	sensors, err := hueClient.GetSensors()
+	if err != nil {
+		fmt.Println("❌ Failed to get sensors:", err)
+		return
+	}
+	fmt.Printf("✅ Got %d sensor(s):\n", len(sensors))
+	for i, sensor := range sensors {
+		fmt.Printf("%d. %s\n", i+1, sensor.String())
+	}
 }
