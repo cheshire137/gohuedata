@@ -32,8 +32,11 @@ func (a *Client) GetLights() ([]Light, error) {
 }
 
 func (a *Client) get(path string) ([]byte, error) {
-	fmt.Println(a.urlFor(path))
-	request, err := http.NewRequest(http.MethodGet, a.urlFor(path), nil)
+	url, err := a.urlFor(path)
+	if err != nil {
+		return nil, err
+	}
+	request, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -41,15 +44,22 @@ func (a *Client) get(path string) ([]byte, error) {
 }
 
 func (a *Client) post(path string, body io.Reader) ([]byte, error) {
-	request, err := http.NewRequest(http.MethodPost, a.urlFor(path), body)
+	url, err := a.urlFor(path)
+	if err != nil {
+		return nil, err
+	}
+	request, err := http.NewRequest(http.MethodPost, url, body)
 	if err != nil {
 		return nil, err
 	}
 	return a.makeRequest(request)
 }
 
-func (a *Client) urlFor(path string) string {
-	return fmt.Sprintf("%s/%s%s", a.ApiURL, a.Username, path)
+func (a *Client) urlFor(path string) (string, error) {
+	if a.Username == "" {
+		return "", fmt.Errorf("No username specified for bridge")
+	}
+	return fmt.Sprintf("%s/%s%s", a.ApiURL, a.Username, path), nil
 }
 
 func (a *Client) makeRequest(request *http.Request) ([]byte, error) {
