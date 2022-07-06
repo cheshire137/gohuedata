@@ -12,7 +12,13 @@ type Bridge struct {
 }
 
 func (b *Bridge) GetApiUrl() (string, error) {
-	uri, err := url.Parse("http://" + b.IPAddress + "/api")
+	if b.Username == "" {
+		return "", fmt.Errorf("No username specified for bridge")
+	}
+	if b.IPAddress == "" {
+		return "", fmt.Errorf("No IP address specified for bridge")
+	}
+	uri, err := url.Parse("http://" + b.IPAddress + "/api/" + b.Username)
 	if err != nil {
 		return "", err
 	}

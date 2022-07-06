@@ -75,7 +75,7 @@ func main() {
 		return
 	}
 
-	hueClient := hueapi.NewClient(bridgeApiUrl, bridge.Username)
+	hueClient := hueapi.NewClient(bridgeApiUrl)
 	lights, err := hueClient.GetLights()
 	if err != nil {
 		fmt.Println("❌ Failed to get lights:", err)

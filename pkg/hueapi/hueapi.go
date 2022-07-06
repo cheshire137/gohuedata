@@ -9,12 +9,11 @@ import (
 )
 
 type Client struct {
-	ApiURL   string
-	Username string
+	ApiURL string
 }
 
-func NewClient(apiURL string, username string) *Client {
-	return &Client{ApiURL: apiURL, Username: username}
+func NewClient(apiURL string) *Client {
+	return &Client{ApiURL: apiURL}
 }
 
 func (a *Client) GetLights() ([]Light, error) {
@@ -32,11 +31,7 @@ func (a *Client) GetLights() ([]Light, error) {
 }
 
 func (a *Client) get(path string) ([]byte, error) {
-	url, err := a.urlFor(path)
-	if err != nil {
-		return nil, err
-	}
-	request, err := http.NewRequest(http.MethodGet, url, nil)
+	request, err := http.NewRequest(http.MethodGet, a.ApiURL+path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -44,22 +39,11 @@ func (a *Client) get(path string) ([]byte, error) {
 }
 
 func (a *Client) post(path string, body io.Reader) ([]byte, error) {
-	url, err := a.urlFor(path)
-	if err != nil {
-		return nil, err
-	}
-	request, err := http.NewRequest(http.MethodPost, url, body)
+	request, err := http.NewRequest(http.MethodPost, a.ApiURL+path, body)
 	if err != nil {
 		return nil, err
 	}
 	return a.makeRequest(request)
-}
-
-func (a *Client) urlFor(path string) (string, error) {
-	if a.Username == "" {
-		return "", fmt.Errorf("No username specified for bridge")
-	}
-	return fmt.Sprintf("%s/%s%s", a.ApiURL, a.Username, path), nil
 }
 
 func (a *Client) makeRequest(request *http.Request) ([]byte, error) {
