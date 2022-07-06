@@ -1,6 +1,7 @@
 package hueapi
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -14,6 +15,20 @@ type Client struct {
 
 func NewClient(url string, username string) *Client {
 	return &Client{URL: url, Username: username}
+}
+
+func (a *Client) GetLights() ([]Light, error) {
+	body, err := a.get("/lights")
+	if err != nil {
+		return nil, err
+	}
+	var lightResponse map[string]Light
+	err = json.Unmarshal(body, &lightResponse)
+	lights := make([]Light, len(lightResponse))
+	for _, light := range lightResponse {
+		lights = append(lights, light)
+	}
+	return lights, nil
 }
 
 func (a *Client) get(path string) ([]byte, error) {
