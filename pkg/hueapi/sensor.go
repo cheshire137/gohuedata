@@ -19,6 +19,17 @@ type Sensor struct {
 }
 
 func (s *Sensor) String() string {
+	if s.IsTemperatureSensor() {
+		return fmt.Sprintf("%s -- %d°F", s.Name, s.State.FahrenheitTemperature())
+	}
+	if s.IsMotionSensor() {
+		lastUpdated, err := s.State.LastUpdatedAt()
+		if err == nil {
+			return fmt.Sprintf("%s -- %s on %s", s.Name, lastUpdated.Format("3:04 PM"), lastUpdated.Format("Jan 2, 2006"))
+		} else {
+			fmt.Println("error parsing last update time:", err)
+		}
+	}
 	return fmt.Sprintf("%s -- %s", s.Name, s.Type)
 }
 
