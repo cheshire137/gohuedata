@@ -1,5 +1,12 @@
 package hueapi
 
+import (
+	"fmt"
+	"time"
+)
+
+const LastUpdatedFormat = "2006-01-02T15:04:05"
+
 type SensorState struct {
 	LightLevel  int    `json:"lightlevel"`
 	Dark        bool   `json:"dark"`
@@ -9,6 +16,17 @@ type SensorState struct {
 	Flag        bool   `json:"flag"`
 	Status      int    `json:"status"`
 	Temperature int    `json:"temperature"`
+}
+
+func (s *SensorState) LastUpdatedAt() (*time.Time, error) {
+	if s.LastUpdated == "" {
+		return nil, fmt.Errorf("No last update time")
+	}
+	time, err := time.Parse(LastUpdatedFormat, s.LastUpdated)
+	if err != nil {
+		return nil, err
+	}
+	return &time, nil
 }
 
 func (s *SensorState) FahrenheitTemperature() int {
