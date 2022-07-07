@@ -22,11 +22,13 @@ func (s *SensorState) LastUpdatedAt() (*time.Time, error) {
 	if s.LastUpdated == "" {
 		return nil, fmt.Errorf("No last update time")
 	}
-	time, err := time.Parse(LastUpdatedFormat, s.LastUpdated)
+	lastUpdatedTime, err := time.Parse(LastUpdatedFormat, s.LastUpdated)
 	if err != nil {
 		return nil, err
 	}
-	return &time, nil
+	_, timezoneOffset := time.Now().Zone()
+	lastUpdatedTime = lastUpdatedTime.Add(time.Duration(timezoneOffset) * time.Second)
+	return &lastUpdatedTime, nil
 }
 
 func (s *SensorState) LastUpdatedSummary() string {
