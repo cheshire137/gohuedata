@@ -82,7 +82,7 @@ func main() {
 		fmt.Println("❌ Failed to get lights:", err)
 		return
 	}
-	fmt.Printf("✅ Got %d light(s):\n", len(lights))
+	fmt.Printf("\n✅ Got %d light(s):\n", len(lights))
 	for i, light := range lights {
 		fmt.Printf("%d. %s\n", i+1, light.String())
 	}
@@ -92,7 +92,7 @@ func main() {
 		fmt.Println("❌ Failed to get sensors:", err)
 		return
 	}
-	fmt.Printf("✅ Got %d sensor(s):\n", len(sensors))
+	fmt.Printf("\n✅ Got %d sensor(s):\n", len(sensors))
 	for i, sensor := range sensors {
 		fmt.Printf("%d. %s\n", i+1, sensor.String())
 	}
