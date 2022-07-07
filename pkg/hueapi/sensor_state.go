@@ -29,6 +29,14 @@ func (s *SensorState) LastUpdatedAt() (*time.Time, error) {
 	return &time, nil
 }
 
+func (s *SensorState) LastUpdatedSummary() string {
+	lastUpdated, err := s.LastUpdatedAt()
+	if err != nil {
+		return ""
+	}
+	return fmt.Sprintf("%s on %s", lastUpdated.Format("3:04 PM"), lastUpdated.Format("Jan 2, 2006"))
+}
+
 func (s *SensorState) FahrenheitTemperature() int {
 	celsiusTemp := s.Temperature / 100 // API returns a value like 2277 for 22.77°C
 	return (celsiusTemp * 9 / 5) + 32
