@@ -21,3 +21,11 @@ type Sensor struct {
 func (s *Sensor) String() string {
 	return fmt.Sprintf("%s -- %s", s.Name, s.Type)
 }
+
+func (s *Sensor) IsMotionSensor() bool {
+	return s.Type == "ZLLPresence"
+}
+
+func (s *Sensor) IsTemperatureSensor() bool {
+	return s.Type == "ZLLTemperature"
+}
