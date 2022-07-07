@@ -92,7 +92,9 @@ func main() {
 		fmt.Println("❌ Failed to get sensors:", err)
 		return
 	}
-	fmt.Printf("\n✅ Got %d sensor(s):\n", len(sensors))
+	totalSensors := len(sensors)
+	units := pluralize(totalSensors, "sensor", "sensors")
+	fmt.Printf("\n✅ Got %d %s:\n", totalSensors, units)
 
 	tempSensors := []hueapi.Sensor{}
 	motionSensors := []hueapi.Sensor{}
@@ -109,15 +111,30 @@ func main() {
 		}
 	}
 
-	fmt.Printf("\n✅ Including %d temperature sensor(s):\n", len(tempSensors))
-	for _, sensor := range tempSensors {
-		fmt.Printf("%d. %s\n", count, sensor.String())
-		count++
+	totalTempSensors := len(tempSensors)
+	if totalTempSensors > 0 {
+		units := pluralize(totalTempSensors, "sensor", "sensors")
+		fmt.Printf("\n✅ Including %d temperature %s:\n", totalTempSensors, units)
+		for _, sensor := range tempSensors {
+			fmt.Printf("%d. %s\n", count, sensor.String())
+			count++
+		}
 	}
 
-	fmt.Printf("\n✅ Including %d motion sensor(s):\n", len(motionSensors))
-	for _, sensor := range motionSensors {
-		fmt.Printf("%d. %s\n", count, sensor.String())
-		count++
+	totalMotionSensors := len(motionSensors)
+	if totalMotionSensors > 0 {
+		units := pluralize(totalMotionSensors, "sensor", "sensors")
+		fmt.Printf("\n✅ Including %d motion %s:\n", totalMotionSensors, units)
+		for _, sensor := range motionSensors {
+			fmt.Printf("%d. %s\n", count, sensor.String())
+			count++
+		}
 	}
+}
+
+func pluralize(count int, singular string, plural string) string {
+	if count == 1 {
+		return singular
+	}
+	return plural
 }
