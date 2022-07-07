@@ -93,7 +93,31 @@ func main() {
 		return
 	}
 	fmt.Printf("\n✅ Got %d sensor(s):\n", len(sensors))
-	for i, sensor := range sensors {
-		fmt.Printf("%d. %s\n", i+1, sensor.String())
+
+	tempSensors := []hueapi.Sensor{}
+	motionSensors := []hueapi.Sensor{}
+	count := 1
+
+	for _, sensor := range sensors {
+		if sensor.IsTemperatureSensor() {
+			tempSensors = append(tempSensors, sensor)
+		} else if sensor.IsMotionSensor() {
+			motionSensors = append(motionSensors, sensor)
+		} else {
+			fmt.Printf("%d. %s\n", count, sensor.String())
+			count++
+		}
+	}
+
+	fmt.Printf("\n✅ Including %d temperature sensor(s):\n", len(tempSensors))
+	for _, sensor := range tempSensors {
+		fmt.Printf("%d. %s\n", count, sensor.String())
+		count++
+	}
+
+	fmt.Printf("\n✅ Including %d motion sensor(s):\n", len(motionSensors))
+	for _, sensor := range motionSensors {
+		fmt.Printf("%d. %s\n", count, sensor.String())
+		count++
 	}
 }
