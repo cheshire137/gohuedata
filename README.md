@@ -27,3 +27,8 @@ Example:
 `motion`, and `none`. Defaults to `all`. Example:
 
     `go run cmd/gohuedata/main.go --sensors temperature`
+
+- **`-t`** - Which units to use for temperature display, to override the `temperature_units` setting in config.yml.
+Choose between `F` for Fahrenheit and `C` for Celsius. Defaults to the config.yml setting. Example:
+
+    `go run cmd/gohuedata/main.go -t C`

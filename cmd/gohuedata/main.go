@@ -72,6 +72,10 @@ func main() {
 	flag.StringVar(&sensorSelection, "sensors", "all",
 		"Which sensors to display, if any; defaults to all; choose 'all', 'motion', 'temperature', or 'none'")
 
+	var tempUnits string
+	flag.StringVar(&tempUnits, "t", "", "Temperature units to use; choose from `F` for Fahrenheit or `C` for "+
+		"Celsius; defaults to the temperature_units setting in config.yml")
+
 	flag.Parse()
 
 	loadSensors := sensorSelection != "none"
@@ -98,7 +102,12 @@ func main() {
 		return
 	}
 
-	fahrenheit := config.TemperatureUnits == "F"
+	var fahrenheit bool
+	if tempUnits == "" { // not overridden via command line
+		fahrenheit = config.TemperatureUnits == "F"
+	} else {
+		fahrenheit = tempUnits == "F"
+	}
 	hueClient := hueapi.NewClient(bridgeApiUrl, fahrenheit)
 
 	if lightSelection == "all" {
