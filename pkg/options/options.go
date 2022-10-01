@@ -24,6 +24,7 @@ const (
 	Unspecified                  = ""
 )
 
+// Command-line options and flags
 type Options struct {
 	BridgeSelection  int
 	LightSelection   LightSelection

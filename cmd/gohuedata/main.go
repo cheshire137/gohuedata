@@ -2,57 +2,13 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 
+	"github.com/cheshire137/gohuedata/pkg/bridge_display"
 	"github.com/cheshire137/gohuedata/pkg/config"
 	"github.com/cheshire137/gohuedata/pkg/hueapi"
 	"github.com/cheshire137/gohuedata/pkg/options"
 	"github.com/cheshire137/gohuedata/pkg/util"
 )
-
-func displayBridgePrompt(bridges []hueapi.Bridge) {
-	fmt.Println("\nChoose a Philips Hue bridge:")
-	for i, bridge := range bridges {
-		fmt.Printf("%d. %s\n", i+1, bridge.String())
-	}
-}
-
-func isValidBridgeIndex(index int, bridges []hueapi.Bridge) bool {
-	return index >= 1 && index <= len(bridges)
-}
-
-func getBridgeSelectionFromUser(bridges []hueapi.Bridge) *hueapi.Bridge {
-	displayBridgePrompt(bridges)
-
-	userInput := ""
-	bridgeSelection := -1
-	invalidIndex := true
-	errorPrefix := "❌ Invalid bridge choice"
-	var err error
-
-	for userInput == "" || invalidIndex {
-		fmt.Scanln(&userInput)
-		bridgeSelection, err = strconv.Atoi(userInput)
-		nonIntegerInput := err != nil
-		invalidIndex = !isValidBridgeIndex(bridgeSelection, bridges)
-		if nonIntegerInput {
-			fmt.Println(errorPrefix + ":" + err.Error())
-		} else if invalidIndex {
-			if len(bridges) > 1 {
-				fmt.Println(errorPrefix+", must be between 1 and", len(bridges))
-			} else {
-				fmt.Println(errorPrefix + ", must be 1")
-			}
-		}
-		if nonIntegerInput || invalidIndex {
-			displayBridgePrompt(bridges)
-			userInput = ""
-		}
-	}
-
-	bridgeIndex := bridgeSelection - 1
-	return &bridges[bridgeIndex]
-}
 
 func main() {
 	config, err := config.NewConfig("config.yml")
@@ -63,15 +19,16 @@ func main() {
 	fmt.Println("✅ Loaded configuration")
 
 	options := options.ParseOptions()
-
 	bridges := config.Bridges
+	bridgeDisplay := bridge_display.NewBridgeDisplay(bridges)
+
 	var bridge *hueapi.Bridge
-	if isValidBridgeIndex(options.BridgeSelection, bridges) {
+	if bridgeDisplay.IsValidBridgeIndex(options.BridgeSelection) {
 		bridge = &bridges[options.BridgeSelection-1]
 	} else if len(bridges) == 1 {
 		bridge = &bridges[0]
 	} else {
-		bridge = getBridgeSelectionFromUser(config.Bridges)
+		bridge = bridgeDisplay.GetBridgeSelectionFromUser()
 	}
 	fmt.Println("✅ Selected bridge:", bridge.Name)
 
