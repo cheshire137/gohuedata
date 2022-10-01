@@ -76,7 +76,8 @@ func main() {
 		return
 	}
 
-	hueClient := hueapi.NewClient(bridgeApiUrl)
+	fahrenheit := config.TemperatureUnits == "F"
+	hueClient := hueapi.NewClient(bridgeApiUrl, fahrenheit)
 
 	lights, err := hueClient.GetLights()
 	if err != nil {

@@ -9,11 +9,12 @@ import (
 )
 
 type Client struct {
-	ApiURL string
+	ApiURL     string
+	Fahrenheit bool
 }
 
-func NewClient(apiURL string) *Client {
-	return &Client{ApiURL: apiURL}
+func NewClient(apiURL string, fahrenheit bool) *Client {
+	return &Client{ApiURL: apiURL, Fahrenheit: fahrenheit}
 }
 
 // https://developers.meethue.com/develop/hue-api/lights-api/#get-all-lights
@@ -50,7 +51,7 @@ func (c *Client) GetSensors() ([]interface{}, error) {
 	sensors := make([]interface{}, 0, len(sensorResponse))
 	for _, sensor := range sensorResponse {
 		if sensor.IsTemperatureSensor() {
-			sensors = append(sensors, NewTemperatureSensor(sensor))
+			sensors = append(sensors, NewTemperatureSensor(sensor, c.Fahrenheit))
 		} else if sensor.IsMotionSensor() {
 			sensors = append(sensors, NewMotionSensor(sensor))
 		} else {

@@ -14,9 +14,10 @@ type TemperatureSensor struct {
 	ProductName      string
 	Capabilities     SensorCapabilities
 	Recycle          bool
+	Fahrenheit       bool
 }
 
-func NewTemperatureSensor(s Sensor) *TemperatureSensor {
+func NewTemperatureSensor(s Sensor, fahrenheit bool) *TemperatureSensor {
 	return &TemperatureSensor{
 		State:            s.State,
 		Config:           s.Config,
@@ -29,13 +30,28 @@ func NewTemperatureSensor(s Sensor) *TemperatureSensor {
 		ProductName:      s.ProductName,
 		Capabilities:     s.Capabilities,
 		Recycle:          s.Recycle,
+		Fahrenheit:       fahrenheit,
 	}
+}
+
+func (s *TemperatureSensor) Temperature() int {
+	if s.Fahrenheit {
+		return s.State.FahrenheitTemperature()
+	}
+	return s.State.CelsiusTemperature()
+}
+
+func (s *TemperatureSensor) TempUnits() string {
+	if s.Fahrenheit {
+		return "°F"
+	}
+	return "°C"
 }
 
 func (s *TemperatureSensor) String() string {
 	lastUpdatedSummary := s.State.LastUpdatedSummary()
 	if lastUpdatedSummary == "" {
-		return fmt.Sprintf("%s -- %d°F", s.Name, s.State.FahrenheitTemperature())
+		return fmt.Sprintf("%s -- %d%s", s.Name, s.Temperature(), s.TempUnits())
 	}
-	return fmt.Sprintf("%s -- %d°F as of %s", s.Name, s.State.FahrenheitTemperature(), lastUpdatedSummary)
+	return fmt.Sprintf("%s -- %d%s as of %s", s.Name, s.Temperature(), s.TempUnits(), lastUpdatedSummary)
 }
