@@ -64,6 +64,10 @@ func main() {
 
 	var bridgeSelection int
 	flag.IntVar(&bridgeSelection, "b", 0, "Philips Hue bridge index from config.yml, starts at 1")
+
+	var lightSelection string
+	flag.StringVar(&lightSelection, "lights", "all", "Whether to load all lights or none; defaults to all")
+
 	flag.Parse()
 
 	bridges := config.Bridges
@@ -86,14 +90,16 @@ func main() {
 	fahrenheit := config.TemperatureUnits == "F"
 	hueClient := hueapi.NewClient(bridgeApiUrl, fahrenheit)
 
-	lights, err := hueClient.GetLights()
-	if err != nil {
-		fmt.Println("❌ Failed to get lights:", err)
-		return
-	}
-	fmt.Printf("\n✅ Got %d light(s):\n", len(lights))
-	for i, light := range lights {
-		fmt.Printf("%d. %s\n", i+1, light.String())
+	if lightSelection == "all" {
+		lights, err := hueClient.GetLights()
+		if err != nil {
+			fmt.Println("❌ Failed to get lights:", err)
+			return
+		}
+		fmt.Printf("\n✅ Got %d light(s):\n", len(lights))
+		for i, light := range lights {
+			fmt.Printf("%d. %s\n", i+1, light.String())
+		}
 	}
 
 	sensors, err := hueClient.GetSensors()
