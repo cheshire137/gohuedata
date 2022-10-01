@@ -1,5 +1,8 @@
 temperature_units: "F" # choose F for Fahrenheit or C for Celsius
 bridges:
-- name: "Name of your Philips Hue bridge"
-  ip_address: "IP address of your bridge, e.g., 192.168.1.2"
+- name: "Name of your first Philips Hue bridge"
+  ip_address: "IP address of your first bridge, e.g., 192.168.1.2"
+  username: "username registered on your bridge, see https://developers.meethue.com/develop/get-started-2/"
+- name: "Name of your second Philips Hue bridge"
+  ip_address: "IP address of your second bridge, e.g., 192.168.1.5"
   username: "username registered on your bridge, see https://developers.meethue.com/develop/get-started-2/"

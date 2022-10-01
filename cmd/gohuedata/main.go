@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"strconv"
 
@@ -61,9 +62,15 @@ func main() {
 	}
 	fmt.Println("✅ Loaded configuration")
 
+	var bridgeSelection int
+	flag.IntVar(&bridgeSelection, "b", 0, "Philips Hue bridge index from config.yml, starts at 1")
+	flag.Parse()
+
 	bridges := config.Bridges
 	var bridge *hueapi.Bridge
-	if len(bridges) == 1 {
+	if isValidBridgeIndex(bridgeSelection, bridges) {
+		bridge = &bridges[bridgeSelection-1]
+	} else if len(bridges) == 1 {
 		bridge = &bridges[0]
 	} else {
 		bridge = getBridgeSelectionFromUser(config.Bridges)
