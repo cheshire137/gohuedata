@@ -19,19 +19,6 @@ type Sensor struct {
 }
 
 func (s *Sensor) String() string {
-	if s.IsTemperatureSensor() {
-		lastUpdatedSummary := s.State.LastUpdatedSummary()
-		if lastUpdatedSummary == "" {
-			return fmt.Sprintf("%s -- %d°F", s.Name, s.State.FahrenheitTemperature())
-		}
-		return fmt.Sprintf("%s -- %d°F as of %s", s.Name, s.State.FahrenheitTemperature(), lastUpdatedSummary)
-	}
-	if s.IsMotionSensor() {
-		lastUpdatedSummary := s.State.LastUpdatedSummary()
-		if lastUpdatedSummary != "" {
-			return fmt.Sprintf("%s -- %s", s.Name, lastUpdatedSummary)
-		}
-	}
 	return fmt.Sprintf("%s -- %s", s.Name, s.Type)
 }
 

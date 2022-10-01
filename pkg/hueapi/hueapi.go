@@ -37,7 +37,7 @@ func (c *Client) GetLights() ([]Light, error) {
 }
 
 // https://developers.meethue.com/develop/hue-api/5-sensors-api/#get-all-sensors
-func (c *Client) GetSensors() ([]Sensor, error) {
+func (c *Client) GetSensors() ([]interface{}, error) {
 	body, err := c.get("/sensors")
 	if err != nil {
 		return nil, err
@@ -47,9 +47,15 @@ func (c *Client) GetSensors() ([]Sensor, error) {
 	if err != nil {
 		return nil, err
 	}
-	sensors := make([]Sensor, 0, len(sensorResponse))
+	sensors := make([]interface{}, 0, len(sensorResponse))
 	for _, sensor := range sensorResponse {
-		sensors = append(sensors, sensor)
+		if sensor.IsTemperatureSensor() {
+			sensors = append(sensors, NewTemperatureSensor(sensor))
+		} else if sensor.IsMotionSensor() {
+			sensors = append(sensors, NewMotionSensor(sensor))
+		} else {
+			sensors = append(sensors, &sensor)
+		}
 	}
 	return sensors, nil
 }

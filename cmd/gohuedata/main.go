@@ -96,19 +96,30 @@ func main() {
 	units := pluralize(totalSensors, "sensor", "sensors")
 	fmt.Printf("\n✅ Got %d %s:\n", totalSensors, units)
 
-	tempSensors := []hueapi.Sensor{}
-	motionSensors := []hueapi.Sensor{}
+	tempSensors := []*hueapi.TemperatureSensor{}
+	motionSensors := []*hueapi.MotionSensor{}
 	count := 1
 
 	for _, sensor := range sensors {
-		if sensor.IsTemperatureSensor() {
-			tempSensors = append(tempSensors, sensor)
-		} else if sensor.IsMotionSensor() {
-			motionSensors = append(motionSensors, sensor)
-		} else {
-			fmt.Printf("%d. %s\n", count, sensor.String())
-			count++
+		tempSensor, ok := sensor.(*hueapi.TemperatureSensor)
+		if ok {
+			tempSensors = append(tempSensors, tempSensor)
+			continue
 		}
+
+		motionSensor, ok := sensor.(*hueapi.MotionSensor)
+		if ok {
+			motionSensors = append(motionSensors, motionSensor)
+			continue
+		}
+
+		sensor, ok := sensor.(*hueapi.Sensor)
+		if !ok {
+			fmt.Println("❌ Unknown sensor type:", sensor)
+			continue
+		}
+		fmt.Printf("%d. %s\n", count, sensor.String())
+		count++
 	}
 
 	totalTempSensors := len(tempSensors)
