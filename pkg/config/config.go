@@ -8,7 +8,8 @@ import (
 )
 
 type Config struct {
-	Bridges []hueapi.Bridge `yaml:"bridges"`
+	Bridges          []hueapi.Bridge `yaml:"bridges"`
+	TemperatureUnits string          `yaml:"temperature_units"`
 }
 
 func NewConfig(path string) (*Config, error) {

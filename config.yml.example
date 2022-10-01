@@ -1,3 +1,4 @@
+temperature_units: "F" # choose F for Fahrenheit or C for Celsius
 bridges:
 - name: "Name of your Philips Hue bridge"
   ip_address: "IP address of your bridge, e.g., 192.168.1.2"
