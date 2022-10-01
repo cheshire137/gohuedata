@@ -114,7 +114,7 @@ func main() {
 	}
 
 	if loadSensors {
-		sensors, err := hueClient.GetSensors()
+		sensors, err := hueClient.GetSensors(sensorSelection)
 		if err != nil {
 			fmt.Println("❌ Failed to get sensors:", err)
 			return
