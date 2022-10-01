@@ -6,6 +6,7 @@ import (
 
 	"github.com/cheshire137/gohuedata/pkg/config"
 	"github.com/cheshire137/gohuedata/pkg/hueapi"
+	"github.com/cheshire137/gohuedata/pkg/util"
 )
 
 func displayBridgePrompt(bridges []hueapi.Bridge) {
@@ -93,7 +94,7 @@ func main() {
 		return
 	}
 	totalSensors := len(sensors)
-	units := pluralize(totalSensors, "sensor", "sensors")
+	units := util.Pluralize(totalSensors, "sensor", "sensors")
 	fmt.Printf("\n✅ Got %d %s:\n", totalSensors, units)
 
 	tempSensors := []*hueapi.TemperatureSensor{}
@@ -124,7 +125,7 @@ func main() {
 
 	totalTempSensors := len(tempSensors)
 	if totalTempSensors > 0 {
-		units := pluralize(totalTempSensors, "sensor", "sensors")
+		units := util.Pluralize(totalTempSensors, "sensor", "sensors")
 		fmt.Printf("\n✅ Including %d temperature %s:\n", totalTempSensors, units)
 		for _, sensor := range tempSensors {
 			fmt.Printf("%d. %s\n", count, sensor.String())
@@ -134,18 +135,11 @@ func main() {
 
 	totalMotionSensors := len(motionSensors)
 	if totalMotionSensors > 0 {
-		units := pluralize(totalMotionSensors, "sensor", "sensors")
+		units := util.Pluralize(totalMotionSensors, "sensor", "sensors")
 		fmt.Printf("\n✅ Including %d motion %s:\n", totalMotionSensors, units)
 		for _, sensor := range motionSensors {
 			fmt.Printf("%d. %s\n", count, sensor.String())
 			count++
 		}
 	}
-}
-
-func pluralize(count int, singular string, plural string) string {
-	if count == 1 {
-		return singular
-	}
-	return plural
 }
