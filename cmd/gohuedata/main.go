@@ -30,12 +30,7 @@ func main() {
 		return
 	}
 
-	var fahrenheit bool
-	if options.AnyTemperatureUnitsSpecified() {
-		fahrenheit = options.FahrenheitSpecified()
-	} else { // not overridden via command line
-		fahrenheit = config.FahrenheitSpecified()
-	}
+	fahrenheit := options.FahrenheitSpecified(config.FahrenheitSpecified())
 	hueClient := hueapi.NewClient(bridgeApiUrl, fahrenheit)
 
 	if options.LoadLights() {

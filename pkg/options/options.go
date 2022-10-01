@@ -90,10 +90,9 @@ func (o *Options) LoadAllSensors() bool {
 	return o.LoadSensors() && !o.OnlyMotionSensors() && !o.OnlyTemperatureSensors()
 }
 
-func (o *Options) AnyTemperatureUnitsSpecified() bool {
-	return o.TemperatureUnits != Unspecified
-}
-
-func (o *Options) FahrenheitSpecified() bool {
-	return o.TemperatureUnits == Fahrenheit
+func (o *Options) FahrenheitSpecified(fahrenheitFallback bool) bool {
+	if o.TemperatureUnits != Unspecified {
+		return o.TemperatureUnits == Fahrenheit
+	}
+	return fahrenheitFallback
 }
