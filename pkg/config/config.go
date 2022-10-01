@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/cheshire137/gohuedata/pkg/hueapi"
+	"github.com/cheshire137/gohuedata/pkg/options"
 	"gopkg.in/yaml.v3"
 )
 
@@ -29,4 +30,8 @@ func ReadConfig(path string, config *Config) error {
 	defer file.Close()
 	decoder := yaml.NewDecoder(file)
 	return decoder.Decode(config)
+}
+
+func (c *Config) FahrenheitSpecified() bool {
+	return c.TemperatureUnits == options.Fahrenheit
 }

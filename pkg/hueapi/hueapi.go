@@ -6,6 +6,8 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/cheshire137/gohuedata/pkg/options"
 )
 
 type Client struct {
@@ -38,7 +40,7 @@ func (c *Client) GetLights() ([]Light, error) {
 }
 
 // https://developers.meethue.com/develop/hue-api/5-sensors-api/#get-all-sensors
-func (c *Client) GetSensors(sensorSelection string) ([]interface{}, error) {
+func (c *Client) GetSensors(sensorSelection options.SensorSelection) ([]interface{}, error) {
 	body, err := c.get("/sensors")
 	if err != nil {
 		return nil, err

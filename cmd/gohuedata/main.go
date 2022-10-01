@@ -1,12 +1,12 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"strconv"
 
 	"github.com/cheshire137/gohuedata/pkg/config"
 	"github.com/cheshire137/gohuedata/pkg/hueapi"
+	"github.com/cheshire137/gohuedata/pkg/options"
 	"github.com/cheshire137/gohuedata/pkg/util"
 )
 
@@ -62,33 +62,12 @@ func main() {
 	}
 	fmt.Println("✅ Loaded configuration")
 
-	var bridgeSelection int
-	flag.IntVar(&bridgeSelection, "b", 0, "Philips Hue bridge index from config.yml, starts at 1")
-
-	var lightSelection string
-	flag.StringVar(&lightSelection, "lights", "all", "Whether to load lights; defaults to all; choose 'all' or 'none'")
-
-	var sensorSelection string
-	flag.StringVar(&sensorSelection, "sensors", "all",
-		"Which sensors to display, if any; defaults to all; choose 'all', 'motion', 'temperature', or 'none'")
-
-	var tempUnits string
-	flag.StringVar(&tempUnits, "t", "", "Temperature units to use; choose from `F` for Fahrenheit or `C` for "+
-		"Celsius; defaults to the temperature_units setting in config.yml")
-
-	flag.Parse()
-
-	loadSensors := sensorSelection != "none"
-	onlyTempSensors := sensorSelection == "temperature"
-	onlyMotionSensors := sensorSelection == "motion"
-	loadTempSensors := loadSensors && !onlyMotionSensors
-	loadMotionSensors := loadSensors && !onlyTempSensors
-	loadAllSensors := loadSensors && !onlyTempSensors && !onlyMotionSensors
+	options := options.ParseOptions()
 
 	bridges := config.Bridges
 	var bridge *hueapi.Bridge
-	if isValidBridgeIndex(bridgeSelection, bridges) {
-		bridge = &bridges[bridgeSelection-1]
+	if isValidBridgeIndex(options.BridgeSelection, bridges) {
+		bridge = &bridges[options.BridgeSelection-1]
 	} else if len(bridges) == 1 {
 		bridge = &bridges[0]
 	} else {
@@ -103,14 +82,14 @@ func main() {
 	}
 
 	var fahrenheit bool
-	if tempUnits == "" { // not overridden via command line
-		fahrenheit = config.TemperatureUnits == "F"
-	} else {
-		fahrenheit = tempUnits == "F"
+	if options.AnyTemperatureUnitsSpecified() {
+		fahrenheit = options.FahrenheitSpecified()
+	} else { // not overridden via command line
+		fahrenheit = config.FahrenheitSpecified()
 	}
 	hueClient := hueapi.NewClient(bridgeApiUrl, fahrenheit)
 
-	if lightSelection == "all" {
+	if options.LoadLights() {
 		lights, err := hueClient.GetLights()
 		if err != nil {
 			fmt.Println("❌ Failed to get lights:", err)
@@ -122,14 +101,14 @@ func main() {
 		}
 	}
 
-	if loadSensors {
-		sensors, err := hueClient.GetSensors(sensorSelection)
+	if options.LoadSensors() {
+		sensors, err := hueClient.GetSensors(options.SensorSelection)
 		if err != nil {
 			fmt.Println("❌ Failed to get sensors:", err)
 			return
 		}
 
-		if loadAllSensors {
+		if options.LoadAllSensors() {
 			totalSensors := len(sensors)
 			units := util.Pluralize(totalSensors, "sensor", "sensors")
 			fmt.Printf("\n✅ Got %d %s:\n", totalSensors, units)
@@ -140,7 +119,7 @@ func main() {
 		count := 1
 
 		for _, sensor := range sensors {
-			if loadTempSensors {
+			if options.LoadTemperatureSensors() {
 				tempSensor, ok := sensor.(*hueapi.TemperatureSensor)
 				if ok {
 					tempSensors = append(tempSensors, tempSensor)
@@ -148,7 +127,7 @@ func main() {
 				}
 			}
 
-			if loadMotionSensors {
+			if options.LoadMotionSensors() {
 				motionSensor, ok := sensor.(*hueapi.MotionSensor)
 				if ok {
 					motionSensors = append(motionSensors, motionSensor)
@@ -156,7 +135,7 @@ func main() {
 				}
 			}
 
-			if loadAllSensors {
+			if options.LoadAllSensors() {
 				sensor, ok := sensor.(*hueapi.Sensor)
 				if !ok {
 					fmt.Println("❌ Unknown sensor type:", sensor)
@@ -171,7 +150,7 @@ func main() {
 		if totalTempSensors > 0 {
 			units := util.Pluralize(totalTempSensors, "sensor", "sensors")
 			var intro string
-			if loadAllSensors {
+			if options.LoadAllSensors() {
 				intro = "Including"
 			} else {
 				intro = "Got"
@@ -187,7 +166,7 @@ func main() {
 		if totalMotionSensors > 0 {
 			units := util.Pluralize(totalMotionSensors, "sensor", "sensors")
 			var intro string
-			if loadAllSensors {
+			if options.LoadAllSensors() {
 				intro = "Including"
 			} else {
 				intro = "Got"
