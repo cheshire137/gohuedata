@@ -21,15 +21,7 @@ func main() {
 	options := options.ParseOptions()
 	bridges := config.Bridges
 	bridgeDisplay := bridge_display.NewBridgeDisplay(bridges)
-
-	var bridge *hueapi.Bridge
-	if bridgeDisplay.IsValidBridgeIndex(options.BridgeSelection) {
-		bridge = &bridges[options.BridgeSelection-1]
-	} else if len(bridges) == 1 {
-		bridge = &bridges[0]
-	} else {
-		bridge = bridgeDisplay.GetBridgeSelectionFromUser()
-	}
+	bridge := bridgeDisplay.GetBridgeSelection(options.BridgeSelection)
 	fmt.Println("✅ Selected bridge:", bridge.Name)
 
 	bridgeApiUrl, err := bridge.GetApiUrl()

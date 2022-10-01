@@ -15,6 +15,16 @@ func NewBridgeDisplay(bridges []hueapi.Bridge) *BridgeDisplay {
 	return &BridgeDisplay{Bridges: bridges}
 }
 
+func (bd *BridgeDisplay) GetBridgeSelection(bridgeSelection int) *hueapi.Bridge {
+	if bd.IsValidBridgeIndex(bridgeSelection) {
+		return &bd.Bridges[bridgeSelection-1]
+	}
+	if len(bd.Bridges) == 1 {
+		return &bd.Bridges[0]
+	}
+	return bd.GetBridgeSelectionFromUser()
+}
+
 func (bd *BridgeDisplay) GetBridgeSelectionFromUser() *hueapi.Bridge {
 	bd.DisplayBridgePrompt()
 
