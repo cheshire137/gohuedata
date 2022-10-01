@@ -22,3 +22,8 @@ the first bridge in your config:
 Example:
 
     `go run cmd/gohuedata/main.go --lights none`
+
+- **`--sensors`** - Which sensors to display from the chosen bridge, if any. Choose between `all`, `temperature`,
+`motion`, and `none`. Defaults to `all`. Example:
+
+    `go run cmd/gohuedata/main.go --sensors temperature`

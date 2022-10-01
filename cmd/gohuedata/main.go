@@ -66,9 +66,20 @@ func main() {
 	flag.IntVar(&bridgeSelection, "b", 0, "Philips Hue bridge index from config.yml, starts at 1")
 
 	var lightSelection string
-	flag.StringVar(&lightSelection, "lights", "all", "Whether to load all lights or none; defaults to all")
+	flag.StringVar(&lightSelection, "lights", "all", "Whether to load lights; defaults to all; choose 'all' or 'none'")
+
+	var sensorSelection string
+	flag.StringVar(&sensorSelection, "sensors", "all",
+		"Which sensors to display, if any; defaults to all; choose 'all', 'motion', 'temperature', or 'none'")
 
 	flag.Parse()
+
+	loadSensors := sensorSelection != "none"
+	onlyTempSensors := sensorSelection == "temperature"
+	onlyMotionSensors := sensorSelection == "motion"
+	loadTempSensors := loadSensors && !onlyMotionSensors
+	loadMotionSensors := loadSensors && !onlyTempSensors
+	loadAllSensors := loadSensors && !onlyTempSensors && !onlyMotionSensors
 
 	bridges := config.Bridges
 	var bridge *hueapi.Bridge
@@ -102,58 +113,81 @@ func main() {
 		}
 	}
 
-	sensors, err := hueClient.GetSensors()
-	if err != nil {
-		fmt.Println("❌ Failed to get sensors:", err)
-		return
-	}
-	totalSensors := len(sensors)
-	units := util.Pluralize(totalSensors, "sensor", "sensors")
-	fmt.Printf("\n✅ Got %d %s:\n", totalSensors, units)
-
-	tempSensors := []*hueapi.TemperatureSensor{}
-	motionSensors := []*hueapi.MotionSensor{}
-	count := 1
-
-	for _, sensor := range sensors {
-		tempSensor, ok := sensor.(*hueapi.TemperatureSensor)
-		if ok {
-			tempSensors = append(tempSensors, tempSensor)
-			continue
+	if loadSensors {
+		sensors, err := hueClient.GetSensors()
+		if err != nil {
+			fmt.Println("❌ Failed to get sensors:", err)
+			return
 		}
 
-		motionSensor, ok := sensor.(*hueapi.MotionSensor)
-		if ok {
-			motionSensors = append(motionSensors, motionSensor)
-			continue
+		if loadAllSensors {
+			totalSensors := len(sensors)
+			units := util.Pluralize(totalSensors, "sensor", "sensors")
+			fmt.Printf("\n✅ Got %d %s:\n", totalSensors, units)
 		}
 
-		sensor, ok := sensor.(*hueapi.Sensor)
-		if !ok {
-			fmt.Println("❌ Unknown sensor type:", sensor)
-			continue
-		}
-		fmt.Printf("%d. %s\n", count, sensor.String())
-		count++
-	}
+		tempSensors := []*hueapi.TemperatureSensor{}
+		motionSensors := []*hueapi.MotionSensor{}
+		count := 1
 
-	totalTempSensors := len(tempSensors)
-	if totalTempSensors > 0 {
-		units := util.Pluralize(totalTempSensors, "sensor", "sensors")
-		fmt.Printf("\n✅ Including %d temperature %s:\n", totalTempSensors, units)
-		for _, sensor := range tempSensors {
-			fmt.Printf("%d. %s\n", count, sensor.String())
-			count++
-		}
-	}
+		for _, sensor := range sensors {
+			if loadTempSensors {
+				tempSensor, ok := sensor.(*hueapi.TemperatureSensor)
+				if ok {
+					tempSensors = append(tempSensors, tempSensor)
+					continue
+				}
+			}
 
-	totalMotionSensors := len(motionSensors)
-	if totalMotionSensors > 0 {
-		units := util.Pluralize(totalMotionSensors, "sensor", "sensors")
-		fmt.Printf("\n✅ Including %d motion %s:\n", totalMotionSensors, units)
-		for _, sensor := range motionSensors {
-			fmt.Printf("%d. %s\n", count, sensor.String())
-			count++
+			if loadMotionSensors {
+				motionSensor, ok := sensor.(*hueapi.MotionSensor)
+				if ok {
+					motionSensors = append(motionSensors, motionSensor)
+					continue
+				}
+			}
+
+			if loadAllSensors {
+				sensor, ok := sensor.(*hueapi.Sensor)
+				if !ok {
+					fmt.Println("❌ Unknown sensor type:", sensor)
+					continue
+				}
+				fmt.Printf("%d. %s\n", count, sensor.String())
+				count++
+			}
+		}
+
+		totalTempSensors := len(tempSensors)
+		if totalTempSensors > 0 {
+			units := util.Pluralize(totalTempSensors, "sensor", "sensors")
+			var intro string
+			if loadAllSensors {
+				intro = "Including"
+			} else {
+				intro = "Got"
+			}
+			fmt.Printf("\n✅ %s %d temperature %s:\n", intro, totalTempSensors, units)
+			for _, sensor := range tempSensors {
+				fmt.Printf("%d. %s\n", count, sensor.String())
+				count++
+			}
+		}
+
+		totalMotionSensors := len(motionSensors)
+		if totalMotionSensors > 0 {
+			units := util.Pluralize(totalMotionSensors, "sensor", "sensors")
+			var intro string
+			if loadAllSensors {
+				intro = "Including"
+			} else {
+				intro = "Got"
+			}
+			fmt.Printf("\n✅ %s %d motion %s:\n", intro, totalMotionSensors, units)
+			for _, sensor := range motionSensors {
+				fmt.Printf("%d. %s\n", count, sensor.String())
+				count++
+			}
 		}
 	}
 }
