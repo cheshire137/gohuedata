@@ -8,7 +8,7 @@ import (
 	"github.com/cheshire137/gohuedata/pkg/hueapi"
 	"github.com/cheshire137/gohuedata/pkg/light_display"
 	"github.com/cheshire137/gohuedata/pkg/options"
-	"github.com/cheshire137/gohuedata/pkg/util"
+	"github.com/cheshire137/gohuedata/pkg/sensor_display"
 )
 
 func main() {
@@ -44,80 +44,11 @@ func main() {
 	}
 
 	if options.LoadSensors() {
-		sensors, err := hueClient.GetSensors(options.SensorSelection)
-		if err != nil {
+		sensorDisplay, err := sensor_display.NewSensorDisplay(hueClient, options.SensorSelection)
+		if err == nil {
+			sensorDisplay.DisplaySensors()
+		} else {
 			fmt.Println("❌ Failed to get sensors:", err)
-			return
-		}
-
-		if options.LoadAllSensors() {
-			totalSensors := len(sensors)
-			units := util.Pluralize(totalSensors, "sensor", "sensors")
-			fmt.Printf("\n✅ Got %d %s:\n", totalSensors, units)
-		}
-
-		tempSensors := []*hueapi.TemperatureSensor{}
-		motionSensors := []*hueapi.MotionSensor{}
-		count := 1
-
-		for _, sensor := range sensors {
-			if options.LoadTemperatureSensors() {
-				tempSensor, ok := sensor.(*hueapi.TemperatureSensor)
-				if ok {
-					tempSensors = append(tempSensors, tempSensor)
-					continue
-				}
-			}
-
-			if options.LoadMotionSensors() {
-				motionSensor, ok := sensor.(*hueapi.MotionSensor)
-				if ok {
-					motionSensors = append(motionSensors, motionSensor)
-					continue
-				}
-			}
-
-			if options.LoadAllSensors() {
-				sensor, ok := sensor.(*hueapi.Sensor)
-				if !ok {
-					fmt.Println("❌ Unknown sensor type:", sensor)
-					continue
-				}
-				fmt.Printf("%d. %s\n", count, sensor.String())
-				count++
-			}
-		}
-
-		totalTempSensors := len(tempSensors)
-		if totalTempSensors > 0 {
-			units := util.Pluralize(totalTempSensors, "sensor", "sensors")
-			var intro string
-			if options.LoadAllSensors() {
-				intro = "Including"
-			} else {
-				intro = "Got"
-			}
-			fmt.Printf("\n✅ %s %d temperature %s:\n", intro, totalTempSensors, units)
-			for _, sensor := range tempSensors {
-				fmt.Printf("%d. %s\n", count, sensor.String())
-				count++
-			}
-		}
-
-		totalMotionSensors := len(motionSensors)
-		if totalMotionSensors > 0 {
-			units := util.Pluralize(totalMotionSensors, "sensor", "sensors")
-			var intro string
-			if options.LoadAllSensors() {
-				intro = "Including"
-			} else {
-				intro = "Got"
-			}
-			fmt.Printf("\n✅ %s %d motion %s:\n", intro, totalMotionSensors, units)
-			for _, sensor := range motionSensors {
-				fmt.Printf("%d. %s\n", count, sensor.String())
-				count++
-			}
 		}
 	}
 }
