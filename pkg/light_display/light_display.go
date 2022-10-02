@@ -7,22 +7,21 @@ import (
 )
 
 type LightDisplay struct {
-	HueClient *hueapi.Client
+	Lights []hueapi.Light
 }
 
-func NewLightDisplay(hueClient *hueapi.Client) *LightDisplay {
-	return &LightDisplay{HueClient: hueClient}
-}
-
-func (ld *LightDisplay) LoadLights() {
-	lights, err := ld.HueClient.GetLights()
+func NewLightDisplay(hueClient *hueapi.Client) (*LightDisplay, error) {
+	lights, err := hueClient.GetLights()
 	if err != nil {
-		fmt.Println("❌ Failed to get lights:", err)
-		return
+		return nil, err
 	}
 
-	fmt.Printf("\n✅ Got %d light(s):\n", len(lights))
-	for i, light := range lights {
+	return &LightDisplay{Lights: lights}, nil
+}
+
+func (ld *LightDisplay) DisplayLights() {
+	fmt.Printf("\n✅ Got %d light(s):\n", len(ld.Lights))
+	for i, light := range ld.Lights {
 		fmt.Printf("%d. %s\n", i+1, light.String())
 	}
 }

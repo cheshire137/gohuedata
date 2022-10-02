@@ -35,8 +35,12 @@ func main() {
 	hueClient := hueapi.NewClient(bridgeApiUrl, fahrenheit)
 
 	if options.LoadLights() {
-		lightDisplay := light_display.NewLightDisplay(hueClient)
-		lightDisplay.LoadLights()
+		lightDisplay, err := light_display.NewLightDisplay(hueClient)
+		if err == nil {
+			lightDisplay.DisplayLights()
+		} else {
+			fmt.Println("❌ Failed to get lights:", err)
+		}
 	}
 
 	if options.LoadSensors() {
