@@ -45,19 +45,19 @@ func main() {
 
 	if options.LoadLights() {
 		lightLoader, err := light_loader.NewLightLoader(hueClient)
-		if err == nil {
-			lightLoader.DisplayLights()
-		} else {
+		if err != nil {
 			util.LogError("Failed to load lights:", err)
+			return
 		}
+		lightLoader.DisplayLights()
 	}
 
 	if options.LoadSensors() {
 		sensorLoader, err := sensor_loader.NewSensorLoader(hueClient, options.SensorSelection)
-		if err == nil {
-			sensorLoader.DisplaySensors()
-		} else {
+		if err != nil {
 			util.LogError("Failed to load sensors:", err)
+			return
 		}
+		sensorLoader.DisplaySensors()
 	}
 }
