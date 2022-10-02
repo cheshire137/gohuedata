@@ -15,12 +15,13 @@ import (
 )
 
 func main() {
-	config, err := config.NewConfig("config.yml")
+	configPath := "config.yml"
+	config, err := config.NewConfig(configPath)
 	if err != nil {
 		util.LogError("Failed to load configuration:", err)
 		return
 	}
-	util.LogSuccess("Loaded configuration")
+	util.LogSuccess("Loaded configuration file %s", configPath)
 
 	options := options.ParseOptions()
 	bridges := config.Bridges
@@ -41,6 +42,7 @@ func main() {
 		util.LogError("Failed to open database:", err)
 		return
 	}
+	util.LogSuccess("Loaded %s database", config.DatabaseFile)
 	defer db.Close()
 
 	if options.LoadLights() {
