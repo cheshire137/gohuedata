@@ -70,26 +70,6 @@ func (o *Options) LoadSensors() bool {
 	return o.SensorSelection != NoSensors
 }
 
-func (o *Options) OnlyTemperatureSensors() bool {
-	return o.SensorSelection == Temperature
-}
-
-func (o *Options) OnlyMotionSensors() bool {
-	return o.SensorSelection == Motion
-}
-
-func (o *Options) LoadTemperatureSensors() bool {
-	return o.LoadSensors() && !o.OnlyMotionSensors()
-}
-
-func (o *Options) LoadMotionSensors() bool {
-	return o.LoadSensors() && !o.OnlyTemperatureSensors()
-}
-
-func (o *Options) LoadAllSensors() bool {
-	return o.LoadSensors() && !o.OnlyMotionSensors() && !o.OnlyTemperatureSensors()
-}
-
 func (o *Options) FahrenheitSpecified(fahrenheitFallback bool) bool {
 	if o.TemperatureUnits != Unspecified {
 		return o.TemperatureUnits == Fahrenheit

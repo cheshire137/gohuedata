@@ -51,8 +51,8 @@ func (c *Client) GetSensors(sensorSelection options.SensorSelection) ([]interfac
 		return nil, err
 	}
 	sensors := make([]interface{}, 0, len(sensorResponse))
-	loadTempSensors := sensorSelection != "motion"
-	loadMotionSensors := sensorSelection != "temperature"
+	loadTempSensors := sensorSelection != options.Motion
+	loadMotionSensors := sensorSelection != options.Temperature
 	for _, sensor := range sensorResponse {
 		if sensor.IsTemperatureSensor() {
 			if loadTempSensors {
