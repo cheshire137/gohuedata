@@ -1,4 +1,5 @@
 temperature_units: "F" # choose F for Fahrenheit or C for Celsius
+database_file: "gohuedata.db" # used for a SQLite database
 bridges:
 - name: "Name of your first Philips Hue bridge"
   ip_address: "IP address of your first bridge, e.g., 192.168.1.2"

@@ -1,6 +1,10 @@
 package main
 
 import (
+	"database/sql"
+
+	_ "github.com/mattn/go-sqlite3"
+
 	"github.com/cheshire137/gohuedata/pkg/bridge_display"
 	"github.com/cheshire137/gohuedata/pkg/config"
 	"github.com/cheshire137/gohuedata/pkg/hueapi"
@@ -32,6 +36,12 @@ func main() {
 
 	fahrenheit := options.FahrenheitSpecified(config.FahrenheitSpecified())
 	hueClient := hueapi.NewClient(bridgeApiUrl, fahrenheit)
+	db, err := sql.Open("sqlite3", config.DatabaseFile)
+	if err != nil {
+		util.LogError("Failed to open database:", err)
+		return
+	}
+	defer db.Close()
 
 	if options.LoadLights() {
 		lightLoader, err := light_loader.NewLightLoader(hueClient)

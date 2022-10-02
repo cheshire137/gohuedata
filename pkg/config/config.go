@@ -11,6 +11,7 @@ import (
 type Config struct {
 	Bridges          []hueapi.Bridge `yaml:"bridges"`
 	TemperatureUnits string          `yaml:"temperature_units"`
+	DatabaseFile     string          `yaml:"database_file"`
 }
 
 func NewConfig(path string) (*Config, error) {
