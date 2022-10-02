@@ -8,7 +8,7 @@ import (
 	"github.com/cheshire137/gohuedata/pkg/hueapi"
 	"github.com/cheshire137/gohuedata/pkg/light_display"
 	"github.com/cheshire137/gohuedata/pkg/options"
-	"github.com/cheshire137/gohuedata/pkg/sensor_display"
+	"github.com/cheshire137/gohuedata/pkg/sensor_loader"
 )
 
 func main() {
@@ -44,9 +44,9 @@ func main() {
 	}
 
 	if options.LoadSensors() {
-		sensorDisplay, err := sensor_display.NewSensorDisplay(hueClient, options.SensorSelection)
+		sensorLoader, err := sensor_loader.NewSensorLoader(hueClient, options.SensorSelection)
 		if err == nil {
-			sensorDisplay.DisplaySensors()
+			sensorLoader.DisplaySensors()
 		} else {
 			fmt.Println("❌ Failed to get sensors:", err)
 		}

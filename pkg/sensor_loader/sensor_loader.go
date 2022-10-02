@@ -1,4 +1,4 @@
-package sensor_display
+package sensor_loader
 
 import (
 	"fmt"
@@ -8,14 +8,14 @@ import (
 	"github.com/cheshire137/gohuedata/pkg/util"
 )
 
-type SensorDisplay struct {
+type SensorLoader struct {
 	SensorSelection    options.SensorSelection
 	MotionSensors      []*hueapi.MotionSensor
 	TemperatureSensors []*hueapi.TemperatureSensor
 	OtherSensors       []*hueapi.Sensor
 }
 
-func NewSensorDisplay(hueClient *hueapi.Client, sensorSelection options.SensorSelection) (*SensorDisplay, error) {
+func NewSensorLoader(hueClient *hueapi.Client, sensorSelection options.SensorSelection) (*SensorLoader, error) {
 	sensors, err := hueClient.GetSensors(sensorSelection)
 	if err != nil {
 		return nil, err
@@ -51,7 +51,7 @@ func NewSensorDisplay(hueClient *hueapi.Client, sensorSelection options.SensorSe
 		}
 	}
 
-	return &SensorDisplay{
+	return &SensorLoader{
 		SensorSelection:    sensorSelection,
 		MotionSensors:      motionSensors,
 		TemperatureSensors: tempSensors,
@@ -59,27 +59,27 @@ func NewSensorDisplay(hueClient *hueapi.Client, sensorSelection options.SensorSe
 	}, nil
 }
 
-func (sd *SensorDisplay) TotalSensors() int {
-	return sd.TotalMotionSensors() + sd.TotalTemperatureSensors() + len(sd.OtherSensors)
+func (sl *SensorLoader) TotalSensors() int {
+	return sl.TotalMotionSensors() + sl.TotalTemperatureSensors() + len(sl.OtherSensors)
 }
 
-func (sd *SensorDisplay) TotalTemperatureSensors() int {
-	return len(sd.TemperatureSensors)
+func (sl *SensorLoader) TotalTemperatureSensors() int {
+	return len(sl.TemperatureSensors)
 }
 
-func (sd *SensorDisplay) TotalMotionSensors() int {
-	return len(sd.MotionSensors)
+func (sl *SensorLoader) TotalMotionSensors() int {
+	return len(sl.MotionSensors)
 }
 
-func (sd *SensorDisplay) DisplaySensors() {
-	displayAllSensors := sd.SensorSelection == options.AllSensors
+func (sl *SensorLoader) DisplaySensors() {
+	displayAllSensors := sl.SensorSelection == options.AllSensors
 
 	if displayAllSensors {
-		totalSensors := sd.TotalSensors()
+		totalSensors := sl.TotalSensors()
 		units := util.Pluralize(totalSensors, "sensor", "sensors")
 		fmt.Printf("\n✅ Got %d %s:\n", totalSensors, units)
 
-		for i, sensor := range sd.OtherSensors {
+		for i, sensor := range sl.OtherSensors {
 			fmt.Printf("%d. %s\n", i+1, sensor.String())
 		}
 	}
@@ -91,20 +91,20 @@ func (sd *SensorDisplay) DisplaySensors() {
 		intro = "Got"
 	}
 
-	totalTempSensors := sd.TotalTemperatureSensors()
+	totalTempSensors := sl.TotalTemperatureSensors()
 	if totalTempSensors > 0 {
 		units := util.Pluralize(totalTempSensors, "sensor", "sensors")
 		fmt.Printf("\n✅ %s %d temperature %s:\n", intro, totalTempSensors, units)
-		for i, sensor := range sd.TemperatureSensors {
+		for i, sensor := range sl.TemperatureSensors {
 			fmt.Printf("%d. %s\n", i+1, sensor.String())
 		}
 	}
 
-	totalMotionSensors := sd.TotalMotionSensors()
+	totalMotionSensors := sl.TotalMotionSensors()
 	if totalMotionSensors > 0 {
 		units := util.Pluralize(totalMotionSensors, "sensor", "sensors")
 		fmt.Printf("\n✅ %s %d motion %s:\n", intro, totalMotionSensors, units)
-		for i, sensor := range sd.MotionSensors {
+		for i, sensor := range sl.MotionSensors {
 			fmt.Printf("%d. %s\n", i+1, sensor.String())
 		}
 	}
