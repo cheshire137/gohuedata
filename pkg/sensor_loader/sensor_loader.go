@@ -77,7 +77,7 @@ func (sl *SensorLoader) DisplaySensors() {
 	if displayAllSensors {
 		totalSensors := sl.TotalSensors()
 		units := util.Pluralize(totalSensors, "sensor", "sensors")
-		fmt.Printf("\n✅ Got %d %s:\n", totalSensors, units)
+		util.LogSuccess("Got %d %s:", totalSensors, units)
 
 		for i, sensor := range sl.OtherSensors {
 			fmt.Printf("%d. %s\n", i+1, sensor.String())
@@ -94,7 +94,7 @@ func (sl *SensorLoader) DisplaySensors() {
 	totalTempSensors := sl.TotalTemperatureSensors()
 	if totalTempSensors > 0 {
 		units := util.Pluralize(totalTempSensors, "sensor", "sensors")
-		fmt.Printf("\n✅ %s %d temperature %s:\n", intro, totalTempSensors, units)
+		util.LogSuccess("%s %d temperature %s:", intro, totalTempSensors, units)
 		for i, sensor := range sl.TemperatureSensors {
 			fmt.Printf("%d. %s\n", i+1, sensor.String())
 		}
@@ -103,7 +103,7 @@ func (sl *SensorLoader) DisplaySensors() {
 	totalMotionSensors := sl.TotalMotionSensors()
 	if totalMotionSensors > 0 {
 		units := util.Pluralize(totalMotionSensors, "sensor", "sensors")
-		fmt.Printf("\n✅ %s %d motion %s:\n", intro, totalMotionSensors, units)
+		util.LogSuccess("%s %d motion %s:", intro, totalMotionSensors, units)
 		for i, sensor := range sl.MotionSensors {
 			fmt.Printf("%d. %s\n", i+1, sensor.String())
 		}

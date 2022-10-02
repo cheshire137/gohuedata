@@ -1,33 +1,32 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/cheshire137/gohuedata/pkg/bridge_display"
 	"github.com/cheshire137/gohuedata/pkg/config"
 	"github.com/cheshire137/gohuedata/pkg/hueapi"
 	"github.com/cheshire137/gohuedata/pkg/light_loader"
 	"github.com/cheshire137/gohuedata/pkg/options"
 	"github.com/cheshire137/gohuedata/pkg/sensor_loader"
+	"github.com/cheshire137/gohuedata/pkg/util"
 )
 
 func main() {
 	config, err := config.NewConfig("config.yml")
 	if err != nil {
-		fmt.Println("❌ Failed to load configuration:", err)
+		util.LogError("Failed to load configuration:", err)
 		return
 	}
-	fmt.Println("✅ Loaded configuration")
+	util.LogSuccess("Loaded configuration")
 
 	options := options.ParseOptions()
 	bridges := config.Bridges
 	bridgeDisplay := bridge_display.NewBridgeDisplay(bridges)
 	bridge := bridgeDisplay.GetBridgeSelection(options.BridgeSelection)
-	fmt.Println("✅ Selected bridge:", bridge.Name)
+	util.LogSuccess("Selected bridge: %s", bridge.Name)
 
 	bridgeApiUrl, err := bridge.GetApiUrl()
 	if err != nil {
-		fmt.Println("❌ Failed to get bridge URL:", err)
+		util.LogError("Failed to get bridge URL:", err)
 		return
 	}
 
@@ -39,7 +38,7 @@ func main() {
 		if err == nil {
 			lightLoader.DisplayLights()
 		} else {
-			fmt.Println("❌ Failed to get lights:", err)
+			util.LogError("Failed to load lights:", err)
 		}
 	}
 
@@ -48,7 +47,7 @@ func main() {
 		if err == nil {
 			sensorLoader.DisplaySensors()
 		} else {
-			fmt.Println("❌ Failed to get sensors:", err)
+			util.LogError("Failed to load sensors:", err)
 		}
 	}
 }
