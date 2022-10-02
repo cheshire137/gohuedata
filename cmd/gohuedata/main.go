@@ -6,7 +6,7 @@ import (
 	"github.com/cheshire137/gohuedata/pkg/bridge_display"
 	"github.com/cheshire137/gohuedata/pkg/config"
 	"github.com/cheshire137/gohuedata/pkg/hueapi"
-	"github.com/cheshire137/gohuedata/pkg/light_display"
+	"github.com/cheshire137/gohuedata/pkg/light_loader"
 	"github.com/cheshire137/gohuedata/pkg/options"
 	"github.com/cheshire137/gohuedata/pkg/sensor_loader"
 )
@@ -35,9 +35,9 @@ func main() {
 	hueClient := hueapi.NewClient(bridgeApiUrl, fahrenheit)
 
 	if options.LoadLights() {
-		lightDisplay, err := light_display.NewLightDisplay(hueClient)
+		lightLoader, err := light_loader.NewLightLoader(hueClient)
 		if err == nil {
-			lightDisplay.DisplayLights()
+			lightLoader.DisplayLights()
 		} else {
 			fmt.Println("❌ Failed to get lights:", err)
 		}
