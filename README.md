@@ -1,6 +1,6 @@
 # gohuedata
 
-Command-line tool written in Go to get data from your Philips Hue system. Just a little work-in-progress that I'm fiddling with.
+Command-line tool written in Go to get data from your Philips Hue system. Just a little work-in-progress that I'm fiddling with. I built this using Go version 1.17.5 on macOS.
 
 ## How to use/develop
 
