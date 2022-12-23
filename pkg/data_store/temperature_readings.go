@@ -12,7 +12,7 @@ func (ds *DataStore) AddTemperatureReading(bridge *hueapi.Bridge, sensor *hueapi
 		return err
 	}
 	insertQuery := `INSERT INTO temperature_readings (temperature_sensor_id, last_updated, fahrenheit_temperature)
-		VALUES (?, ?, ?)`
+		VALUES (?, ?, ?) ON CONFLICT DO NOTHING`
 	stmt, err := ds.db.Prepare(insertQuery)
 	if err != nil {
 		return err
