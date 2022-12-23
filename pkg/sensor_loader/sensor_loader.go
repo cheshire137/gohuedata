@@ -4,31 +4,31 @@ import (
 	"fmt"
 
 	"github.com/cheshire137/gohuedata/pkg/data_store"
-	"github.com/cheshire137/gohuedata/pkg/hueapi"
+	"github.com/cheshire137/gohuedata/pkg/hue_api"
 	"github.com/cheshire137/gohuedata/pkg/options"
 	"github.com/cheshire137/gohuedata/pkg/util"
 )
 
 type SensorLoader struct {
 	SensorSelection    options.SensorSelection
-	MotionSensors      []*hueapi.MotionSensor
-	TemperatureSensors []*hueapi.TemperatureSensor
-	OtherSensors       []*hueapi.Sensor
+	MotionSensors      []*hue_api.MotionSensor
+	TemperatureSensors []*hue_api.TemperatureSensor
+	OtherSensors       []*hue_api.Sensor
 }
 
-func NewSensorLoader(hueClient *hueapi.Client, sensorSelection options.SensorSelection) (*SensorLoader, error) {
+func NewSensorLoader(hueClient *hue_api.Client, sensorSelection options.SensorSelection) (*SensorLoader, error) {
 	sensors, err := hueClient.GetSensors(sensorSelection)
 	if err != nil {
 		return nil, err
 	}
 
-	tempSensors := []*hueapi.TemperatureSensor{}
-	motionSensors := []*hueapi.MotionSensor{}
-	otherSensors := []*hueapi.Sensor{}
+	tempSensors := []*hue_api.TemperatureSensor{}
+	motionSensors := []*hue_api.MotionSensor{}
+	otherSensors := []*hue_api.Sensor{}
 
 	for _, sensor := range sensors {
 		if sensorSelection != options.Motion {
-			tempSensor, ok := sensor.(*hueapi.TemperatureSensor)
+			tempSensor, ok := sensor.(*hue_api.TemperatureSensor)
 			if ok {
 				tempSensors = append(tempSensors, tempSensor)
 				continue
@@ -36,7 +36,7 @@ func NewSensorLoader(hueClient *hueapi.Client, sensorSelection options.SensorSel
 		}
 
 		if sensorSelection != options.Temperature {
-			motionSensor, ok := sensor.(*hueapi.MotionSensor)
+			motionSensor, ok := sensor.(*hue_api.MotionSensor)
 			if ok {
 				motionSensors = append(motionSensors, motionSensor)
 				continue
@@ -44,7 +44,7 @@ func NewSensorLoader(hueClient *hueapi.Client, sensorSelection options.SensorSel
 		}
 
 		if sensorSelection == options.AllSensors {
-			sensor, ok := sensor.(*hueapi.Sensor)
+			sensor, ok := sensor.(*hue_api.Sensor)
 			if !ok {
 				return nil, fmt.Errorf("Unknown sensor type: %v", sensor)
 			}
@@ -111,7 +111,7 @@ func (sl *SensorLoader) DisplaySensors() {
 	}
 }
 
-func (sl *SensorLoader) SaveTemperatureSensorReadings(bridge *hueapi.Bridge, dataStore *data_store.DataStore) error {
+func (sl *SensorLoader) SaveTemperatureSensorReadings(bridge *hue_api.Bridge, dataStore *data_store.DataStore) error {
 	for _, sensor := range sl.TemperatureSensors {
 		err := dataStore.AddTemperatureReading(bridge, sensor)
 		if err != nil {

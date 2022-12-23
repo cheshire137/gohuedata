@@ -3,10 +3,10 @@ package data_store
 import (
 	"database/sql"
 
-	"github.com/cheshire137/gohuedata/pkg/hueapi"
+	"github.com/cheshire137/gohuedata/pkg/hue_api"
 )
 
-func (ds *DataStore) AddHueBridge(bridge *hueapi.Bridge) error {
+func (ds *DataStore) AddHueBridge(bridge *hue_api.Bridge) error {
 	insertQuery := `INSERT INTO hue_bridges (ip_address, name) VALUES (?, ?)
 		ON CONFLICT(ip_address) DO UPDATE SET name = excluded.name`
 	stmt, err := ds.db.Prepare(insertQuery)

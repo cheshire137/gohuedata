@@ -1,4 +1,4 @@
-package hueapi
+package hue_api
 
 type LightConfig struct {
 	Archetype string `json:"archetype"`

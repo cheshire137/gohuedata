@@ -1,4 +1,4 @@
-package hueapi
+package hue_api
 
 type LightControl struct {
 	MinDimLevel      int         `json:"mindimlevel"`

@@ -3,15 +3,15 @@ package config
 import (
 	"os"
 
-	"github.com/cheshire137/gohuedata/pkg/hueapi"
+	"github.com/cheshire137/gohuedata/pkg/hue_api"
 	"github.com/cheshire137/gohuedata/pkg/options"
 	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
-	Bridges          []hueapi.Bridge `yaml:"bridges"`
-	TemperatureUnits string          `yaml:"temperature_units"`
-	DatabaseFile     string          `yaml:"database_file"`
+	Bridges          []hue_api.Bridge `yaml:"bridges"`
+	TemperatureUnits string           `yaml:"temperature_units"`
+	DatabaseFile     string           `yaml:"database_file"`
 }
 
 func NewConfig(path string) (*Config, error) {

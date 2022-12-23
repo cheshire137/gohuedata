@@ -1,4 +1,4 @@
-package hueapi
+package hue_api
 
 type SensorInput struct {
 	RepeatIntervals []int         `json:"repeatintervals"`

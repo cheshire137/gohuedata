@@ -4,18 +4,18 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/cheshire137/gohuedata/pkg/hueapi"
+	"github.com/cheshire137/gohuedata/pkg/hue_api"
 )
 
 type BridgeDisplay struct {
-	Bridges []hueapi.Bridge
+	Bridges []hue_api.Bridge
 }
 
-func NewBridgeDisplay(bridges []hueapi.Bridge) *BridgeDisplay {
+func NewBridgeDisplay(bridges []hue_api.Bridge) *BridgeDisplay {
 	return &BridgeDisplay{Bridges: bridges}
 }
 
-func (bd *BridgeDisplay) GetBridgeSelection(bridgeSelection int) *hueapi.Bridge {
+func (bd *BridgeDisplay) GetBridgeSelection(bridgeSelection int) *hue_api.Bridge {
 	if bd.IsValidBridgeIndex(bridgeSelection) {
 		return &bd.Bridges[bridgeSelection-1]
 	}
@@ -25,7 +25,7 @@ func (bd *BridgeDisplay) GetBridgeSelection(bridgeSelection int) *hueapi.Bridge 
 	return bd.GetBridgeSelectionFromUser()
 }
 
-func (bd *BridgeDisplay) GetBridgeSelectionFromUser() *hueapi.Bridge {
+func (bd *BridgeDisplay) GetBridgeSelectionFromUser() *hue_api.Bridge {
 	bd.DisplayBridgePrompt()
 
 	userInput := ""

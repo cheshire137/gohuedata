@@ -3,10 +3,10 @@ package data_store
 import (
 	"database/sql"
 
-	"github.com/cheshire137/gohuedata/pkg/hueapi"
+	"github.com/cheshire137/gohuedata/pkg/hue_api"
 )
 
-func (ds *DataStore) AddTemperatureReading(bridge *hueapi.Bridge, sensor *hueapi.TemperatureSensor) error {
+func (ds *DataStore) AddTemperatureReading(bridge *hue_api.Bridge, sensor *hue_api.TemperatureSensor) error {
 	err := ds.addTemperatureSensor(bridge, sensor)
 	if err != nil {
 		return err

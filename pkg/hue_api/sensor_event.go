@@ -1,4 +1,4 @@
-package hueapi
+package hue_api
 
 type SensorEvent struct {
 	ButtonEvent int    `json:"buttonevent"`

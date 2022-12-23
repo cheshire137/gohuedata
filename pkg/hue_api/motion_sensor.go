@@ -1,8 +1,8 @@
-package hueapi
+package hue_api
 
 import "fmt"
 
-type TemperatureSensor struct {
+type MotionSensor struct {
 	State            SensorState
 	Config           SensorConfig
 	Name             string
@@ -14,11 +14,10 @@ type TemperatureSensor struct {
 	ProductName      string
 	Capabilities     SensorCapabilities
 	Recycle          bool
-	Fahrenheit       bool
 }
 
-func NewTemperatureSensor(s Sensor, fahrenheit bool) *TemperatureSensor {
-	return &TemperatureSensor{
+func NewMotionSensor(s Sensor) *MotionSensor {
+	return &MotionSensor{
 		State:            s.State,
 		Config:           s.Config,
 		Name:             s.Name,
@@ -30,28 +29,13 @@ func NewTemperatureSensor(s Sensor, fahrenheit bool) *TemperatureSensor {
 		ProductName:      s.ProductName,
 		Capabilities:     s.Capabilities,
 		Recycle:          s.Recycle,
-		Fahrenheit:       fahrenheit,
 	}
 }
 
-func (s *TemperatureSensor) Temperature() float32 {
-	if s.Fahrenheit {
-		return s.State.FahrenheitTemperature()
-	}
-	return s.State.CelsiusTemperature()
-}
-
-func (s *TemperatureSensor) TempUnits() string {
-	if s.Fahrenheit {
-		return "°F"
-	}
-	return "°C"
-}
-
-func (s *TemperatureSensor) String() string {
+func (s *MotionSensor) String() string {
 	lastUpdatedSummary := s.State.LastUpdatedSummary()
-	if lastUpdatedSummary == "" {
-		return fmt.Sprintf("%s -- %.1f%s", s.Name, s.Temperature(), s.TempUnits())
+	if lastUpdatedSummary != "" {
+		return fmt.Sprintf("%s -- %s", s.Name, lastUpdatedSummary)
 	}
-	return fmt.Sprintf("%s -- %.1f%s as of %s", s.Name, s.Temperature(), s.TempUnits(), lastUpdatedSummary)
+	return s.Name
 }

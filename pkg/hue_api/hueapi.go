@@ -1,4 +1,4 @@
-package hueapi
+package hue_api
 
 import (
 	"encoding/json"

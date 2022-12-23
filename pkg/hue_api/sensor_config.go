@@ -1,4 +1,4 @@
-package hueapi
+package hue_api
 
 type SensorConfig struct {
 	On              bool   `json:"on"`

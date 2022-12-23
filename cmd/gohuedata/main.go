@@ -8,7 +8,7 @@ import (
 	"github.com/cheshire137/gohuedata/pkg/bridge_display"
 	"github.com/cheshire137/gohuedata/pkg/config"
 	"github.com/cheshire137/gohuedata/pkg/data_store"
-	"github.com/cheshire137/gohuedata/pkg/hueapi"
+	"github.com/cheshire137/gohuedata/pkg/hue_api"
 	"github.com/cheshire137/gohuedata/pkg/light_loader"
 	"github.com/cheshire137/gohuedata/pkg/options"
 	"github.com/cheshire137/gohuedata/pkg/sensor_loader"
@@ -57,7 +57,7 @@ func main() {
 	}
 
 	fahrenheit := options.FahrenheitSpecified(config.FahrenheitSpecified())
-	hueClient := hueapi.NewClient(bridgeApiUrl, fahrenheit)
+	hueClient := hue_api.NewClient(bridgeApiUrl, fahrenheit)
 
 	if options.LoadLights() {
 		lightLoader, err := light_loader.NewLightLoader(hueClient)

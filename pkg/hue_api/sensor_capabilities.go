@@ -1,4 +1,4 @@
-package hueapi
+package hue_api
 
 type SensorCapabilities struct {
 	Certified bool          `json:"certified"`
