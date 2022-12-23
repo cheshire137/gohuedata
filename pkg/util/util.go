@@ -1,6 +1,9 @@
 package util
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 func Pluralize(count int, singular string, plural string) string {
 	if count == 1 {
@@ -20,4 +23,9 @@ func LogSuccess(format string, a ...interface{}) {
 func LogError(a ...interface{}) {
 	fmt.Print("❌ ")
 	fmt.Println(a...)
+}
+
+func ErrorJson(w http.ResponseWriter, err error) {
+	w.Header().Set("Content-Type", "application/json")
+	http.Error(w, err.Error(), http.StatusInternalServerError)
 }
