@@ -11,6 +11,7 @@ import (
 	"github.com/cheshire137/gohuedata/pkg/light_loader"
 	"github.com/cheshire137/gohuedata/pkg/options"
 	"github.com/cheshire137/gohuedata/pkg/sensor_loader"
+	"github.com/cheshire137/gohuedata/pkg/temperature_sensor_store"
 	"github.com/cheshire137/gohuedata/pkg/util"
 )
 
@@ -61,5 +62,11 @@ func main() {
 			return
 		}
 		sensorLoader.DisplaySensors()
+
+		_, err = temperature_sensor_store.NewTemperatureSensorStore(db)
+		if err != nil {
+			util.LogError("Failed to create temperature sensor table:", err)
+			return
+		}
 	}
 }
