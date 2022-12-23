@@ -36,7 +36,9 @@ Choose between `F` for Fahrenheit and `C` for Celsius. Defaults to the config fi
 
     `go run cmd/gohuedata/main.go -t C`
 
-- **`-config`** - Specify the path to the YAML configuration file.
+- **`-config`** - Specify the path to the YAML configuration file. Example:
+
+    `go run cmd/gohuedata/main.go -config ~/my_gohuedata_configuration.yml`
 
 ## Thanks
 
