@@ -34,6 +34,10 @@ temperature sensors over time. This is done via the gohuedata script:
     You will be prompted to select a bridge if your config file specifies more than one. By default, all lights and
     sensors on the selected bridge will be shown. The current temperature for each Philips Hue temperature sensor will also be recorded in the specified SQLite database.
 
+1. Optional: set up a cron job to run the script periodically to log data. For example, on macOS, run `crontab -e` and add a line like this to run gohuedata [every hour](https://crontab.guru/every-hour):
+
+    `0 * * * * go run /path/to/gohuedata/cmd/gohuedata/main.go -sensors temperature -lights none -b 1 -config /path/to/your-config-file.yml`
+
 #### Options for gohuedata
 
 - **`-b`** - Specify a bridge via the index (starting at 1) of the bridge in your config file. For example, to specify
