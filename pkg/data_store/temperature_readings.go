@@ -6,6 +6,13 @@ import (
 	"github.com/cheshire137/gohuedata/pkg/hue_api"
 )
 
+type TemperatureReading struct {
+	TemperatureSensorID string  `json:"temperatureSensorID"`
+	LastUpdated         string  `json:"lastUpdated"`
+	Temperature         float32 `json:"temperature"`
+	Units               string  `json:"units"`
+}
+
 func (ds *DataStore) AddTemperatureReading(bridge *hue_api.Bridge, sensor *hue_api.TemperatureSensor, fahrenheit bool) error {
 	err := ds.addTemperatureSensor(bridge, sensor)
 	if err != nil {

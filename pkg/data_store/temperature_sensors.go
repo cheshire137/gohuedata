@@ -6,6 +6,12 @@ import (
 	"github.com/cheshire137/gohuedata/pkg/hue_api"
 )
 
+type TemperatureSensor struct {
+	ID              string `json:"id"`
+	Name            string `json:"name"`
+	BridgeIPAddress string `json:"bridgeIPAddress"`
+}
+
 func (ds *DataStore) addTemperatureSensor(bridge *hue_api.Bridge, sensor *hue_api.TemperatureSensor) error {
 	insertQuery := `INSERT INTO temperature_sensors (id, name, bridge_ip_address) VALUES (?, ?, ?)
 		ON CONFLICT(id) DO UPDATE SET name = excluded.name`
