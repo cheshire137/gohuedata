@@ -111,9 +111,9 @@ func (sl *SensorLoader) DisplaySensors() {
 	}
 }
 
-func (sl *SensorLoader) SaveTemperatureSensorReadings(tss *data_store.DataStore) error {
+func (sl *SensorLoader) SaveTemperatureSensorReadings(bridge *hueapi.Bridge, dataStore *data_store.DataStore) error {
 	for _, sensor := range sl.TemperatureSensors {
-		err := tss.AddTemperatureReading(sensor)
+		err := dataStore.AddTemperatureReading(bridge, sensor)
 		if err != nil {
 			return err
 		}

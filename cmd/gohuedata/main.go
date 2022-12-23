@@ -30,6 +30,26 @@ func main() {
 	bridge := bridgeDisplay.GetBridgeSelection(options.BridgeSelection)
 	util.LogSuccess("Selected bridge: %s", bridge.Name)
 
+	db, err := sql.Open("sqlite3", config.DatabaseFile)
+	if err != nil {
+		util.LogError("Failed to open database:", err)
+		return
+	}
+	util.LogSuccess("Loaded %s database", config.DatabaseFile)
+	defer db.Close()
+
+	dataStore, err := data_store.NewDataStore(db)
+	if err != nil {
+		util.LogError("Failed to create tables:", err)
+		return
+	}
+
+	err = dataStore.AddHueBridge(bridge)
+	if err != nil {
+		util.LogError("Failed to record Hue bridge:", err)
+		return
+	}
+
 	bridgeApiUrl, err := bridge.GetApiUrl()
 	if err != nil {
 		util.LogError("Failed to get bridge URL:", err)
@@ -38,13 +58,6 @@ func main() {
 
 	fahrenheit := options.FahrenheitSpecified(config.FahrenheitSpecified())
 	hueClient := hueapi.NewClient(bridgeApiUrl, fahrenheit)
-	db, err := sql.Open("sqlite3", config.DatabaseFile)
-	if err != nil {
-		util.LogError("Failed to open database:", err)
-		return
-	}
-	util.LogSuccess("Loaded %s database", config.DatabaseFile)
-	defer db.Close()
 
 	if options.LoadLights() {
 		lightLoader, err := light_loader.NewLightLoader(hueClient)
@@ -63,13 +76,7 @@ func main() {
 		}
 		sensorLoader.DisplaySensors()
 
-		dataStore, err := data_store.NewDataStore(db)
-		if err != nil {
-			util.LogError("Failed to create tables:", err)
-			return
-		}
-
-		err = sensorLoader.SaveTemperatureSensorReadings(dataStore)
+		err = sensorLoader.SaveTemperatureSensorReadings(bridge, dataStore)
 		if err != nil {
 			util.LogError("Failed to save temperature readings:", err)
 			return

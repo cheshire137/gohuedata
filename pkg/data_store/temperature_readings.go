@@ -6,8 +6,8 @@ import (
 	"github.com/cheshire137/gohuedata/pkg/hueapi"
 )
 
-func (ds *DataStore) AddTemperatureReading(sensor *hueapi.TemperatureSensor) error {
-	err := ds.addTemperatureSensor(sensor)
+func (ds *DataStore) AddTemperatureReading(bridge *hueapi.Bridge, sensor *hueapi.TemperatureSensor) error {
+	err := ds.addTemperatureSensor(bridge, sensor)
 	if err != nil {
 		return err
 	}
