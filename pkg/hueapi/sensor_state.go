@@ -39,10 +39,10 @@ func (s *SensorState) LastUpdatedSummary() string {
 	return fmt.Sprintf("%s on %s", lastUpdated.Format("3:04 PM"), lastUpdated.Format("Jan 2, 2006"))
 }
 
-func (s *SensorState) CelsiusTemperature() int {
-	return s.Temperature / 100 // API returns a value like 2277 for 22.77°C
+func (s *SensorState) CelsiusTemperature() float32 {
+	return float32(s.Temperature) / 100 // API returns a value like 2277 for 22.77°C
 }
 
-func (s *SensorState) FahrenheitTemperature() int {
+func (s *SensorState) FahrenheitTemperature() float32 {
 	return (s.CelsiusTemperature() * 9 / 5) + 32
 }

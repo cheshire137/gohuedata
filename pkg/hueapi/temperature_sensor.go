@@ -34,7 +34,7 @@ func NewTemperatureSensor(s Sensor, fahrenheit bool) *TemperatureSensor {
 	}
 }
 
-func (s *TemperatureSensor) Temperature() int {
+func (s *TemperatureSensor) Temperature() float32 {
 	if s.Fahrenheit {
 		return s.State.FahrenheitTemperature()
 	}
@@ -51,7 +51,7 @@ func (s *TemperatureSensor) TempUnits() string {
 func (s *TemperatureSensor) String() string {
 	lastUpdatedSummary := s.State.LastUpdatedSummary()
 	if lastUpdatedSummary == "" {
-		return fmt.Sprintf("%s -- %d%s", s.Name, s.Temperature(), s.TempUnits())
+		return fmt.Sprintf("%s -- %.1f%s", s.Name, s.Temperature(), s.TempUnits())
 	}
-	return fmt.Sprintf("%s -- %d%s as of %s", s.Name, s.Temperature(), s.TempUnits(), lastUpdatedSummary)
+	return fmt.Sprintf("%s -- %.1f%s as of %s", s.Name, s.Temperature(), s.TempUnits(), lastUpdatedSummary)
 }
