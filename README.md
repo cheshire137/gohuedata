@@ -18,15 +18,15 @@ the first bridge in your config:
 
     `go run cmd/gohuedata/main.go -b 1`
 
-- **`--lights`** - Whether to fetch lights on the chosen bridge. Choose between `all` and `none`. Defaults to `all`.
+- **`-lights`** - Whether to fetch lights on the chosen bridge. Choose between `all` and `none`. Defaults to `all`.
 Example:
 
-    `go run cmd/gohuedata/main.go --lights none`
+    `go run cmd/gohuedata/main.go -lights none`
 
-- **`--sensors`** - Which sensors to display from the chosen bridge, if any. Choose between `all`, `temperature`,
+- **`-sensors`** - Which sensors to display from the chosen bridge, if any. Choose between `all`, `temperature`,
 `motion`, and `none`. Defaults to `all`. Example:
 
-    `go run cmd/gohuedata/main.go --sensors temperature`
+    `go run cmd/gohuedata/main.go -sensors temperature`
 
 - **`-t`** - Which units to use for temperature display, to override the `temperature_units` setting in config.yml.
 Choose between `F` for Fahrenheit and `C` for Celsius. Defaults to the config.yml setting. Example:
