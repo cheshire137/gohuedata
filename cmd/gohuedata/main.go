@@ -76,13 +76,15 @@ func main() {
 		}
 		sensorLoader.DisplaySensors()
 
-		err = sensorLoader.SaveTemperatureSensorReadings(bridge, dataStore)
-		if err != nil {
-			util.LogError("Failed to save temperature readings:", err)
-			return
+		tempSensorCount := sensorLoader.TotalTemperatureSensors()
+		if tempSensorCount > 0 {
+			err = sensorLoader.SaveTemperatureSensorReadings(bridge, dataStore)
+			if err != nil {
+				util.LogError("Failed to save temperature readings:", err)
+				return
+			}
+			units := util.Pluralize(tempSensorCount, "reading", "readings")
+			util.LogSuccess("Recorded %d temperature %s", tempSensorCount, units)
 		}
-		count := sensorLoader.TotalTemperatureSensors()
-		units := util.Pluralize(count, "reading", "readings")
-		util.LogSuccess("Recorded %d temperature %s", count, units)
 	}
 }
