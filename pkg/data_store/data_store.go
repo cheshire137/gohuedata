@@ -23,5 +23,5 @@ func createTables(db *sql.DB) error {
 	if err != nil {
 		return err
 	}
-	return nil
+	return createHueBridgesTable(db)
 }
