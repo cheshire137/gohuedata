@@ -7,8 +7,7 @@ import (
 )
 
 type HueBridge struct {
-	IPAddress string `json:"ipAddress"`
-	Name      string `json:"name"`
+	Name string `json:"name"`
 }
 
 func (ds *DataStore) AddHueBridge(bridge *hue_api.Bridge) error {

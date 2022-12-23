@@ -7,17 +7,23 @@ import (
 )
 
 type TemperatureReading struct {
-	TemperatureSensorID string  `json:"temperatureSensorID"`
-	LastUpdated         string  `json:"lastUpdated"`
-	Temperature         float32 `json:"temperature"`
-	Units               string  `json:"units"`
+	TemperatureSensor *TemperatureSensor `json:"temperatureSensor"`
+	LastUpdated       string             `json:"lastUpdated"`
+	Temperature       float32            `json:"temperature"`
+	Units             string             `json:"units"`
 }
 
 func (ds *DataStore) LoadTemperatureReadings(page int) ([]*TemperatureReading, error) {
 	perPage := 100
-	rows, err := ds.db.Query(`SELECT temperature_sensor_id, last_updated, temperature, units
+	rows, err := ds.db.Query(`SELECT temperature_readings.last_updated,
+			temperature_readings.temperature,
+			temperature_readings.units,
+			temperature_sensors.name AS sensor_name,
+			hue_bridges.name AS bridge_name
 		FROM temperature_readings
-		ORDER BY last_updated DESC
+		INNER JOIN temperature_sensors ON temperature_readings.temperature_sensor_id = temperature_sensors.id
+		INNER JOIN hue_bridges ON temperature_sensors.bridge_ip_address = hue_bridges.ip_address
+		ORDER BY temperature_readings.last_updated DESC, temperature_sensors.name ASC, hue_bridges.name ASC
 		LIMIT ? OFFSET ?`, perPage, (page-1)*perPage)
 	if err != nil {
 		return nil, err
@@ -26,10 +32,14 @@ func (ds *DataStore) LoadTemperatureReadings(page int) ([]*TemperatureReading, e
 	var readings []*TemperatureReading
 	for rows.Next() {
 		var reading TemperatureReading
-		err = rows.Scan(&reading.TemperatureSensorID, &reading.LastUpdated, &reading.Temperature, &reading.Units)
+		var sensor TemperatureSensor
+		var bridge HueBridge
+		err = rows.Scan(&reading.LastUpdated, &reading.Temperature, &reading.Units, &sensor.Name, &bridge.Name)
 		if err != nil {
 			return nil, err
 		}
+		sensor.Bridge = &bridge
+		reading.TemperatureSensor = &sensor
 		readings = append(readings, &reading)
 	}
 	return readings, nil

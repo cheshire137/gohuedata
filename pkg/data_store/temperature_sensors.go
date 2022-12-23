@@ -7,9 +7,8 @@ import (
 )
 
 type TemperatureSensor struct {
-	ID              string `json:"id"`
-	Name            string `json:"name"`
-	BridgeIPAddress string `json:"bridgeIPAddress"`
+	Name   string     `json:"name"`
+	Bridge *HueBridge `json:"bridge"`
 }
 
 func (ds *DataStore) addTemperatureSensor(bridge *hue_api.Bridge, sensor *hue_api.TemperatureSensor) error {
