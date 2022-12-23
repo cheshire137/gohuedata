@@ -1,8 +1,17 @@
 # gohuedata
 
-Command-line tool written in Go to get data from your Philips Hue system. Just a little work-in-progress that I'm fiddling with. I built this using Go version 1.17.5 on macOS.
+This is a work in progress that provides a command-line tool written in Go to get data from your Philips Hue system
+and record timestamped data in a SQLite database for your later use. It also provides a simple server to expose the
+recorded historical data in a JSON API.
 
-## How to use/develop
+I built this using Go version 1.17.5 on macOS.
+
+## How to run
+
+### Fetch data from your Hue devices and record in database
+
+You need to start recording your Philips Hue data so that you capture, for example, temperature readings from your
+temperature sensors over time. This is done via the gohuedata script:
 
 1. `cp config.yml.example config.yml`
 
@@ -25,11 +34,7 @@ Command-line tool written in Go to get data from your Philips Hue system. Just a
     You will be prompted to select a bridge if your config file specifies more than one. By default, all lights and
     sensors on the selected bridge will be shown. The current temperature for each Philips Hue temperature sensor will also be recorded in the specified SQLite database.
 
-1. `go run cmd/server/main.go`
-
-    This will start a server at http://localhost:8080. This part is a work in progress with the goal of providing an API to surface the data the gohuedata command has recorded in the database.
-
-### Options for gohuedata
+#### Options for gohuedata
 
 - **`-b`** - Specify a bridge via the index (starting at 1) of the bridge in your config file. For example, to specify
 the first bridge in your config:
@@ -55,7 +60,16 @@ Choose between `F` for Fahrenheit and `C` for Celsius. Defaults to the config fi
 
     `go run cmd/gohuedata/main.go -config ~/my_gohuedata_configuration.yml`
 
-### Options for the server
+### Start API server to read the data you've logged
+
+Once you've logged some data from your Philips Hue devices, you can expose that data via an API to see how, for
+example, your home temperatures have changed over time.
+
+1. `go run cmd/server/main.go`
+
+    This will start a server at http://localhost:8080. This part is a work in progress with the goal of providing an API to surface the data the gohuedata command has recorded in the database.
+
+#### Options for the server
 
 - **`-db`** - Path to the gohuedata SQLite database file. Defaults to gohuedata.db if omitted. Example:
 
