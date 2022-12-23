@@ -16,15 +16,13 @@ import (
 )
 
 func main() {
-	configPath := "config.yml"
-	config, err := config.NewConfig(configPath)
+	options := options.ParseOptions()
+	config, err := config.NewConfig(options.ConfigPath)
 	if err != nil {
 		util.LogError("Failed to load configuration:", err)
 		return
 	}
-	util.LogSuccess("Loaded configuration file %s", configPath)
-
-	options := options.ParseOptions()
+	util.LogSuccess("Loaded configuration file %s", options.ConfigPath)
 	bridges := config.Bridges
 	bridgeDisplay := bridge_display.NewBridgeDisplay(bridges)
 	bridge := bridgeDisplay.GetBridgeSelection(options.BridgeSelection)

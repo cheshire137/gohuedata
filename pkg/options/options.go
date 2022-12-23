@@ -30,14 +30,16 @@ type Options struct {
 	LightSelection   LightSelection
 	SensorSelection  SensorSelection
 	TemperatureUnits TemperatureUnits
+	ConfigPath       string
 }
 
-func NewOptions(bridgeSelection int, lightSelection LightSelection, sensorSelection SensorSelection, tempUnits TemperatureUnits) *Options {
+func NewOptions(bridgeSelection int, lightSelection LightSelection, sensorSelection SensorSelection, tempUnits TemperatureUnits, configPath string) *Options {
 	return &Options{
 		BridgeSelection:  bridgeSelection,
 		LightSelection:   lightSelection,
 		SensorSelection:  sensorSelection,
 		TemperatureUnits: tempUnits,
+		ConfigPath:       configPath,
 	}
 }
 
@@ -56,10 +58,13 @@ func ParseOptions() *Options {
 	flag.StringVar(&tempUnits, "t", "", "Temperature units to use; choose from `F` for Fahrenheit or `C` for "+
 		"Celsius; defaults to the temperature_units setting in config.yml")
 
+	var configPath string
+	flag.StringVar(&configPath, "config", "config.yml", "Path to YAML configuration file; defaults to config.yml")
+
 	flag.Parse()
 
 	return NewOptions(bridgeSelection, LightSelection(lightSelection), SensorSelection(sensorSelection),
-		TemperatureUnits(tempUnits))
+		TemperatureUnits(tempUnits), configPath)
 }
 
 func (o *Options) LoadLights() bool {
