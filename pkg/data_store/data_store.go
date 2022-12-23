@@ -6,22 +6,18 @@ type DataStore struct {
 	db *sql.DB
 }
 
-func NewDataStore(db *sql.DB) (*DataStore, error) {
-	err := createTables(db)
-	if err != nil {
-		return nil, err
-	}
-	return &DataStore{db: db}, nil
+func NewDataStore(db *sql.DB) *DataStore {
+	return &DataStore{db: db}
 }
 
-func createTables(db *sql.DB) error {
-	err := createTemperatureSensorsTable(db)
+func (ds *DataStore) CreateTables() error {
+	err := createTemperatureSensorsTable(ds.db)
 	if err != nil {
 		return err
 	}
-	err = createTemperatureReadingsTable(db)
+	err = createTemperatureReadingsTable(ds.db)
 	if err != nil {
 		return err
 	}
-	return createHueBridgesTable(db)
+	return createHueBridgesTable(ds.db)
 }
