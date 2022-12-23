@@ -30,7 +30,7 @@ func (b *Bridge) String() string {
 		return fmt.Sprintf("%s -- %s via %s", b.Name, b.IPAddress, b.Username)
 	}
 	if b.Name != "" && b.IPAddress != "" {
-		return fmt.Sprintf("%s -- %s", b.Name, b.IPAddress)
+		return fmt.Sprintf("%s -- %s (not authenticated)", b.Name, b.IPAddress)
 	}
 	if b.Name != "" && b.Username != "" {
 		return fmt.Sprintf("%s via %s", b.Name, b.Username)
