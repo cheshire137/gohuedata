@@ -111,7 +111,7 @@ func (sl *SensorLoader) DisplaySensors() {
 	}
 }
 
-func (sl *SensorLoader) SaveTemperatureSensorReadings(tss *data_store.TemperatureSensorStore) error {
+func (sl *SensorLoader) SaveTemperatureSensorReadings(tss *data_store.DataStore) error {
 	for _, sensor := range sl.TemperatureSensors {
 		err := tss.AddTemperatureReading(sensor)
 		if err != nil {

@@ -63,13 +63,13 @@ func main() {
 		}
 		sensorLoader.DisplaySensors()
 
-		tss, err := data_store.NewTemperatureSensorStore(db)
+		dataStore, err := data_store.NewDataStore(db)
 		if err != nil {
-			util.LogError("Failed to create temperature sensor table:", err)
+			util.LogError("Failed to create tables:", err)
 			return
 		}
 
-		err = sensorLoader.SaveTemperatureSensorReadings(tss)
+		err = sensorLoader.SaveTemperatureSensorReadings(dataStore)
 		if err != nil {
 			util.LogError("Failed to save temperature readings:", err)
 			return
