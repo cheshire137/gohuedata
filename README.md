@@ -37,3 +37,9 @@ Choose between `F` for Fahrenheit and `C` for Celsius. Defaults to the config fi
     `go run cmd/gohuedata/main.go -t C`
 
 - **`-config`** - Specify the path to the YAML configuration file.
+
+## Thanks
+
+Thanks to the developers of these libraries that gohuedata is built with:
+
+- [mattn/go-sqlite3](https://github.com/mattn/go-sqlite3)
