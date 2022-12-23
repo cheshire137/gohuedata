@@ -78,7 +78,7 @@ func main() {
 
 		tempSensorCount := sensorLoader.TotalTemperatureSensors()
 		if tempSensorCount > 0 {
-			err = sensorLoader.SaveTemperatureSensorReadings(bridge, dataStore)
+			err = sensorLoader.SaveTemperatureSensorReadings(bridge, dataStore, fahrenheit)
 			if err != nil {
 				util.LogError("Failed to save temperature readings:", err)
 				return
