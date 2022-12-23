@@ -31,7 +31,9 @@ func main() {
 	dataStore := data_store.NewDataStore(db)
 	mux := http.NewServeMux()
 	env := server.NewEnv(dataStore)
+
 	mux.Handle("/", http.HandlerFunc(env.RootHandler))
+	mux.Handle("/api/temperature-readings", http.HandlerFunc(env.GetTemperatureReadingsHandler))
 
 	server := &http.Server{
 		Addr:    options.Address(),

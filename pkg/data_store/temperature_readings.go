@@ -13,6 +13,28 @@ type TemperatureReading struct {
 	Units               string  `json:"units"`
 }
 
+func (ds *DataStore) LoadTemperatureReadings(page int) ([]*TemperatureReading, error) {
+	perPage := 100
+	rows, err := ds.db.Query(`SELECT temperature_sensor_id, last_updated, temperature, units
+		FROM temperature_readings
+		ORDER BY last_updated DESC
+		LIMIT ? OFFSET ?`, perPage, (page-1)*perPage)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var readings []*TemperatureReading
+	for rows.Next() {
+		var reading TemperatureReading
+		err = rows.Scan(&reading.TemperatureSensorID, &reading.LastUpdated, &reading.Temperature, &reading.Units)
+		if err != nil {
+			return nil, err
+		}
+		readings = append(readings, &reading)
+	}
+	return readings, nil
+}
+
 func (ds *DataStore) AddTemperatureReading(bridge *hue_api.Bridge, sensor *hue_api.TemperatureSensor, fahrenheit bool) error {
 	err := ds.addTemperatureSensor(bridge, sensor)
 	if err != nil {
