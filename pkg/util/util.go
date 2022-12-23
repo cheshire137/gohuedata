@@ -9,6 +9,10 @@ func Pluralize(count int, singular string, plural string) string {
 	return plural
 }
 
+func LogInfo(format string, a ...interface{}) {
+	fmt.Printf("\nℹ️ "+format+"\n", a...)
+}
+
 func LogSuccess(format string, a ...interface{}) {
 	fmt.Printf("\n✅ "+format+"\n", a...)
 }
