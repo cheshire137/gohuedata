@@ -9,10 +9,21 @@ Command-line tool written in Go to get data from your Philips Hue system. Just a
     You can move the config.yml file wherever you want or rename it, but you'll need to pass the `-config` option and specify its path if you do.
 
 1. Update config.yml with details about your Philips Hue bridges. See [Get started](https://developers.meethue.com/develop/get-started-2/) docs from Philips about how to get your bridge IP address and a username.
+
+    The configuration file supports these options:
+
+    - `temperature_units` - either `"F"` or `"C"` to specify Fahrenheit or Celsius
+    - `database_file` - specify a path for a SQLite database where data from your Philips Hue devices will be recorded
+    - `bridges` - a list of your Philips Hue bridges, each with the following properties:
+
+        - `name` - the name of your bridge
+        - `ip_address` - the IP address of the bridge, e.g, `"192.168.1.2"`
+        - `username` - the username you configured on your bridge via a CLIP command (see https://developers.meethue.com/develop/get-started-2/)
+
 1. `go run cmd/gohuedata/main.go`
 
     You will be prompted to select a bridge if your config file specifies more than one. By default, all lights and
-    sensors on the selected bridge will be shown.
+    sensors on the selected bridge will be shown. The current temperature for each Philips Hue temperature sensor will also be recorded in the specified SQLite database.
 
 ### Options
 
@@ -36,7 +47,7 @@ Choose between `F` for Fahrenheit and `C` for Celsius. Defaults to the config fi
 
     `go run cmd/gohuedata/main.go -t C`
 
-- **`-config`** - Specify the path to the YAML configuration file. Example:
+- **`-config`** - Specify the path to the YAML configuration file. Defaults to "config.yml" if omitted. Example:
 
     `go run cmd/gohuedata/main.go -config ~/my_gohuedata_configuration.yml`
 
