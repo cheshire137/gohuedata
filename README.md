@@ -25,7 +25,11 @@ Command-line tool written in Go to get data from your Philips Hue system. Just a
     You will be prompted to select a bridge if your config file specifies more than one. By default, all lights and
     sensors on the selected bridge will be shown. The current temperature for each Philips Hue temperature sensor will also be recorded in the specified SQLite database.
 
-### Options
+1. `go run cmd/server/main.go`
+
+    This will start a server at http://localhost:8080. This part is a work in progress with the goal of providing an API to surface the data the gohuedata command has recorded in the database.
+
+### Options for gohuedata
 
 - **`-b`** - Specify a bridge via the index (starting at 1) of the bridge in your config file. For example, to specify
 the first bridge in your config:
@@ -50,6 +54,16 @@ Choose between `F` for Fahrenheit and `C` for Celsius. Defaults to the config fi
 - **`-config`** - Specify the path to the YAML configuration file. Defaults to "config.yml" if omitted. Example:
 
     `go run cmd/gohuedata/main.go -config ~/my_gohuedata_configuration.yml`
+
+### Options for the server
+
+- **`-db`** - Path to the gohuedata SQLite database file. Defaults to gohuedata.db if omitted. Example:
+
+    `go run cmd/server/main.go -db /some/dir/gohuedata.db`
+
+- **`-p`** - Port to start the server on. Defaults to 8080. Example:
+
+    `go run cmd/server/main.go -p 3000`
 
 ## Thanks
 
