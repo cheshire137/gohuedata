@@ -1,4 +1,4 @@
-package options
+package cli_options
 
 import "flag"
 
@@ -25,7 +25,7 @@ const (
 )
 
 // Command-line options and flags
-type Options struct {
+type CliOptions struct {
 	BridgeSelection  int
 	LightSelection   LightSelection
 	SensorSelection  SensorSelection
@@ -33,8 +33,8 @@ type Options struct {
 	ConfigPath       string
 }
 
-func NewOptions(bridgeSelection int, lightSelection LightSelection, sensorSelection SensorSelection, tempUnits TemperatureUnits, configPath string) *Options {
-	return &Options{
+func NewCliOptions(bridgeSelection int, lightSelection LightSelection, sensorSelection SensorSelection, tempUnits TemperatureUnits, configPath string) *CliOptions {
+	return &CliOptions{
 		BridgeSelection:  bridgeSelection,
 		LightSelection:   lightSelection,
 		SensorSelection:  sensorSelection,
@@ -43,7 +43,7 @@ func NewOptions(bridgeSelection int, lightSelection LightSelection, sensorSelect
 	}
 }
 
-func ParseOptions() *Options {
+func ParseOptions() *CliOptions {
 	var bridgeSelection int
 	flag.IntVar(&bridgeSelection, "b", 0, "Philips Hue bridge index from config.yml, starts at 1")
 
@@ -63,19 +63,19 @@ func ParseOptions() *Options {
 
 	flag.Parse()
 
-	return NewOptions(bridgeSelection, LightSelection(lightSelection), SensorSelection(sensorSelection),
+	return NewCliOptions(bridgeSelection, LightSelection(lightSelection), SensorSelection(sensorSelection),
 		TemperatureUnits(tempUnits), configPath)
 }
 
-func (o *Options) LoadLights() bool {
+func (o *CliOptions) LoadLights() bool {
 	return o.LightSelection != NoLights
 }
 
-func (o *Options) LoadSensors() bool {
+func (o *CliOptions) LoadSensors() bool {
 	return o.SensorSelection != NoSensors
 }
 
-func (o *Options) FahrenheitSpecified(fahrenheitFallback bool) bool {
+func (o *CliOptions) FahrenheitSpecified(fahrenheitFallback bool) bool {
 	if o.TemperatureUnits != Unspecified {
 		return o.TemperatureUnits == Fahrenheit
 	}

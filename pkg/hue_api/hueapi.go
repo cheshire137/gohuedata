@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/cheshire137/gohuedata/pkg/options"
+	options "github.com/cheshire137/gohuedata/pkg/cli_options"
 )
 
 type Client struct {

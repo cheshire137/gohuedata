@@ -3,9 +3,9 @@ package sensor_loader
 import (
 	"fmt"
 
+	options "github.com/cheshire137/gohuedata/pkg/cli_options"
 	"github.com/cheshire137/gohuedata/pkg/data_store"
 	"github.com/cheshire137/gohuedata/pkg/hue_api"
-	"github.com/cheshire137/gohuedata/pkg/options"
 	"github.com/cheshire137/gohuedata/pkg/util"
 )
 

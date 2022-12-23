@@ -3,8 +3,8 @@ package config
 import (
 	"os"
 
+	options "github.com/cheshire137/gohuedata/pkg/cli_options"
 	"github.com/cheshire137/gohuedata/pkg/hue_api"
-	"github.com/cheshire137/gohuedata/pkg/options"
 	"gopkg.in/yaml.v3"
 )
 

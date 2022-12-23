@@ -6,11 +6,11 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 
 	"github.com/cheshire137/gohuedata/pkg/bridge_display"
+	options "github.com/cheshire137/gohuedata/pkg/cli_options"
 	"github.com/cheshire137/gohuedata/pkg/config"
 	"github.com/cheshire137/gohuedata/pkg/data_store"
 	"github.com/cheshire137/gohuedata/pkg/hue_api"
 	"github.com/cheshire137/gohuedata/pkg/light_loader"
-	"github.com/cheshire137/gohuedata/pkg/options"
 	"github.com/cheshire137/gohuedata/pkg/sensor_loader"
 	"github.com/cheshire137/gohuedata/pkg/util"
 )
