@@ -3,9 +3,9 @@ package sensor_loader
 import (
 	"fmt"
 
+	"github.com/cheshire137/gohuedata/pkg/data_store"
 	"github.com/cheshire137/gohuedata/pkg/hueapi"
 	"github.com/cheshire137/gohuedata/pkg/options"
-	"github.com/cheshire137/gohuedata/pkg/temperature_sensor_store"
 	"github.com/cheshire137/gohuedata/pkg/util"
 )
 
@@ -111,7 +111,7 @@ func (sl *SensorLoader) DisplaySensors() {
 	}
 }
 
-func (sl *SensorLoader) SaveTemperatureSensorReadings(tss *temperature_sensor_store.TemperatureSensorStore) error {
+func (sl *SensorLoader) SaveTemperatureSensorReadings(tss *data_store.TemperatureSensorStore) error {
 	for _, sensor := range sl.TemperatureSensors {
 		err := tss.AddTemperatureReading(sensor)
 		if err != nil {

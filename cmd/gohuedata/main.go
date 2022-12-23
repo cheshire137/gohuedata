@@ -7,11 +7,11 @@ import (
 
 	"github.com/cheshire137/gohuedata/pkg/bridge_display"
 	"github.com/cheshire137/gohuedata/pkg/config"
+	"github.com/cheshire137/gohuedata/pkg/data_store"
 	"github.com/cheshire137/gohuedata/pkg/hueapi"
 	"github.com/cheshire137/gohuedata/pkg/light_loader"
 	"github.com/cheshire137/gohuedata/pkg/options"
 	"github.com/cheshire137/gohuedata/pkg/sensor_loader"
-	"github.com/cheshire137/gohuedata/pkg/temperature_sensor_store"
 	"github.com/cheshire137/gohuedata/pkg/util"
 )
 
@@ -63,7 +63,7 @@ func main() {
 		}
 		sensorLoader.DisplaySensors()
 
-		tss, err := temperature_sensor_store.NewTemperatureSensorStore(db)
+		tss, err := data_store.NewTemperatureSensorStore(db)
 		if err != nil {
 			util.LogError("Failed to create temperature sensor table:", err)
 			return

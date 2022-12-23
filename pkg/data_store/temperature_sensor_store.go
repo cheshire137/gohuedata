@@ -1,4 +1,4 @@
-package temperature_sensor_store
+package data_store
 
 import (
 	"database/sql"
