@@ -17,6 +17,8 @@ type TemperatureReadingsResponse struct {
 }
 
 func (e *Env) GetTemperatureReadingsHandler(w http.ResponseWriter, r *http.Request) {
+	e.enableCors(&w)
+
 	pageInfo, err := pagination.GetPageInfoParams(r.URL)
 	if err != nil {
 		util.ErrorJson(w, err)
