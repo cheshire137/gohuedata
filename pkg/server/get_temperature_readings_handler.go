@@ -12,6 +12,7 @@ type TemperatureReadingsResponse struct {
 	TemperatureReadings []*data_store.TemperatureReading `json:"temperatureReadings"`
 	Page                int                              `json:"page"`
 	TotalPages          int                              `json:"totalPages"`
+	TotalCount          int                              `json:"totalCount"`
 }
 
 func (e *Env) GetTemperatureReadingsHandler(w http.ResponseWriter, r *http.Request) {
@@ -22,10 +23,14 @@ func (e *Env) GetTemperatureReadingsHandler(w http.ResponseWriter, r *http.Reque
 	}
 
 	bridgeName := r.URL.Query().Get("bridge")
+	updatedSince := r.URL.Query().Get("updated_since")
+	updatedBefore := r.URL.Query().Get("updated_before")
 	filter := &data_store.TemperatureReadingFilter{
-		Page:       pageInfo.Page,
-		PerPage:    pageInfo.PerPage,
-		BridgeName: bridgeName,
+		Page:          pageInfo.Page,
+		PerPage:       pageInfo.PerPage,
+		BridgeName:    bridgeName,
+		UpdatedSince:  updatedSince,
+		UpdatedBefore: updatedBefore,
 	}
 
 	tempReadings, err := e.ds.LoadTemperatureReadings(filter)
@@ -44,6 +49,7 @@ func (e *Env) GetTemperatureReadingsHandler(w http.ResponseWriter, r *http.Reque
 		TemperatureReadings: tempReadings,
 		Page:                pageInfo.Page,
 		TotalPages:          util.TotalPages(totalTempReadings, pageInfo.PerPage),
+		TotalCount:          totalTempReadings,
 	}
 
 	w.Header().Set("Content-Type", "application/json")

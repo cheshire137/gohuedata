@@ -15,9 +15,11 @@ type TemperatureReading struct {
 }
 
 type TemperatureReadingFilter struct {
-	Page       int
-	PerPage    int
-	BridgeName string
+	Page          int
+	PerPage       int
+	BridgeName    string
+	UpdatedSince  string
+	UpdatedBefore string
 }
 
 const temperatureReadingJoins = `
@@ -130,6 +132,16 @@ func buildTemperatureReadingWhereConditions(filter *TemperatureReadingFilter) (s
 	if filter.BridgeName != "" {
 		conditions = append(conditions, "LOWER(hue_bridges.name) = ?")
 		values = append(values, strings.ToLower(filter.BridgeName))
+	}
+
+	if filter.UpdatedSince != "" {
+		conditions = append(conditions, "temperature_readings.last_updated >= ?")
+		values = append(values, filter.UpdatedSince)
+	}
+
+	if filter.UpdatedBefore != "" {
+		conditions = append(conditions, "temperature_readings.last_updated < ?")
+		values = append(values, filter.UpdatedBefore)
 	}
 
 	if len(conditions) == 0 {
