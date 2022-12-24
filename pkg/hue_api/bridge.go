@@ -49,3 +49,11 @@ func (b *Bridge) String() string {
 	}
 	return "Unnamed bridge"
 }
+
+func BridgeNames(bridges []*Bridge) []string {
+	names := make([]string, len(bridges))
+	for i, bridge := range bridges {
+		names[i] = bridge.Name
+	}
+	return names
+}
