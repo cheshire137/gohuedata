@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"math"
 	"net/http"
 )
 
@@ -28,4 +29,8 @@ func LogError(a ...interface{}) {
 func ErrorJson(w http.ResponseWriter, err error) {
 	w.Header().Set("Content-Type", "application/json")
 	http.Error(w, err.Error(), http.StatusInternalServerError)
+}
+
+func TotalPages(count int, perPage int) int {
+	return int(math.Ceil(float64(count) / float64(perPage)))
 }
