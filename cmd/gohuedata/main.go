@@ -108,6 +108,10 @@ func main() {
 				}
 				units := util.Pluralize(tempSensorCount, "reading", "readings")
 				util.LogSuccess("Recorded %d temperature %s", tempSensorCount, units)
+				mostRecentSensorState := sensorLoader.MostRecentlyUpdatedSensorState()
+				if mostRecentSensorState != nil {
+					util.LogInfo("Most recent reading: %s", mostRecentSensorState.LastUpdatedSummary())
+				}
 			}
 		}
 	}
