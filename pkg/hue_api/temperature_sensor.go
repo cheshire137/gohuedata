@@ -55,3 +55,19 @@ func (s *TemperatureSensor) String() string {
 	}
 	return fmt.Sprintf("%s -- %.1f%s as of %s", s.Name, s.Temperature(), s.TempUnits(), lastUpdatedSummary)
 }
+
+func (s *TemperatureSensor) ToSensor() *Sensor {
+	return &Sensor{
+		State:            s.State,
+		Config:           s.Config,
+		Name:             s.Name,
+		ModelID:          s.ModelID,
+		ManufacturerName: s.ManufacturerName,
+		SoftwareVersion:  s.SoftwareVersion,
+		UniqueID:         s.UniqueID,
+		DiversityID:      s.DiversityID,
+		ProductName:      s.ProductName,
+		Capabilities:     s.Capabilities,
+		Recycle:          s.Recycle,
+	}
+}
