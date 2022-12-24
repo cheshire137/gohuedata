@@ -17,7 +17,9 @@ func NewServerOptions(databasePath string, port int) *ServerOptions {
 	}
 }
 
+// Keep in sync with 'proxy' port in ui/package.json:
 const DefaultPort = 8080
+
 const DefaultDatabasePath = "gohuedata.db"
 
 func ParseOptions() *ServerOptions {
