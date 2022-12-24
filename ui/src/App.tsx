@@ -3,7 +3,10 @@ import useGetTemperatureReadings from './hooks/use-get-temperature-readings';
 import './App.css';
 
 function App() {
-  const { temperatureReadings, fetching, error } = useGetTemperatureReadings();
+  const { temperatureReadings, fetching, error } = useGetTemperatureReadings({
+    page: 1,
+    perPage: 100,
+  });
 
   if (fetching) {
     return <p>Loading...</p>;
