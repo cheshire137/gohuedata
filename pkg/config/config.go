@@ -9,9 +9,9 @@ import (
 )
 
 type Config struct {
-	Bridges          []hue_api.Bridge `yaml:"bridges"`
-	TemperatureUnits string           `yaml:"temperature_units"`
-	DatabaseFile     string           `yaml:"database_file"`
+	Bridges          []*hue_api.Bridge `yaml:"bridges"`
+	TemperatureUnits string            `yaml:"temperature_units"`
+	DatabaseFile     string            `yaml:"database_file"`
 }
 
 func NewConfig(path string) (*Config, error) {

@@ -2,11 +2,14 @@ package cli_options
 
 import (
 	"flag"
+	"fmt"
 )
 
 type SensorSelection string
 type LightSelection string
 type TemperatureUnits string
+
+const AllBridges = -1
 
 const (
 	AllSensors  SensorSelection = "all"
@@ -49,7 +52,8 @@ func NewCliOptions(bridgeSelection int, lightSelection LightSelection, sensorSel
 
 func ParseOptions() *CliOptions {
 	var bridgeSelection int
-	flag.IntVar(&bridgeSelection, "b", 0, "Philips Hue bridge index from config.yml, starts at 1")
+	flag.IntVar(&bridgeSelection, "b", 0, fmt.Sprintf("Philips Hue bridge index from config.yml, starts at 1. Use %d "+
+		"to hit all bridges specified in the config file.", AllBridges))
 
 	var lightSelection string
 	flag.StringVar(&lightSelection, "lights", "all", "Whether to load lights; defaults to all; choose 'all' or 'none'")
@@ -72,6 +76,10 @@ func ParseOptions() *CliOptions {
 
 	return NewCliOptions(bridgeSelection, LightSelection(lightSelection), SensorSelection(sensorSelection),
 		TemperatureUnits(tempUnits), configPath, quietMode)
+}
+
+func (o *CliOptions) LoadAllBridges() bool {
+	return o.BridgeSelection == AllBridges
 }
 
 func (o *CliOptions) LoadLights() bool {

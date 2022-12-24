@@ -27,12 +27,19 @@ func main() {
 		util.LogSuccess("Loaded configuration file %s", options.ConfigPath)
 	}
 
-	bridges := config.Bridges
-	bridgeDisplay := bridge_display.NewBridgeDisplay(bridges)
-	bridge := bridgeDisplay.GetBridgeSelection(options.BridgeSelection)
+	allBridges := config.Bridges
+	bridgeDisplay := bridge_display.NewBridgeDisplay(allBridges)
+	var selectedBridges []*hue_api.Bridge
+	if options.LoadAllBridges() {
+		selectedBridges = allBridges
+	} else {
+		selectedBridges = bridgeDisplay.GetBridgeSelection(options.BridgeSelection)
+	}
 
 	if !options.QuietMode {
-		util.LogSuccess("Selected bridge: %s", bridge.Name)
+		units := util.Pluralize(len(selectedBridges), "bridge", "bridges")
+		bridgeNames := hue_api.BridgeNames(selectedBridges)
+		util.LogSuccess("Selected %s: %s", units, bridgeNames)
 	}
 
 	db, err := sql.Open("sqlite3", config.DatabaseFile)
@@ -53,49 +60,55 @@ func main() {
 		return
 	}
 
-	err = dataStore.AddHueBridge(bridge)
-	if err != nil {
-		util.LogError("Failed to record Hue bridge:", err)
-		return
-	}
+	for _, bridge := range selectedBridges {
+		if options.LoadAllBridges() {
+			util.LogInfo("Bridge %s", bridge.Name)
+		}
 
-	bridgeApiUrl, err := bridge.GetApiUrl()
-	if err != nil {
-		util.LogError("Failed to get bridge URL:", err)
-		return
-	}
-
-	fahrenheit := options.FahrenheitSpecified(config.FahrenheitSpecified())
-	hueClient := hue_api.NewClient(bridgeApiUrl, fahrenheit)
-
-	if options.LoadLights() {
-		lightLoader, err := light_loader.NewLightLoader(hueClient)
+		err = dataStore.AddHueBridge(bridge)
 		if err != nil {
-			util.LogError("Failed to load lights:", err)
+			util.LogError("Failed to record Hue bridge:", err)
 			return
 		}
 
-		lightLoader.DisplayLights(options.QuietMode)
-	}
-
-	if options.LoadSensors() {
-		sensorLoader, err := sensor_loader.NewSensorLoader(hueClient, options.SensorSelection)
+		bridgeApiUrl, err := bridge.GetApiUrl()
 		if err != nil {
-			util.LogError("Failed to load sensors:", err)
+			util.LogError("Failed to get bridge URL:", err)
 			return
 		}
 
-		sensorLoader.DisplaySensors(options.QuietMode)
+		fahrenheit := options.FahrenheitSpecified(config.FahrenheitSpecified())
+		hueClient := hue_api.NewClient(bridgeApiUrl, fahrenheit)
 
-		tempSensorCount := sensorLoader.TotalTemperatureSensors()
-		if tempSensorCount > 0 {
-			err = sensorLoader.SaveTemperatureSensorReadings(bridge, dataStore, fahrenheit)
+		if options.LoadLights() {
+			lightLoader, err := light_loader.NewLightLoader(hueClient)
 			if err != nil {
-				util.LogError("Failed to save temperature readings:", err)
+				util.LogError("Failed to load lights:", err)
 				return
 			}
-			units := util.Pluralize(tempSensorCount, "reading", "readings")
-			util.LogSuccess("Recorded %d temperature %s", tempSensorCount, units)
+
+			lightLoader.DisplayLights(options.QuietMode)
+		}
+
+		if options.LoadSensors() {
+			sensorLoader, err := sensor_loader.NewSensorLoader(hueClient, options.SensorSelection)
+			if err != nil {
+				util.LogError("Failed to load sensors:", err)
+				return
+			}
+
+			sensorLoader.DisplaySensors(options.QuietMode)
+
+			tempSensorCount := sensorLoader.TotalTemperatureSensors()
+			if tempSensorCount > 0 {
+				err = sensorLoader.SaveTemperatureSensorReadings(bridge, dataStore, fahrenheit)
+				if err != nil {
+					util.LogError("Failed to save temperature readings:", err)
+					return
+				}
+				units := util.Pluralize(tempSensorCount, "reading", "readings")
+				util.LogSuccess("Recorded %d temperature %s", tempSensorCount, units)
+			}
 		}
 	}
 }
