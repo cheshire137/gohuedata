@@ -13,7 +13,12 @@ type TemperatureReading struct {
 	Units             string             `json:"units"`
 }
 
-func (ds *DataStore) TotalTemperatureReadings() (int, error) {
+type TemperatureReadingFilter struct {
+	Page    int
+	PerPage int
+}
+
+func (ds *DataStore) TotalTemperatureReadings(filter *TemperatureReadingFilter) (int, error) {
 	var count int
 	query := `SELECT COUNT(*)
 		FROM temperature_readings
@@ -26,7 +31,19 @@ func (ds *DataStore) TotalTemperatureReadings() (int, error) {
 	return count, nil
 }
 
-func (ds *DataStore) LoadTemperatureReadings(page int, perPage int) ([]*TemperatureReading, error) {
+func (ds *DataStore) LoadTemperatureReadings(filter *TemperatureReadingFilter) ([]*TemperatureReading, error) {
+	var page int
+	if filter == nil {
+		page = 1
+	} else {
+		page = filter.Page
+	}
+	var perPage int
+	if filter == nil {
+		perPage = 10
+	} else {
+		perPage = filter.PerPage
+	}
 	rows, err := ds.db.Query(`SELECT temperature_readings.last_updated,
 			temperature_readings.temperature,
 			temperature_readings.units,

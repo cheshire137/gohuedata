@@ -21,13 +21,18 @@ func (e *Env) GetTemperatureReadingsHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	tempReadings, err := e.ds.LoadTemperatureReadings(pageInfo.Page, pageInfo.PerPage)
+	filter := &data_store.TemperatureReadingFilter{
+		Page:    pageInfo.Page,
+		PerPage: pageInfo.PerPage,
+	}
+
+	tempReadings, err := e.ds.LoadTemperatureReadings(filter)
 	if err != nil {
 		util.ErrorJson(w, err)
 		return
 	}
 
-	totalTempReadings, err := e.ds.TotalTemperatureReadings()
+	totalTempReadings, err := e.ds.TotalTemperatureReadings(filter)
 	if err != nil {
 		util.ErrorJson(w, err)
 		return
