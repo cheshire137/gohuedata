@@ -8,13 +8,13 @@ interface Results {
   error?: string;
 }
 
-function useGetTemperatureReadings(api: GoHueDataApi): Results {
+function useGetTemperatureReadings(): Results {
   const [results, setResults] = useState<Results>({ fetching: true });
 
   useEffect(() => {
     async function fetchTemperatureReadings() {
       try {
-        const temperatureReadings = await api.getTemperatureReadings();
+        const temperatureReadings = await GoHueDataApi.getTemperatureReadings();
         setResults({ temperatureReadings, fetching: false })
       } catch (err: any) {
         console.error('failed to fetch temperature readings', err);
@@ -23,7 +23,7 @@ function useGetTemperatureReadings(api: GoHueDataApi): Results {
     }
 
     fetchTemperatureReadings()
-  }, [api]);
+  }, []);
 
   return results;
 }
