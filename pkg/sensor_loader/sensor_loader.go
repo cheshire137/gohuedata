@@ -119,6 +119,27 @@ func (sl *SensorLoader) DisplaySensors(quietMode bool) {
 	}
 }
 
+func (sl *SensorLoader) AllSensors() []*hue_api.Sensor {
+	allSensors := make([]*hue_api.Sensor, sl.TotalSensors())
+	start := 0
+
+	for i, sensor := range sl.OtherSensors {
+		allSensors[i+start] = sensor
+	}
+	start += len(sl.OtherSensors)
+
+	for i, tempSensor := range sl.TemperatureSensors {
+		allSensors[i+start] = tempSensor.ToSensor()
+	}
+	start += len(sl.TemperatureSensors)
+
+	for i, motionSensor := range sl.MotionSensors {
+		allSensors[i+start] = motionSensor.ToSensor()
+	}
+
+	return allSensors
+}
+
 func (sl *SensorLoader) SaveTemperatureSensorReadings(bridge *hue_api.Bridge, dataStore *data_store.DataStore, fahrenheit bool) error {
 	for _, sensor := range sl.TemperatureSensors {
 		err := dataStore.AddTemperatureReading(bridge, sensor, fahrenheit)
