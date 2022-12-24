@@ -1,4 +1,4 @@
-package server
+package pagination
 
 import (
 	"net/url"
@@ -10,7 +10,7 @@ type PageInfo struct {
 	PerPage int
 }
 
-func GetPageInfo(url *url.URL) (*PageInfo, error) {
+func GetPageInfoParams(url *url.URL) (*PageInfo, error) {
 	pageStr := url.Query().Get("page")
 	var page int
 	var err error

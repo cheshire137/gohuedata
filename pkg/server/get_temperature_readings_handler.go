@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/cheshire137/gohuedata/pkg/data_store"
+	"github.com/cheshire137/gohuedata/pkg/pagination"
 	"github.com/cheshire137/gohuedata/pkg/util"
 )
 
@@ -16,7 +17,7 @@ type TemperatureReadingsResponse struct {
 }
 
 func (e *Env) GetTemperatureReadingsHandler(w http.ResponseWriter, r *http.Request) {
-	pageInfo, err := GetPageInfo(r.URL)
+	pageInfo, err := pagination.GetPageInfoParams(r.URL)
 	if err != nil {
 		util.ErrorJson(w, err)
 		return

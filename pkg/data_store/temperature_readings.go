@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/cheshire137/gohuedata/pkg/hue_api"
+	"github.com/cheshire137/gohuedata/pkg/pagination"
 )
 
 type TemperatureReading struct {
@@ -155,9 +156,7 @@ func buildTemperatureReadingWhereConditions(filter *TemperatureReadingFilter) (s
 func temperatureReadingLimitAndOffset(filter *TemperatureReadingFilter) (int, int) {
 	page, perPage := 1, 10
 	if filter != nil {
-		page, perPage = filter.Page, filter.PerPage
+		page, perPage = pagination.ConstrainPageAndPerPage(filter.Page, filter.PerPage)
 	}
-	limit := perPage
-	offset := (page - 1) * perPage
-	return limit, offset
+	return pagination.GetLimitAndOffset(page, perPage)
 }
