@@ -4,7 +4,7 @@ This is a work in progress that provides a command-line tool written in Go to ge
 and record timestamped data in a SQLite database for your later use. It also provides a simple server to expose the
 recorded historical data in a JSON API.
 
-I built this using Go version 1.17.5 on macOS.
+I built this using Go version 1.19.4 on macOS.
 
 ## How to run
 
