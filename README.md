@@ -76,7 +76,7 @@ Choose between `F` for Fahrenheit and `C` for Celsius. Defaults to the config fi
 
     `go run cmd/gohuedata/main.go -quiet=true`
 
-### Start API server to read the data you've logged
+### Start API server to surface the data you've logged
 
 Once you've logged some data from your Philips Hue devices, you can expose that data via an API to see how, for
 example, your home temperatures have changed over time.
@@ -94,6 +94,20 @@ example, your home temperatures have changed over time.
 - **`-p`** - Port to start the server on. Defaults to 8080. Example:
 
     `go run cmd/server/main.go -p 3000`
+
+- **`-fp`** - Port the frontend will run on. Defaults to 4000. Example:
+
+    `go run cmd/server/main.go -fp 3456`
+
+### Start frontend to view your data
+
+```sh
+cd ui
+npm install
+npm start
+```
+
+This will launch the React app and open http://localhost:4000 in your browser. You can change the port used for the frontend via the `PORT` environment variable. If you do so, you'll want to pass the same port via the `-fp` option when launching the server.
 
 ## Thanks
 

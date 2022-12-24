@@ -8,17 +8,22 @@ import (
 type ServerOptions struct {
 	DatabasePath string
 	Port         int
+	FrontendPort int
 }
 
-func NewServerOptions(databasePath string, port int) *ServerOptions {
+func NewServerOptions(databasePath string, port int, frontendPort int) *ServerOptions {
 	return &ServerOptions{
 		DatabasePath: databasePath,
 		Port:         port,
+		FrontendPort: frontendPort,
 	}
 }
 
 // Keep in sync with 'proxy' port in ui/package.json:
 const DefaultPort = 8080
+
+// Keep in sync with `PORT` environment variable in ui/.env:
+const DefaultFrontendPort = 4000
 
 const DefaultDatabasePath = "gohuedata.db"
 
@@ -30,9 +35,13 @@ func ParseOptions() *ServerOptions {
 	var port int
 	flag.IntVar(&port, "p", DefaultPort, fmt.Sprintf("Port to run the server on. Defaults to %d.", DefaultPort))
 
+	var frontendPort int
+	flag.IntVar(&frontendPort, "fp", DefaultFrontendPort, fmt.Sprintf("Port the frontend runs on. Necessary to "+
+		"allow API requests from the frontend to the server. Defaults to %d.", DefaultFrontendPort))
+
 	flag.Parse()
 
-	return NewServerOptions(databasePath, port)
+	return NewServerOptions(databasePath, port, frontendPort)
 }
 
 func (o *ServerOptions) Address() string {
