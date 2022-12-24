@@ -22,19 +22,29 @@ func main() {
 		util.LogError("Failed to load configuration:", err)
 		return
 	}
-	util.LogSuccess("Loaded configuration file %s", options.ConfigPath)
+
+	if !options.QuietMode {
+		util.LogSuccess("Loaded configuration file %s", options.ConfigPath)
+	}
+
 	bridges := config.Bridges
 	bridgeDisplay := bridge_display.NewBridgeDisplay(bridges)
 	bridge := bridgeDisplay.GetBridgeSelection(options.BridgeSelection)
-	util.LogSuccess("Selected bridge: %s", bridge.Name)
+
+	if !options.QuietMode {
+		util.LogSuccess("Selected bridge: %s", bridge.Name)
+	}
 
 	db, err := sql.Open("sqlite3", config.DatabaseFile)
 	if err != nil {
 		util.LogError("Failed to open database:", err)
 		return
 	}
-	util.LogSuccess("Loaded %s database", config.DatabaseFile)
 	defer db.Close()
+
+	if !options.QuietMode {
+		util.LogSuccess("Loaded %s database", config.DatabaseFile)
+	}
 
 	dataStore := data_store.NewDataStore(db)
 	err = dataStore.CreateTables()
@@ -64,7 +74,8 @@ func main() {
 			util.LogError("Failed to load lights:", err)
 			return
 		}
-		lightLoader.DisplayLights()
+
+		lightLoader.DisplayLights(options.QuietMode)
 	}
 
 	if options.LoadSensors() {
@@ -73,7 +84,8 @@ func main() {
 			util.LogError("Failed to load sensors:", err)
 			return
 		}
-		sensorLoader.DisplaySensors()
+
+		sensorLoader.DisplaySensors(options.QuietMode)
 
 		tempSensorCount := sensorLoader.TotalTemperatureSensors()
 		if tempSensorCount > 0 {

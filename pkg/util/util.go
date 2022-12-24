@@ -14,11 +14,11 @@ func Pluralize(count int, singular string, plural string) string {
 }
 
 func LogInfo(format string, a ...interface{}) {
-	fmt.Printf("\nℹ️ "+format+"\n", a...)
+	fmt.Printf("ℹ️ "+format+"\n", a...)
 }
 
 func LogSuccess(format string, a ...interface{}) {
-	fmt.Printf("\n✅ "+format+"\n", a...)
+	fmt.Printf("✅ "+format+"\n", a...)
 }
 
 func LogError(a ...interface{}) {
@@ -33,4 +33,11 @@ func ErrorJson(w http.ResponseWriter, err error) {
 
 func TotalPages(count int, perPage int) int {
 	return int(math.Ceil(float64(count) / float64(perPage)))
+}
+
+func LinePunctuation(quietMode bool) string {
+	if quietMode {
+		return ""
+	}
+	return ":"
 }

@@ -40,7 +40,7 @@ temperature sensors over time. This is done via the gohuedata script:
 
     If you want to preserve log messages, you can create a log directory: `mkdir ~/Documents/gohuedata-logs`. Then set your cron job to:
 
-    `0 * * * * cd /path/to/gohuedata && /usr/local/bin/go run cmd/gohuedata/main.go -sensors temperature -lights none -b 1 -config /path/to/your-config-file.yml >/path/to/gohuedata-logs/stdout.log 2>/path/to/gohuedata-logs/stderr.log`
+    `0 * * * * cd /path/to/gohuedata && /usr/local/bin/go run cmd/gohuedata/main.go -sensors temperature -lights none -b 1 -config /path/to/your-config-file.yml -quiet=true >/path/to/gohuedata-logs/stdout.log 2>/path/to/gohuedata-logs/stderr.log`
 
 #### Options for gohuedata
 
@@ -67,6 +67,10 @@ Choose between `F` for Fahrenheit and `C` for Celsius. Defaults to the config fi
 - **`-config`** - Specify the path to the YAML configuration file. Defaults to "config.yml" if omitted. Example:
 
     `go run cmd/gohuedata/main.go -config ~/my_gohuedata_configuration.yml`
+
+- **`-quiet`** - Quiet mode to suppress how much output is made. Choose from `true` for quiet mode enabled or `false` for disabled. Defaults to `false`. Example:
+
+    `go run cmd/gohuedata/main.go -quiet=true`
 
 ### Start API server to read the data you've logged
 

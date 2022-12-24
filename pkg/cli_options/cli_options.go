@@ -1,6 +1,8 @@
 package cli_options
 
-import "flag"
+import (
+	"flag"
+)
 
 type SensorSelection string
 type LightSelection string
@@ -31,15 +33,17 @@ type CliOptions struct {
 	SensorSelection  SensorSelection
 	TemperatureUnits TemperatureUnits
 	ConfigPath       string
+	QuietMode        bool
 }
 
-func NewCliOptions(bridgeSelection int, lightSelection LightSelection, sensorSelection SensorSelection, tempUnits TemperatureUnits, configPath string) *CliOptions {
+func NewCliOptions(bridgeSelection int, lightSelection LightSelection, sensorSelection SensorSelection, tempUnits TemperatureUnits, configPath string, quietMode bool) *CliOptions {
 	return &CliOptions{
 		BridgeSelection:  bridgeSelection,
 		LightSelection:   lightSelection,
 		SensorSelection:  sensorSelection,
 		TemperatureUnits: tempUnits,
 		ConfigPath:       configPath,
+		QuietMode:        quietMode,
 	}
 }
 
@@ -61,10 +65,13 @@ func ParseOptions() *CliOptions {
 	var configPath string
 	flag.StringVar(&configPath, "config", "config.yml", "Path to YAML configuration file; defaults to config.yml")
 
+	var quietMode bool
+	flag.BoolVar(&quietMode, "quiet", false, "Whether to reduce output; defaults to false; choose true or false.")
+
 	flag.Parse()
 
 	return NewCliOptions(bridgeSelection, LightSelection(lightSelection), SensorSelection(sensorSelection),
-		TemperatureUnits(tempUnits), configPath)
+		TemperatureUnits(tempUnits), configPath, quietMode)
 }
 
 func (o *CliOptions) LoadLights() bool {

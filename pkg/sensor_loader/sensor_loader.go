@@ -72,16 +72,18 @@ func (sl *SensorLoader) TotalMotionSensors() int {
 	return len(sl.MotionSensors)
 }
 
-func (sl *SensorLoader) DisplaySensors() {
+func (sl *SensorLoader) DisplaySensors(quietMode bool) {
 	displayAllSensors := sl.SensorSelection == options.AllSensors
 
 	if displayAllSensors {
 		totalSensors := sl.TotalSensors()
 		units := util.Pluralize(totalSensors, "sensor", "sensors")
-		util.LogSuccess("Got %d %s:", totalSensors, units)
+		util.LogSuccess("Got %d %s%s", totalSensors, units, util.LinePunctuation(quietMode))
 
-		for i, sensor := range sl.OtherSensors {
-			fmt.Printf("%d. %s\n", i+1, sensor.String())
+		if !quietMode {
+			for i, sensor := range sl.OtherSensors {
+				fmt.Printf("%d. %s\n", i+1, sensor.String())
+			}
 		}
 	}
 
@@ -95,18 +97,24 @@ func (sl *SensorLoader) DisplaySensors() {
 	totalTempSensors := sl.TotalTemperatureSensors()
 	if totalTempSensors > 0 {
 		units := util.Pluralize(totalTempSensors, "sensor", "sensors")
-		util.LogSuccess("%s %d temperature %s:", intro, totalTempSensors, units)
-		for i, sensor := range sl.TemperatureSensors {
-			fmt.Printf("%d. %s\n", i+1, sensor.String())
+		util.LogSuccess("%s %d temperature %s%s", intro, totalTempSensors, units, util.LinePunctuation(quietMode))
+
+		if !quietMode {
+			for i, sensor := range sl.TemperatureSensors {
+				fmt.Printf("%d. %s\n", i+1, sensor.String())
+			}
 		}
 	}
 
 	totalMotionSensors := sl.TotalMotionSensors()
 	if totalMotionSensors > 0 {
 		units := util.Pluralize(totalMotionSensors, "sensor", "sensors")
-		util.LogSuccess("%s %d motion %s:", intro, totalMotionSensors, units)
-		for i, sensor := range sl.MotionSensors {
-			fmt.Printf("%d. %s\n", i+1, sensor.String())
+		util.LogSuccess("%s %d motion %s%s", intro, totalMotionSensors, units, util.LinePunctuation(quietMode))
+
+		if !quietMode {
+			for i, sensor := range sl.MotionSensors {
+				fmt.Printf("%d. %s\n", i+1, sensor.String())
+			}
 		}
 	}
 }

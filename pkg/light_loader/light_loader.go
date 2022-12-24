@@ -20,11 +20,13 @@ func NewLightLoader(hueClient *hue_api.Client) (*LightLoader, error) {
 	return &LightLoader{Lights: lights}, nil
 }
 
-func (ll *LightLoader) DisplayLights() {
+func (ll *LightLoader) DisplayLights(quietMode bool) {
 	count := len(ll.Lights)
 	units := util.Pluralize(count, "light", "lights")
-	util.LogSuccess("Got %d %s:", count, units)
-	for i, light := range ll.Lights {
-		fmt.Printf("%d. %s\n", i+1, light.String())
+	util.LogSuccess("Got %d %s%s", count, units, util.LinePunctuation(quietMode))
+	if !quietMode {
+		for i, light := range ll.Lights {
+			fmt.Printf("%d. %s\n", i+1, light.String())
+		}
 	}
 }
