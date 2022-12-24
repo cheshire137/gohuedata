@@ -22,7 +22,7 @@ function App() {
 
   return <ul>
     {temperatureReadings.map(tempReading => <li key={tempReading.id()}>
-      {tempReading.temperature}&deg; {tempReading.units} as of {tempReading.lastUpdated}
+      ({tempReading.sensor.bridge.name}) {tempReading.sensor.name}: {tempReading.temperature}&deg; {tempReading.units} as of {tempReading.lastUpdated}
     </li>)}
   </ul>;
 }
