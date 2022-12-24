@@ -2,6 +2,7 @@ package sensor_loader
 
 import (
 	"fmt"
+	"time"
 
 	options "github.com/cheshire137/gohuedata/pkg/cli_options"
 	"github.com/cheshire137/gohuedata/pkg/data_store"
@@ -146,6 +147,22 @@ func (sl *SensorLoader) SensorStates() []*hue_api.SensorState {
 		sensorStates[i] = &sensor.State
 	}
 	return sensorStates
+}
+
+func (sl *SensorLoader) MostRecentlyUpdatedSensorState() *hue_api.SensorState {
+	var latestLastUpdated *time.Time
+	var latestSensorState *hue_api.SensorState
+	for _, sensorState := range sl.SensorStates() {
+		lastUpdatedAt, err := sensorState.LastUpdatedAt()
+		if err != nil {
+			continue
+		}
+		if latestLastUpdated == nil || lastUpdatedAt.After(*latestLastUpdated) {
+			latestLastUpdated = lastUpdatedAt
+			latestSensorState = sensorState
+		}
+	}
+	return latestSensorState
 }
 
 func (sl *SensorLoader) SaveTemperatureSensorReadings(bridge *hue_api.Bridge, dataStore *data_store.DataStore, fahrenheit bool) error {
