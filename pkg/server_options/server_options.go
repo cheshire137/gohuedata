@@ -19,7 +19,7 @@ func NewServerOptions(databasePath string, port int, frontendPort int) *ServerOp
 	}
 }
 
-// Keep in sync with 'proxy' port in ui/package.json:
+// Keep in sync with 'proxy' port in ui/package.json and `REACT_APP_BACKEND_PORT` in ui/.env:
 const DefaultPort = 8080
 
 // Keep in sync with `PORT` environment variable in ui/.env:
