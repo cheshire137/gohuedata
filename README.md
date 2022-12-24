@@ -36,11 +36,11 @@ temperature sensors over time. This is done via the gohuedata script:
 
 1. Optional: set up a cron job to run the script periodically to log data. For example, on macOS, run `crontab -e` and add a line like this to run gohuedata [every hour](https://crontab.guru/every-hour):
 
-    `0 * * * * /usr/local/bin/go run /path/to/gohuedata/cmd/gohuedata/main.go -sensors temperature -lights none -b 1 -config /path/to/your-config-file.yml`
+    `0 * * * * cd /path/to/gohuedata && /usr/local/bin/go run cmd/gohuedata/main.go -sensors temperature -lights none -b 1 -config /path/to/your-config-file.yml`
 
     If you want to preserve log messages, you can create a log directory: `mkdir ~/Documents/gohuedata-logs`. Then set your cron job to:
 
-    `0 * * * * /usr/local/bin/go run /path/to/gohuedata/cmd/gohuedata/main.go -sensors temperature -lights none -b 1 -config /path/to/your-config-file.yml >/path/to/gohuedata-logs/stdout.log 2>/path/to/gohuedata-logs/stderr.log`
+    `0 * * * * cd /path/to/gohuedata && /usr/local/bin/go run cmd/gohuedata/main.go -sensors temperature -lights none -b 1 -config /path/to/your-config-file.yml >/path/to/gohuedata-logs/stdout.log 2>/path/to/gohuedata-logs/stderr.log`
 
 #### Options for gohuedata
 
