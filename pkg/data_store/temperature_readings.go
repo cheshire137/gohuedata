@@ -13,8 +13,20 @@ type TemperatureReading struct {
 	Units             string             `json:"units"`
 }
 
-func (ds *DataStore) LoadTemperatureReadings(page int) ([]*TemperatureReading, error) {
-	perPage := 100
+func (ds *DataStore) TotalTemperatureReadings() (int, error) {
+	var count int
+	query := `SELECT COUNT(*)
+		FROM temperature_readings
+		INNER JOIN temperature_sensors ON temperature_readings.temperature_sensor_id = temperature_sensors.id
+		INNER JOIN hue_bridges ON temperature_sensors.bridge_ip_address = hue_bridges.ip_address`
+	err := ds.db.QueryRow(query).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func (ds *DataStore) LoadTemperatureReadings(page int, perPage int) ([]*TemperatureReading, error) {
 	rows, err := ds.db.Query(`SELECT temperature_readings.last_updated,
 			temperature_readings.temperature,
 			temperature_readings.units,
