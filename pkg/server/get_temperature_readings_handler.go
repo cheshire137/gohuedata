@@ -21,9 +21,11 @@ func (e *Env) GetTemperatureReadingsHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	bridgeName := r.URL.Query().Get("bridge")
 	filter := &data_store.TemperatureReadingFilter{
-		Page:    pageInfo.Page,
-		PerPage: pageInfo.PerPage,
+		Page:       pageInfo.Page,
+		PerPage:    pageInfo.PerPage,
+		BridgeName: bridgeName,
 	}
 
 	tempReadings, err := e.ds.LoadTemperatureReadings(filter)
