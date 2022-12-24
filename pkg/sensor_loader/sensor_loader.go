@@ -140,6 +140,14 @@ func (sl *SensorLoader) AllSensors() []*hue_api.Sensor {
 	return allSensors
 }
 
+func (sl *SensorLoader) SensorStates() []*hue_api.SensorState {
+	sensorStates := make([]*hue_api.SensorState, sl.TotalSensors())
+	for i, sensor := range sl.AllSensors() {
+		sensorStates[i] = &sensor.State
+	}
+	return sensorStates
+}
+
 func (sl *SensorLoader) SaveTemperatureSensorReadings(bridge *hue_api.Bridge, dataStore *data_store.DataStore, fahrenheit bool) error {
 	for _, sensor := range sl.TemperatureSensors {
 		err := dataStore.AddTemperatureReading(bridge, sensor, fahrenheit)
