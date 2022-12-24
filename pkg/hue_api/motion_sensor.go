@@ -39,3 +39,19 @@ func (s *MotionSensor) String() string {
 	}
 	return s.Name
 }
+
+func (s *MotionSensor) ToSensor() *Sensor {
+	return &Sensor{
+		State:            s.State,
+		Config:           s.Config,
+		Name:             s.Name,
+		ModelID:          s.ModelID,
+		ManufacturerName: s.ManufacturerName,
+		SoftwareVersion:  s.SoftwareVersion,
+		UniqueID:         s.UniqueID,
+		DiversityID:      s.DiversityID,
+		ProductName:      s.ProductName,
+		Capabilities:     s.Capabilities,
+		Recycle:          s.Recycle,
+	}
+}
