@@ -1,6 +1,7 @@
 import React from 'react';
 import { BaseStyles, ThemeProvider, Header, Heading, PageLayout } from '@primer/react';
 import TemperatureReadings from './components/TemperatureReadings';
+import TemperatureSensors from './components/TemperatureSensors';
 
 function App() {
   return <ThemeProvider>
@@ -14,6 +15,7 @@ function App() {
           </Header>
         </PageLayout.Header>
         <PageLayout.Content sx={{ fontSize: 2 }}>
+          <TemperatureSensors />
           <TemperatureReadings />
         </PageLayout.Content>
       </PageLayout>

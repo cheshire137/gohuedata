@@ -1,8 +1,17 @@
 import TemperatureReading from "./TemperatureReading";
+import TemperatureSensor from "./TemperatureSensor";
 
 class GoHueDataApi {
   static apiUrl() {
     return `http://localhost:${process.env.REACT_APP_BACKEND_PORT}/api`;
+  }
+
+  static async getTemperatureSensors() {
+    const result = await this.get('/temperature-sensors/live');
+    const tempSensors: TemperatureSensor[] = result.temperatureSensors.map(
+      (data: any) => new TemperatureSensor(data)
+    );
+    return tempSensors;
   }
 
   static async getTemperatureReadings(page?: number, perPage?: number) {
