@@ -3,7 +3,7 @@ import useGetTemperatureSensors from '../hooks/use-get-temperature-sensors';
 import { PageContext } from '../contexts/PageContext';
 import TemperatureSensorListItem from './TemperatureSensorListItem';
 
-const TemperatureSensors = () => {
+const TemperatureSensorsPage = () => {
   const { temperatureSensors, fetching, error } = useGetTemperatureSensors();
   const { setPageTitle } = useContext(PageContext);
 
@@ -25,4 +25,4 @@ const TemperatureSensors = () => {
   </ul>;
 };
 
-export default TemperatureSensors;
+export default TemperatureSensorsPage;
