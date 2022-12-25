@@ -15,7 +15,7 @@ class TemperatureSensor {
 
   lastUpdatedAt() {
     if (!this.lastUpdated || this.lastUpdated.length < 1) return null;
-    return new Date(this.lastUpdated);
+    return new Date(`${this.lastUpdated}Z`); // parse as UTC
   }
 }
 

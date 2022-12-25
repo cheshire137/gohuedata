@@ -14,6 +14,11 @@ class TemperatureReading {
     this.units = data.units;
     this.sensor = new TemperatureSensor(data.temperatureSensor);
   }
+
+  timestampAsDate() {
+    if (!this.timestamp || this.timestamp.length < 1) return null;
+    return new Date(`${this.timestamp}Z`); // parse as UTC
+  }
 }
 
 export default TemperatureReading;
