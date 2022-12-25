@@ -1,9 +1,24 @@
 import React from 'react';
+import { BaseStyles, ThemeProvider, Header, Heading, PageLayout } from '@primer/react';
 import TemperatureReadings from './components/TemperatureReadings';
-import './App.css';
 
 function App() {
-  return <TemperatureReadings />;
+  return <ThemeProvider>
+    <BaseStyles>
+      <PageLayout>
+        <PageLayout.Header>
+          <Header>
+            <Header.Item>
+              <Heading as="h1">gohuedata</Heading>
+            </Header.Item>
+          </Header>
+        </PageLayout.Header>
+        <PageLayout.Content sx={{ fontSize: 2 }}>
+          <TemperatureReadings />
+        </PageLayout.Content>
+      </PageLayout>
+    </BaseStyles>
+  </ThemeProvider>;
 }
 
 export default App;
