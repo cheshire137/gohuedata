@@ -11,6 +11,7 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
+	"github.com/cheshire137/gohuedata/pkg/config"
 	"github.com/cheshire137/gohuedata/pkg/data_store"
 	"github.com/cheshire137/gohuedata/pkg/server"
 	options "github.com/cheshire137/gohuedata/pkg/server_options"
@@ -19,13 +20,18 @@ import (
 
 func main() {
 	options := options.ParseOptions()
+	config, err := config.NewConfig(options.ConfigPath)
+	if err != nil {
+		util.LogError("Failed to load configuration:", err)
+		return
+	}
 
-	db, err := sql.Open("sqlite3", options.DatabasePath)
+	db, err := sql.Open("sqlite3", config.DatabaseFile)
 	if err != nil {
 		util.LogError("Failed to open database:", err)
 		return
 	}
-	util.LogSuccess("Loaded %s database", options.DatabasePath)
+	util.LogSuccess("Loaded %s database", config.DatabaseFile)
 	defer db.Close()
 
 	dataStore := data_store.NewDataStore(db)

@@ -87,9 +87,9 @@ example, your home temperatures have changed over time.
 
 #### Options for the server
 
-- **`-db`** - Path to the gohuedata SQLite database file. Defaults to gohuedata.db if omitted. Example:
+- **`-config`** - Specify the path to the YAML configuration file. Defaults to "config.yml" if omitted. Example:
 
-    `go run cmd/server/main.go -db /some/dir/gohuedata.db`
+    `go run cmd/server/main.go -config ~/my_gohuedata_configuration.yml`
 
 - **`-p`** - Port to start the server on. Defaults to 8080. Example:
 
