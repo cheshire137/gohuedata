@@ -17,6 +17,11 @@ type TemperatureSensor struct {
 	bridgeIPAddress string
 }
 
+type TemperatureSensorExtended struct {
+	TemperatureSensor
+	LatestReading *TemperatureReading `json:"latestReading"`
+}
+
 type HueBridge struct {
 	ID        string `json:"id"`
 	IPAddress string `json:"ipAddress"`
