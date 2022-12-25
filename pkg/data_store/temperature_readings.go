@@ -36,7 +36,9 @@ func (ds *DataStore) LoadTemperatureReadings(filter *TemperatureReadingFilter) (
 	queryStr := `SELECT temperature_readings.last_updated,
 			temperature_readings.temperature,
 			temperature_readings.units,
+			temperature_sensors.id AS sensor_id,
 			temperature_sensors.name AS sensor_name,
+			temperature_sensors.bridge_ip_address AS bridge_ip_address,
 			hue_bridges.name AS bridge_name
 		FROM temperature_readings` + temperatureReadingJoins + whereClause + `
 		ORDER BY temperature_readings.last_updated DESC, temperature_sensors.name ASC, hue_bridges.name ASC
@@ -50,19 +52,48 @@ func (ds *DataStore) LoadTemperatureReadings(filter *TemperatureReadingFilter) (
 	defer rows.Close()
 
 	var readings []*TemperatureReading
+	sensorsByID := map[string]*TemperatureSensor{}
+	bridgesByIPAddress := map[string]*HueBridge{}
+
 	for rows.Next() {
 		var reading TemperatureReading
-		var sensor TemperatureSensor
-		var bridge HueBridge
+		var sensorName string
+		var bridgeIPAddress string
+		var bridgeName string
 
-		err = rows.Scan(&reading.LastUpdated, &reading.Temperature, &reading.Units, &sensor.Name, &bridge.Name)
+		err = rows.Scan(&reading.LastUpdated, &reading.Temperature, &reading.Units, &reading.temperatureSensorID,
+			&sensorName, &bridgeIPAddress, &bridgeName)
 		if err != nil {
 			return nil, err
 		}
 
-		sensor.Bridge = &bridge
-		reading.TemperatureSensor = &sensor
+		_, ok := sensorsByID[reading.temperatureSensorID]
+		if !ok {
+			sensorsByID[reading.temperatureSensorID] = &TemperatureSensor{
+				ID:              reading.temperatureSensorID,
+				Name:            sensorName,
+				bridgeIPAddress: bridgeIPAddress,
+			}
+		}
+
+		_, ok = bridgesByIPAddress[bridgeIPAddress]
+		if !ok {
+			bridgesByIPAddress[bridgeIPAddress] = &HueBridge{IPAddress: bridgeIPAddress, Name: bridgeName}
+		}
+
 		readings = append(readings, &reading)
+	}
+
+	for _, sensor := range sensorsByID {
+		if bridge, ok := bridgesByIPAddress[sensor.bridgeIPAddress]; ok {
+			sensor.Bridge = bridge
+		}
+	}
+
+	for _, reading := range readings {
+		if sensor, ok := sensorsByID[reading.temperatureSensorID]; ok {
+			reading.TemperatureSensor = sensor
+		}
 	}
 
 	return readings, nil
