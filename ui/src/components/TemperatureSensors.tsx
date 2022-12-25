@@ -1,10 +1,13 @@
-import React from 'react';
-import { Box, Heading } from '@primer/react';
+import React, { useContext, useEffect } from 'react';
 import useGetTemperatureSensors from '../hooks/use-get-temperature-sensors';
+import { PageContext } from '../contexts/PageContext';
 import TemperatureSensorListItem from './TemperatureSensorListItem';
 
 const TemperatureSensors = () => {
   const { temperatureSensors, fetching, error } = useGetTemperatureSensors();
+  const { setPageTitle } = useContext(PageContext);
+
+  useEffect(() => setPageTitle('Temperature sensors'), [setPageTitle]);
 
   if (fetching) {
     return <p>Loading...</p>;
@@ -14,15 +17,12 @@ const TemperatureSensors = () => {
     return <p>Error: {error}</p>;
   }
 
-  return <Box mb={4}>
-    <Heading as="h2">Temperature sensors</Heading>
-    <ul>
-      {temperatureSensors && temperatureSensors.map(tempSensor => <TemperatureSensorListItem
-        key={tempSensor.id}
-        sensor={tempSensor}
-      />)}
-    </ul>
-  </Box>;
+  return <ul>
+    {temperatureSensors && temperatureSensors.map(tempSensor => <TemperatureSensorListItem
+      key={tempSensor.id}
+      sensor={tempSensor}
+    />)}
+  </ul>;
 };
 
 export default TemperatureSensors;
