@@ -1,26 +1,22 @@
 import React from 'react';
-import { BaseStyles, ThemeProvider, Header, Heading, PageLayout } from '@primer/react';
+import { BaseStyles, ThemeProvider } from '@primer/react';
 import { PageContextProvider } from './contexts/PageContext';
-import TemperatureReadings from './components/TemperatureReadings';
+import { createHashRouter, RouterProvider, createRoutesFromElements, Route } from 'react-router-dom';
 import TemperatureSensors from './components/TemperatureSensors';
+import AppLayout from './components/AppLayout';
+import ErrorPage from './components/ErrorPage';
 
 function App() {
+  const router = createHashRouter(createRoutesFromElements(
+    <Route element={<AppLayout />}>
+      <Route path="/" element={<TemperatureSensors />} errorElement={<ErrorPage />} />
+    </Route>
+  ));
+
   return <ThemeProvider>
     <BaseStyles>
       <PageContextProvider>
-        <PageLayout>
-          <PageLayout.Header>
-            <Header>
-              <Header.Item>
-                <Heading as="h1">gohuedata</Heading>
-              </Header.Item>
-            </Header>
-          </PageLayout.Header>
-          <PageLayout.Content sx={{ fontSize: 2 }}>
-            <TemperatureSensors />
-            <TemperatureReadings />
-          </PageLayout.Content>
-        </PageLayout>
+        <RouterProvider router={router} />
       </PageContextProvider>
     </BaseStyles>
   </ThemeProvider>;
