@@ -7,13 +7,6 @@ import (
 	"github.com/cheshire137/gohuedata/pkg/pagination"
 )
 
-type TemperatureReading struct {
-	TemperatureSensor *TemperatureSensor `json:"temperatureSensor"`
-	LastUpdated       string             `json:"lastUpdated"`
-	Temperature       float32            `json:"temperature"`
-	Units             string             `json:"units"`
-}
-
 type TemperatureReadingFilter struct {
 	Page          int
 	PerPage       int
