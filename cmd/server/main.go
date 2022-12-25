@@ -32,7 +32,7 @@ func main() {
 	mux := http.NewServeMux()
 	env := server.NewEnv(dataStore, options)
 
-	mux.Handle("/", http.HandlerFunc(env.RootHandler))
+	mux.Handle("/", http.FileServer(http.Dir("./ui/build/")))
 	mux.Handle("/api/temperature-readings", http.HandlerFunc(env.GetTemperatureReadingsHandler))
 
 	server := &http.Server{

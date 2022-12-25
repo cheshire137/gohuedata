@@ -101,6 +101,10 @@ example, your home temperatures have changed over time.
 
 ### Start frontend to view your data
 
+#### With live updates
+
+If you want to change the frontend and see your changes live:
+
 ```sh
 cd ui
 npm install
@@ -108,6 +112,18 @@ npm start
 ```
 
 This will launch the React app and open http://localhost:4000 in your browser. You can change the port used for the frontend via the `PORT` environment variable. If you do so, you'll want to pass the same port via the `-fp` option when launching the server.
+
+#### Static
+
+```sh
+cd ui
+npm run build
+cd ../
+go run cmd/server/main.go
+```
+
+The Go server running at http://localhost:8080 (by default; see the `-p` server option above for how to use a
+different port) will serve up the static frontend.
 
 ## Thanks
 
