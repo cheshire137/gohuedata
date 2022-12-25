@@ -71,37 +71,30 @@ func (ds *DataStore) LoadTemperatureReadings(filter *TemperatureReadingFilter) (
 		reading.ID = fmt.Sprintf("%s%s%.1f%s", reading.temperatureSensorID, reading.LastUpdated, reading.Temperature,
 			reading.Units)
 
-		_, ok := sensorsByID[reading.temperatureSensorID]
+		sensor, ok := sensorsByID[reading.temperatureSensorID]
 		if !ok {
-			sensorsByID[reading.temperatureSensorID] = &TemperatureSensor{
+			sensor = &TemperatureSensor{
 				ID:              reading.temperatureSensorID,
 				Name:            sensorName,
 				bridgeIPAddress: bridgeIPAddress,
 			}
+			sensorsByID[reading.temperatureSensorID] = sensor
 		}
 
-		_, ok = bridgesByIPAddress[bridgeIPAddress]
+		bridge, ok := bridgesByIPAddress[bridgeIPAddress]
 		if !ok {
-			bridgesByIPAddress[bridgeIPAddress] = &HueBridge{
+			bridge = &HueBridge{
 				ID:        bridgeIPAddress,
 				IPAddress: bridgeIPAddress,
 				Name:      bridgeName,
 			}
+			bridgesByIPAddress[bridgeIPAddress] = bridge
 		}
+
+		sensor.Bridge = bridge
+		reading.TemperatureSensor = sensor
 
 		readings = append(readings, &reading)
-	}
-
-	for _, sensor := range sensorsByID {
-		if bridge, ok := bridgesByIPAddress[sensor.bridgeIPAddress]; ok {
-			sensor.Bridge = bridge
-		}
-	}
-
-	for _, reading := range readings {
-		if sensor, ok := sensorsByID[reading.temperatureSensorID]; ok {
-			reading.TemperatureSensor = sensor
-		}
 	}
 
 	return readings, nil
