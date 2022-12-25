@@ -31,6 +31,47 @@ func (ds *DataStore) TotalTemperatureReadings(filter *TemperatureReadingFilter) 
 	return count, nil
 }
 
+func (ds *DataStore) LoadTemperatureReading(sensorID string, timestamp string) (*TemperatureReading, error) {
+	queryStr := `SELECT temperature_readings.last_updated AS timestamp,
+			temperature_readings.temperature,
+			temperature_readings.units,
+			temperature_sensors.id AS sensor_id,
+			temperature_sensors.name AS sensor_name,
+			temperature_sensors.bridge_ip_address AS bridge_ip_address,
+			hue_bridges.name AS bridge_name
+		FROM temperature_readings` + temperatureReadingJoins + `
+		WHERE temperature_readings.temperature_sensor_id = ?
+			AND temperature_readings.last_updated = ?
+		LIMIT 1`
+
+	rows, err := ds.db.Query(queryStr, sensorID, timestamp)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var reading *TemperatureReading
+	var sensor *TemperatureSensor
+	var bridge *HueBridge
+
+	for rows.Next() {
+		err = rows.Scan(&reading.Timestamp, &reading.Temperature, &reading.Units, &reading.temperatureSensorID,
+			&sensor.Name, &bridge.IPAddress, &bridge.Name)
+		if err != nil {
+			return nil, err
+		}
+
+		reading.ID = fmt.Sprintf("%s%s%.1f%s", reading.temperatureSensorID, reading.Timestamp, reading.Temperature,
+			reading.Units)
+		sensor.ID = reading.temperatureSensorID
+		bridge.ID = bridge.IPAddress
+		sensor.Bridge = bridge
+		reading.TemperatureSensor = sensor
+	}
+
+	return reading, nil
+}
+
 func (ds *DataStore) LoadTemperatureReadings(filter *TemperatureReadingFilter) ([]*TemperatureReading, error) {
 	limit, offset := temperatureReadingLimitAndOffset(filter)
 	whereClause, values := buildTemperatureReadingWhereConditions(filter)
