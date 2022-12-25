@@ -1,7 +1,7 @@
 import TemperatureSensor from "./TemperatureSensor";
 
 class TemperatureReading {
-  lastUpdated: string;
+  timestamp: string;
   temperature: number;
   units: string;
   sensor: TemperatureSensor;
@@ -9,7 +9,7 @@ class TemperatureReading {
 
   constructor(data: any) {
     this.id = data.id;
-    this.lastUpdated = data.lastUpdated;
+    this.timestamp = data.timestamp;
     this.temperature = data.temperature;
     this.units = data.units;
     this.sensor = new TemperatureSensor(data.temperatureSensor);

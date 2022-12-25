@@ -17,7 +17,7 @@ const TemperatureReadings = () => {
 
   return <ul>
     {temperatureReadings && temperatureReadings.map(tempReading => <li key={tempReading.id}>
-      ({tempReading.sensor.bridge.name}) {tempReading.sensor.name}: {tempReading.temperature}&deg; {tempReading.units} as of {tempReading.lastUpdated}
+      ({tempReading.sensor.bridge.name}) {tempReading.sensor.name}: {tempReading.temperature}&deg; {tempReading.units} as of {tempReading.timestamp}
     </li>)}
   </ul>;
 };

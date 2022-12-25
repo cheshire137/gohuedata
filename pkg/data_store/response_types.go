@@ -3,7 +3,7 @@ package data_store
 type TemperatureReading struct {
 	ID                  string             `json:"id"`
 	TemperatureSensor   *TemperatureSensor `json:"temperatureSensor"`
-	LastUpdated         string             `json:"lastUpdated"`
+	Timestamp           string             `json:"timestamp"`
 	Temperature         float32            `json:"temperature"`
 	Units               string             `json:"units"`
 	temperatureSensorID string
