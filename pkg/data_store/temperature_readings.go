@@ -1,6 +1,7 @@
 package data_store
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/cheshire137/gohuedata/pkg/hue_api"
@@ -67,6 +68,9 @@ func (ds *DataStore) LoadTemperatureReadings(filter *TemperatureReadingFilter) (
 			return nil, err
 		}
 
+		reading.ID = fmt.Sprintf("%s%s%.1f%s", reading.temperatureSensorID, reading.LastUpdated, reading.Temperature,
+			reading.Units)
+
 		_, ok := sensorsByID[reading.temperatureSensorID]
 		if !ok {
 			sensorsByID[reading.temperatureSensorID] = &TemperatureSensor{
@@ -78,7 +82,11 @@ func (ds *DataStore) LoadTemperatureReadings(filter *TemperatureReadingFilter) (
 
 		_, ok = bridgesByIPAddress[bridgeIPAddress]
 		if !ok {
-			bridgesByIPAddress[bridgeIPAddress] = &HueBridge{IPAddress: bridgeIPAddress, Name: bridgeName}
+			bridgesByIPAddress[bridgeIPAddress] = &HueBridge{
+				ID:        bridgeIPAddress,
+				IPAddress: bridgeIPAddress,
+				Name:      bridgeName,
+			}
 		}
 
 		readings = append(readings, &reading)

@@ -1,6 +1,7 @@
 package data_store
 
 type TemperatureReading struct {
+	ID                  string             `json:"id"`
 	TemperatureSensor   *TemperatureSensor `json:"temperatureSensor"`
 	LastUpdated         string             `json:"lastUpdated"`
 	Temperature         float32            `json:"temperature"`
@@ -16,6 +17,7 @@ type TemperatureSensor struct {
 }
 
 type HueBridge struct {
+	ID        string `json:"id"`
 	IPAddress string `json:"ipAddress"`
 	Name      string `json:"name"`
 }
