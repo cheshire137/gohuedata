@@ -27,12 +27,10 @@ func (e *Env) GetTemperatureSensorsHandler(w http.ResponseWriter, r *http.Reques
 	}
 
 	bridgeName := r.URL.Query().Get("bridge")
-	sensorName := r.URL.Query().Get("sensor")
 	filter := &data_store.TemperatureSensorFilter{
 		Page:       pageInfo.Page,
 		PerPage:    pageInfo.PerPage,
 		BridgeName: bridgeName,
-		SensorName: sensorName,
 	}
 
 	tempSensors, err := e.ds.LoadTemperatureSensors(filter)

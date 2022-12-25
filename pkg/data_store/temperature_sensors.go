@@ -11,7 +11,6 @@ type TemperatureSensorFilter struct {
 	Page       int
 	PerPage    int
 	BridgeName string
-	SensorName string
 }
 
 const temperatureSensorJoins = `
@@ -112,11 +111,6 @@ func buildTemperatureSensorWhereConditions(filter *TemperatureSensorFilter) (str
 	if filter.BridgeName != "" {
 		conditions = append(conditions, "LOWER(hue_bridges.name) = ?")
 		values = append(values, strings.ToLower(filter.BridgeName))
-	}
-
-	if filter.SensorName != "" {
-		conditions = append(conditions, "LOWER(temperature_sensors.name) = ?")
-		values = append(values, strings.ToLower(filter.SensorName))
 	}
 
 	if len(conditions) == 0 {
