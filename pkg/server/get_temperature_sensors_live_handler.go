@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -11,6 +12,13 @@ import (
 	"github.com/cheshire137/gohuedata/pkg/sensor_loader"
 	"github.com/cheshire137/gohuedata/pkg/util"
 )
+
+type TemperatureSensorsLiveResponse struct {
+	TemperatureSensors []*data_store.TemperatureSensorExtended `json:"temperatureSensors"`
+	Page               int                                     `json:"page"`
+	TotalPages         int                                     `json:"totalPages"`
+	TotalCount         int                                     `json:"totalCount"`
+}
 
 func (e *Env) GetTemperatureSensorsLiveHandler(w http.ResponseWriter, r *http.Request) {
 	e.enableCors(&w)
@@ -38,7 +46,7 @@ func (e *Env) GetTemperatureSensorsLiveHandler(w http.ResponseWriter, r *http.Re
 		}
 	}
 
-	var tempSensors []*data_store.TemperatureSensor
+	var tempSensors []*data_store.TemperatureSensorExtended
 	totalTempSensors := 0
 
 	for _, bridge := range selectedBridges {
@@ -64,17 +72,30 @@ func (e *Env) GetTemperatureSensorsLiveHandler(w http.ResponseWriter, r *http.Re
 		totalTempSensors += sensorLoader.TotalTemperatureSensors()
 
 		for _, tempSensor := range tempSensorsForBridge {
-			tempSensorForResponse := &data_store.TemperatureSensor{
+			temperature := tempSensor.Temperature()
+			units := tempSensor.TempUnits()
+			tempSensorForResponse := data_store.TemperatureSensor{
 				ID:          tempSensor.UniqueID,
 				Name:        tempSensor.Name,
 				Bridge:      bridgeForResponse,
 				LastUpdated: tempSensor.State.LastUpdated,
 			}
-			tempSensors = append(tempSensors, tempSensorForResponse)
+			readingForResponse := &data_store.TemperatureReading{
+				ID:                fmt.Sprintf("%s%s%.1f%s", tempSensor.UniqueID, tempSensor.State.LastUpdated, temperature, units),
+				TemperatureSensor: &tempSensorForResponse,
+				Timestamp:         tempSensor.State.LastUpdated,
+				Temperature:       temperature,
+				Units:             units,
+			}
+			extendedTempSensor := &data_store.TemperatureSensorExtended{
+				TemperatureSensor: tempSensorForResponse,
+				LatestReading:     readingForResponse,
+			}
+			tempSensors = append(tempSensors, extendedTempSensor)
 		}
 	}
 
-	response := TemperatureSensorsResponse{
+	response := TemperatureSensorsLiveResponse{
 		TemperatureSensors: tempSensors,
 		Page:               1,
 		TotalPages:         1,
