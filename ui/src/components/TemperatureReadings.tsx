@@ -20,7 +20,8 @@ const TemperatureReadings = () => {
     <Heading as="h2">Latest temperatures</Heading>
     <ul>
       {temperatureReadings && temperatureReadings.map(tempReading => <li key={tempReading.id}>
-        ({tempReading.sensor.bridge.name}) {tempReading.sensor.name}: {tempReading.temperature}&deg; {tempReading.units} as of {tempReading.timestamp}
+        ({tempReading.sensor.bridge.name}) {tempReading.sensor.name}: {tempReading.temperature}&deg; {tempReading.units} as of
+        {tempReading.timestampAsDate()?.toLocaleDateString()} {tempReading.timestampAsDate()?.toLocaleTimeString()}
       </li>)}
     </ul>
   </Box>;
