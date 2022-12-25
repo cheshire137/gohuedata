@@ -43,17 +43,17 @@ func (s *TemperatureSensor) Temperature() float32 {
 
 func (s *TemperatureSensor) TempUnits() string {
 	if s.Fahrenheit {
-		return "°F"
+		return "F"
 	}
-	return "°C"
+	return "C"
 }
 
 func (s *TemperatureSensor) String() string {
 	lastUpdatedSummary := s.State.LastUpdatedSummary()
 	if lastUpdatedSummary == "" {
-		return fmt.Sprintf("%s -- %.1f%s", s.Name, s.Temperature(), s.TempUnits())
+		return fmt.Sprintf("%s -- %.1f°%s", s.Name, s.Temperature(), s.TempUnits())
 	}
-	return fmt.Sprintf("%s -- %.1f%s as of %s", s.Name, s.Temperature(), s.TempUnits(), lastUpdatedSummary)
+	return fmt.Sprintf("%s -- %.1f°%s as of %s", s.Name, s.Temperature(), s.TempUnits(), lastUpdatedSummary)
 }
 
 func (s *TemperatureSensor) ToSensor() *Sensor {
