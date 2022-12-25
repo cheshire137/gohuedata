@@ -1,5 +1,5 @@
 import TemperatureReading from "./TemperatureReading";
-import TemperatureSensor from "./TemperatureSensor";
+import TemperatureSensorExtended from "./TemperatureSensorExtended";
 
 class GoHueDataApi {
   static apiUrl() {
@@ -8,8 +8,8 @@ class GoHueDataApi {
 
   static async getTemperatureSensors() {
     const result = await this.get('/temperature-sensors/live');
-    const tempSensors: TemperatureSensor[] = result.temperatureSensors.map(
-      (data: any) => new TemperatureSensor(data)
+    const tempSensors: TemperatureSensorExtended[] = result.temperatureSensors.map(
+      (data: any) => new TemperatureSensorExtended(data)
     );
     return tempSensors;
   }

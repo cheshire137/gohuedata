@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import GoHueDataApi from '../models/GoHueDataApi';
-import TemperatureSensor from "../models/TemperatureSensor";
+import TemperatureSensorExtended from "../models/TemperatureSensorExtended";
 
 interface Results {
-  temperatureSensors?: TemperatureSensor[];
+  temperatureSensors?: TemperatureSensorExtended[];
   fetching: boolean;
   error?: string;
 }

@@ -17,7 +17,7 @@ const TemperatureSensors = () => {
     <Heading as="h2">Temperature sensors</Heading>
     <ul>
       {temperatureSensors && temperatureSensors.map(tempSensor => <li key={tempSensor.id}>
-        ({tempSensor.bridge.name}) {tempSensor.name}: as of {tempSensor.lastUpdated}
+        ({tempSensor.bridge.name}) {tempSensor.name}: {tempSensor.latestReading.temperature}&deg; {tempSensor.latestReading.units} as of {tempSensor.lastUpdated}
       </li>)}
     </ul>
   </Box>;
