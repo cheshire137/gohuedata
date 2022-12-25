@@ -13,6 +13,7 @@ type TemperatureSensor struct {
 	ID              string     `json:"id"`
 	Name            string     `json:"name"`
 	Bridge          *HueBridge `json:"bridge"`
+	LastUpdated     string     `json:"lastUpdated"`
 	bridgeIPAddress string
 }
 

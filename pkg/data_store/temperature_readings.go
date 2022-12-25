@@ -55,6 +55,7 @@ func (ds *DataStore) LoadTemperatureReadings(filter *TemperatureReadingFilter) (
 	var readings []*TemperatureReading
 	sensorsByID := map[string]*TemperatureSensor{}
 	bridgesByIPAddress := map[string]*HueBridge{}
+	sensors := []*TemperatureSensor{}
 
 	for rows.Next() {
 		var reading TemperatureReading
@@ -79,6 +80,7 @@ func (ds *DataStore) LoadTemperatureReadings(filter *TemperatureReadingFilter) (
 				bridgeIPAddress: bridgeIPAddress,
 			}
 			sensorsByID[reading.temperatureSensorID] = sensor
+			sensors = append(sensors, sensor)
 		}
 
 		bridge, ok := bridgesByIPAddress[bridgeIPAddress]
@@ -96,6 +98,8 @@ func (ds *DataStore) LoadTemperatureReadings(filter *TemperatureReadingFilter) (
 
 		readings = append(readings, &reading)
 	}
+
+	setLastUpdatedOnSensors(sensors, readings)
 
 	return readings, nil
 }

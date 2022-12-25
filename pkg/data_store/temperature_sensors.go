@@ -17,3 +17,13 @@ func (ds *DataStore) addTemperatureSensor(bridge *hue_api.Bridge, sensor *hue_ap
 	}
 	return nil
 }
+
+func setLastUpdatedOnSensors(sensors []*TemperatureSensor, readings []*TemperatureReading) {
+	for _, sensor := range sensors {
+		for _, reading := range readings {
+			if reading.temperatureSensorID == sensor.ID && (sensor.LastUpdated == "" || reading.Timestamp > sensor.LastUpdated) {
+				sensor.LastUpdated = reading.Timestamp
+			}
+		}
+	}
+}
