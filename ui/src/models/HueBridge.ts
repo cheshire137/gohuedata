@@ -1,12 +1,12 @@
 class HueBridge {
   name: string;
+  ipAddress: string;
+  id: string;
 
   constructor(data: any) {
+    this.id = data.id;
     this.name = data.name;
-  }
-
-  id() {
-    return `bridge-${this.name}`;
+    this.ipAddress = data.ipAddress;
   }
 }
 

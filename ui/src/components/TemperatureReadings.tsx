@@ -15,12 +15,8 @@ const TemperatureReadings = () => {
     return <p>Error: {error}</p>;
   }
 
-  if (!temperatureReadings) {
-    return <p>No data</p>;
-  }
-
   return <ul>
-    {temperatureReadings.map(tempReading => <li key={tempReading.id()}>
+    {temperatureReadings && temperatureReadings.map(tempReading => <li key={tempReading.id}>
       ({tempReading.sensor.bridge.name}) {tempReading.sensor.name}: {tempReading.temperature}&deg; {tempReading.units} as of {tempReading.lastUpdated}
     </li>)}
   </ul>;
