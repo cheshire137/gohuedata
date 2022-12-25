@@ -1,15 +1,19 @@
 import React from 'react';
-import { RelativeTime } from '@primer/react';
+import { Box } from '@primer/react';
 import TemperatureSensorExtended from '../models/TemperatureSensorExtended';
+import TemperatureReadingDisplay from './TemperatureReadingDisplay';
 
 interface Props {
   sensor: TemperatureSensorExtended;
 }
 
 const TemperatureSensorListItem = ({ sensor }: Props) => {
-  return <li>
-    ({sensor.bridge.name}) {sensor.name}: {sensor.latestReading.temperature}&deg; {sensor.latestReading.units} as of <RelativeTime date={sensor.lastUpdatedAt()} />
-  </li>;
+  return <Box as="li" mb={2}>
+    {sensor.name}: <TemperatureReadingDisplay reading={sensor.latestReading} />
+    <Box fontSize={1} color="fg.muted">
+      {sensor.bridge.name}
+    </Box>
+  </Box>;
 };
 
 export default TemperatureSensorListItem;
