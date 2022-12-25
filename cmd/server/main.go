@@ -34,6 +34,7 @@ func main() {
 
 	mux.Handle("/", http.FileServer(http.Dir("./ui/build/")))
 	mux.Handle("/api/temperature-readings", http.HandlerFunc(env.GetTemperatureReadingsHandler))
+	mux.Handle("/api/temperature-sensors", http.HandlerFunc(env.GetTemperatureSensorsHandler))
 
 	server := &http.Server{
 		Addr:    options.Address(),
