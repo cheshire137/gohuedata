@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react';
-import { Box } from '@primer/react';
+import { Box, CircleBadge, Text, RelativeTime } from '@primer/react';
 import TemperatureSensorExtended from '../models/TemperatureSensorExtended';
-import TemperatureReadingDisplay from './TemperatureReadingDisplay';
 import { useLoaderData } from 'react-router-dom';
 import { PageContext } from '../contexts/PageContext';
 import { TemperatureReadingsContextProvider } from '../contexts/TemperatureReadingsContext';
@@ -11,14 +10,22 @@ import TemperatureReadingGraph from './TemperatureReadingGraph';
 const TemperatureSensorPage = () => {
   const { setPageTitle } = useContext(PageContext);
   const sensor = useLoaderData() as TemperatureSensorExtended;
+  const { latestReading } = sensor;
 
-  useEffect(() => setPageTitle(sensor.name), [sensor.name, setPageTitle]);
+  useEffect(() => setPageTitle(`${sensor.bridge.name} / ${sensor.name}`),
+    [sensor.name, sensor.bridge.name, setPageTitle]);
 
-  return <Box as="li" mb={2}>
-    <TemperatureReadingDisplay reading={sensor.latestReading} />
-    <Box fontSize={1} color="fg.muted">
-      {sensor.bridge.name}
-    </Box>
+  return <Box mb={2}>
+    <CircleBadge variant="large" sx={{ flexDirection: 'column' }}>
+      <Text
+        fontWeight="bold"
+        fontSize="5"
+      >{Math.round(latestReading.temperature)}&deg;{latestReading.units}</Text>
+      <Text
+        fontSize={1}
+        color="fg.muted"
+      ><RelativeTime threshold="P1D" date={latestReading.timestampAsDate()} /></Text>
+    </CircleBadge>
     <TemperatureReadingsContextProvider filter={{ sensorID: sensor.id, perPage: 30 }}>
       <TemperatureReadingGraph />
       <TemperatureReadingList />
