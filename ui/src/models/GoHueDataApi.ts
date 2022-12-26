@@ -13,8 +13,8 @@ class GoHueDataApi {
     return new TemperatureSensorExtended(data);
   }
 
-  static async getTemperatureSensors() {
-    const result = await this.get('/temperature-sensors/live');
+  static async getLiveTemperatureSensors() {
+    const result = await this.get('/live/temperature-sensors');
     const tempSensors: TemperatureSensorExtended[] = result.temperatureSensors.map(
       (data: any) => new TemperatureSensorExtended(data)
     );

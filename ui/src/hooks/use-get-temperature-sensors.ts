@@ -14,7 +14,7 @@ function useGetTemperatureSensors(): Results {
   useEffect(() => {
     async function fetchTemperatureSensors() {
       try {
-        const temperatureSensors = await GoHueDataApi.getTemperatureSensors();
+        const temperatureSensors = await GoHueDataApi.getLiveTemperatureSensors();
         setResults({ temperatureSensors, fetching: false })
       } catch (err: any) {
         console.error('failed to fetch temperature sensors', err);
