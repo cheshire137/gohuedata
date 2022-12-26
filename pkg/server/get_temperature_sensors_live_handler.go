@@ -22,7 +22,7 @@ type TemperatureSensorsLiveResponse struct {
 
 func (e *Env) GetTemperatureSensorsLiveHandler(w http.ResponseWriter, r *http.Request) {
 	e.enableCors(&w)
-	util.LogInfo("GET %s", r.URL.Path)
+	util.LogRequest(r)
 
 	config, err := config.NewConfig(e.options.ConfigPath)
 	if err != nil {

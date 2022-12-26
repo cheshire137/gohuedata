@@ -9,7 +9,7 @@ import (
 
 func (e *Env) GetTemperatureSensorHandler(w http.ResponseWriter, r *http.Request) {
 	e.enableCors(&w)
-	util.LogInfo("GET %s", r.URL.Path)
+	util.LogRequest(r)
 
 	sensorID := r.URL.Query().Get("id")
 	tempSensor, err := e.ds.LoadTemperatureSensor(sensorID)

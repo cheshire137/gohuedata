@@ -41,3 +41,12 @@ func LinePunctuation(quietMode bool) string {
 	}
 	return ":"
 }
+
+func LogRequest(r *http.Request) {
+	queryStr := r.URL.RawQuery
+	if queryStr == "" {
+		LogInfo("%s %s", r.Method, r.URL.Path)
+	} else {
+		LogInfo("%s %s?%s", r.Method, r.URL.Path, r.URL.RawQuery)
+	}
+}
