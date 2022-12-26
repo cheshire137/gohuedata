@@ -46,7 +46,7 @@ const TemperatureReadingGraph = () => {
     ]
   };
 
-  return <Box mb={2}>
+  return <Box mb={2} height="400px">
     <Line data={data} options={{
       responsive: true,
       plugins: {
