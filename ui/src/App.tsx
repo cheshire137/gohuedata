@@ -1,6 +1,7 @@
 import React from 'react';
 import { BaseStyles, ThemeProvider } from '@primer/react';
 import { PageContextProvider } from './contexts/PageContext';
+import { TemperatureSensorsContextProvider } from './contexts/TemperatureSensorsContext';
 import { createHashRouter, RouterProvider, createRoutesFromElements, Route } from 'react-router-dom';
 import TemperatureSensorsPage from './components/TemperatureSensorsPage';
 import TemperatureSensorPage from './components/TemperatureSensorPage';
@@ -26,7 +27,9 @@ function App() {
   return <ThemeProvider>
     <BaseStyles>
       <PageContextProvider>
-        <RouterProvider router={router} />
+        <TemperatureSensorsContextProvider>
+          <RouterProvider router={router} />
+        </TemperatureSensorsContextProvider>
       </PageContextProvider>
     </BaseStyles>
   </ThemeProvider>;
