@@ -1,7 +1,9 @@
 import TemperatureReading from './TemperatureReading';
 import TemperatureSensorExtended from './TemperatureSensorExtended';
+import Group from './Group';
 import type TemperatureReadingFilter from '../types/TemperatureReadingFilter';
 import type TemperatureReadingsResult from '../types/TemperatureReadingsResult';
+import type GroupsResult from '../types/GroupsResult';
 
 class GoHueDataApi {
   static apiUrl() {
@@ -19,6 +21,13 @@ class GoHueDataApi {
       (data: any) => new TemperatureSensorExtended(data)
     );
     return tempSensors;
+  }
+
+  static async getLiveGroups(): Promise<GroupsResult> {
+    const result = await this.get('/live/groups');
+    const { groups: groupData, ...rest } = result;
+    const groups: Group[] = groupData.map((data: any) => new Group(data));
+    return { groups, ...rest };
   }
 
   static async getTemperatureReadings(filter?: TemperatureReadingFilter): Promise<TemperatureReadingsResult> {
