@@ -44,32 +44,24 @@ func (ds *DataStore) LoadTemperatureReading(sensorID string, timestamp string) (
 			AND temperature_readings.last_updated = ?
 		LIMIT 1`
 
-	rows, err := ds.db.Query(queryStr, sensorID, timestamp)
+	var reading TemperatureReading
+	var sensor TemperatureSensor
+	var bridge HueBridge
+
+	err := ds.db.QueryRow(queryStr, sensorID, timestamp).Scan(&reading.Timestamp, &reading.Temperature, &reading.Units,
+		&reading.temperatureSensorID, &sensor.Name, &bridge.IPAddress, &bridge.Name)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
-	var reading *TemperatureReading
-	var sensor *TemperatureSensor
-	var bridge *HueBridge
+	reading.ID = fmt.Sprintf("%s%s%.1f%s", reading.temperatureSensorID, reading.Timestamp, reading.Temperature,
+		reading.Units)
+	sensor.ID = reading.temperatureSensorID
+	bridge.ID = bridge.IPAddress
+	sensor.Bridge = &bridge
+	reading.TemperatureSensor = &sensor
 
-	for rows.Next() {
-		err = rows.Scan(&reading.Timestamp, &reading.Temperature, &reading.Units, &reading.temperatureSensorID,
-			&sensor.Name, &bridge.IPAddress, &bridge.Name)
-		if err != nil {
-			return nil, err
-		}
-
-		reading.ID = fmt.Sprintf("%s%s%.1f%s", reading.temperatureSensorID, reading.Timestamp, reading.Temperature,
-			reading.Units)
-		sensor.ID = reading.temperatureSensorID
-		bridge.ID = bridge.IPAddress
-		sensor.Bridge = bridge
-		reading.TemperatureSensor = sensor
-	}
-
-	return reading, nil
+	return &reading, nil
 }
 
 func (ds *DataStore) LoadTemperatureReadings(filter *TemperatureReadingFilter) ([]*TemperatureReading, error) {

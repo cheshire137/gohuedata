@@ -39,24 +39,17 @@ func (ds *DataStore) LoadTemperatureSensor(id string) (*TemperatureSensorExtende
 		GROUP BY temperature_sensors.id, temperature_sensors.name, temperature_sensors.bridge_ip_address, hue_bridges.name
 		LIMIT 1`
 
-	rows, err := ds.db.Query(queryStr, id)
+	var sensor TemperatureSensorExtended
+	var bridge HueBridge
+	err := ds.db.QueryRow(queryStr, id).Scan(&sensor.ID, &sensor.Name, &sensor.bridgeIPAddress, &bridge.Name,
+		&sensor.LastUpdated)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
-	var sensor *TemperatureSensorExtended
-	var bridge *HueBridge
-	for rows.Next() {
-		err = rows.Scan(&sensor.ID, &sensor.Name, &sensor.bridgeIPAddress, &bridge.Name, &sensor.LastUpdated)
-		if err != nil {
-			return nil, err
-		}
-
-		bridge.ID = sensor.bridgeIPAddress
-		bridge.IPAddress = sensor.bridgeIPAddress
-		sensor.Bridge = bridge
-	}
+	bridge.ID = sensor.bridgeIPAddress
+	bridge.IPAddress = sensor.bridgeIPAddress
+	sensor.Bridge = &bridge
 
 	latestReading, err := ds.LoadTemperatureReading(sensor.ID, sensor.LastUpdated)
 	if err != nil {
@@ -64,7 +57,7 @@ func (ds *DataStore) LoadTemperatureSensor(id string) (*TemperatureSensorExtende
 	}
 	sensor.LatestReading = latestReading
 
-	return sensor, nil
+	return &sensor, nil
 }
 
 func (ds *DataStore) LoadTemperatureSensors(filter *TemperatureSensorFilter) ([]*TemperatureSensor, error) {
