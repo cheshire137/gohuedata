@@ -1,5 +1,6 @@
-import TemperatureReading from "./TemperatureReading";
-import TemperatureSensorExtended from "./TemperatureSensorExtended";
+import TemperatureReading from './TemperatureReading';
+import TemperatureSensorExtended from './TemperatureSensorExtended';
+import type TemperatureReadingFilter from '../types/TemperatureReadingFilter';
 
 class GoHueDataApi {
   static apiUrl() {
@@ -19,13 +20,22 @@ class GoHueDataApi {
     return tempSensors;
   }
 
-  static async getTemperatureReadings(page?: number, perPage?: number) {
+  static async getTemperatureReadings(filter?: TemperatureReadingFilter) {
     const params = new URLSearchParams();
-    if (typeof page === 'number') {
-      params.append('page', page.toString());
+    if (typeof filter?.page === 'number') {
+      params.append('page', filter.page.toString());
     }
-    if (typeof perPage === 'number') {
-      params.append('per_page', perPage.toString());
+    if (typeof filter?.perPage === 'number') {
+      params.append('per_page', filter.perPage.toString());
+    }
+    if (typeof filter?.perPage === 'number') {
+      params.append('per_page', filter.perPage.toString());
+    }
+    if (typeof filter?.sensorID === 'string' && filter.sensorID.length > 0) {
+      params.append('sensor_id', filter.sensorID);
+    }
+    if (typeof filter?.bridge === 'string' && filter.bridge.length > 0) {
+      params.append('bridge', filter.bridge);
     }
     const queryString = params.toString();
     let path = '/temperature-readings';

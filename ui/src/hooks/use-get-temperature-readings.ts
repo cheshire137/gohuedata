@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import GoHueDataApi from '../models/GoHueDataApi';
-import TemperatureReading from "../models/TemperatureReading";
+import TemperatureReading from '../models/TemperatureReading';
+import type TemperatureReadingFilter from '../types/TemperatureReadingFilter';
 
 interface Results {
   temperatureReadings?: TemperatureReading[];
@@ -8,18 +9,13 @@ interface Results {
   error?: string;
 }
 
-interface Props {
-  page?: number;
-  perPage?: number;
-}
-
-function useGetTemperatureReadings({ page, perPage }: Props): Results {
+function useGetTemperatureReadings(filter?: TemperatureReadingFilter): Results {
   const [results, setResults] = useState<Results>({ fetching: true });
 
   useEffect(() => {
     async function fetchTemperatureReadings() {
       try {
-        const temperatureReadings = await GoHueDataApi.getTemperatureReadings(page, perPage);
+        const temperatureReadings = await GoHueDataApi.getTemperatureReadings(filter);
         setResults({ temperatureReadings, fetching: false })
       } catch (err: any) {
         console.error('failed to fetch temperature readings', err);
@@ -28,7 +24,7 @@ function useGetTemperatureReadings({ page, perPage }: Props): Results {
     }
 
     fetchTemperatureReadings()
-  }, [page, perPage]);
+  }, [filter, setResults]);
 
   return results;
 }

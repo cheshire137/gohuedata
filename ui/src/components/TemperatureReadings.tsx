@@ -1,12 +1,10 @@
 import React from 'react';
 import { Box, Heading } from '@primer/react';
 import useGetTemperatureReadings from '../hooks/use-get-temperature-readings';
+import type TemperatureReadingFilter from '../types/TemperatureReadingFilter';
 
-const TemperatureReadings = () => {
-  const { temperatureReadings, fetching, error } = useGetTemperatureReadings({
-    page: 1,
-    perPage: 100,
-  });
+const TemperatureReadings = (filter?: TemperatureReadingFilter) => {
+  const { temperatureReadings, fetching, error } = useGetTemperatureReadings(filter);
 
   if (fetching) {
     return <p>Loading...</p>;
