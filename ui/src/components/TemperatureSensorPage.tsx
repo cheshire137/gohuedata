@@ -8,6 +8,7 @@ import { PageContext } from '../contexts/PageContext';
 import { TemperatureReadingsContextProvider } from '../contexts/TemperatureReadingsContext';
 import TemperatureReadingList from './TemperatureReadingList';
 import TemperatureReadingGraph from './TemperatureReadingGraph';
+import TemperatureReadingBadge from './TemperatureReadingBadge';
 
 const TemperatureSensorPage = () => {
   const { setPageTitle } = useContext(PageContext);
@@ -26,16 +27,7 @@ const TemperatureSensorPage = () => {
     [sensor.name, sensor.bridge.name, setPageTitle]);
 
   return <Box mb={2}>
-    {liveReading && <CircleBadge variant="large" sx={{ flexDirection: 'column' }}>
-      <Text
-        fontWeight="bold"
-        fontSize="5"
-      >{Math.round(liveReading.temperature)}&deg;{liveReading.units}</Text>
-      <Text
-        fontSize={1}
-        color="fg.muted"
-      ><RelativeTime threshold="P1D" date={liveReading.timestampAsDate()} /></Text>
-    </CircleBadge>}
+    {liveReading && <TemperatureReadingBadge temperatureReading={liveReading} />}
     <TemperatureReadingsContextProvider filter={{ sensorID: sensor.id, perPage: 30 }}>
       <TemperatureReadingGraph />
       <TemperatureReadingList />
