@@ -6,6 +6,7 @@ import { useLoaderData } from 'react-router-dom';
 import { PageContext } from '../contexts/PageContext';
 import { TemperatureReadingsContextProvider } from '../contexts/TemperatureReadingsContext';
 import TemperatureReadingList from './TemperatureReadingList';
+import TemperatureReadingGraph from './TemperatureReadingGraph';
 
 const TemperatureSensorPage = () => {
   const { setPageTitle } = useContext(PageContext);
@@ -19,6 +20,7 @@ const TemperatureSensorPage = () => {
       {sensor.bridge.name}
     </Box>
     <TemperatureReadingsContextProvider filter={{ sensorID: sensor.id }}>
+      <TemperatureReadingGraph />
       <TemperatureReadingList />
     </TemperatureReadingsContextProvider>
   </Box>;
