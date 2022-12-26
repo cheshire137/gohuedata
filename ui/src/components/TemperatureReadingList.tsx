@@ -1,11 +1,14 @@
-import React from 'react';
-import { Box, Heading } from '@primer/react';
+import React, { useState, useEffect } from 'react';
+import { Box, Heading, Pagination } from '@primer/react';
 import useGetTemperatureReadings from '../hooks/use-get-temperature-readings';
 import type TemperatureReadingFilter from '../types/TemperatureReadingFilter';
 import TemperatureReadingListItem from './TemperatureReadingListItem';
 
 const TemperatureReadingList = (filter?: TemperatureReadingFilter) => {
-  const { temperatureReadings, fetching, error } = useGetTemperatureReadings(filter);
+  const [page, setPage] = useState(filter?.page || 1);
+  const { temperatureReadings, totalPages, fetching, error } = useGetTemperatureReadings({page, ...filter});
+
+  useEffect(() => setPage(filter?.page || 1), [filter?.page]);
 
   if (fetching) {
     return <p>Loading...</p>;
@@ -23,6 +26,14 @@ const TemperatureReadingList = (filter?: TemperatureReadingFilter) => {
         key={tempReading.id}
       />)}
     </ul>
+    {totalPages && page && totalPages > 1 && <Pagination
+      pageCount={totalPages}
+      currentPage={page}
+      onPageChange={(e, newPage) => {
+        e.preventDefault();
+        setPage(newPage);
+      }}
+    />}
   </Box>;
 };
 
