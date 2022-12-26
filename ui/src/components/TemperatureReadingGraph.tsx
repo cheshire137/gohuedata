@@ -27,7 +27,13 @@ const TemperatureReadingGraph = () => {
   const { temperatureReadings } = useContext(TemperatureReadingsContext);
   const units = temperatureReadings.length > 0 ? temperatureReadings[0].units : 'F';
   const thermScale = units === 'F' ? 'Fahrenheit' : 'Celsius';
-  const labels = useMemo(() => temperatureReadings.map(tempReading => tempReading.timestamp), [temperatureReadings]);
+  const labels = useMemo(() => temperatureReadings.map(tempReading => {
+    const date = tempReading.timestampAsDate();
+    if (date) {
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric' });
+    }
+    return tempReading.timestamp;
+  }), [temperatureReadings]);
   const data = {
     labels,
     datasets: [
