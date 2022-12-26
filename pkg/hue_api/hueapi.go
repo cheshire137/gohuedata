@@ -39,6 +39,25 @@ func (c *Client) GetLights() ([]Light, error) {
 	return lights, nil
 }
 
+// https://developers.meethue.com/develop/hue-api/groupds-api/#get-all-groups
+func (c *Client) GetGroups() ([]*Group, error) {
+	body, err := c.get("/groups")
+	if err != nil {
+		return nil, err
+	}
+	var groupResponse map[string]Group
+	err = json.Unmarshal(body, &groupResponse)
+	if err != nil {
+		return nil, err
+	}
+	groups := []*Group{}
+	for id, group := range groupResponse {
+		group.ID = id
+		groups = append(groups, &group)
+	}
+	return groups, nil
+}
+
 // https://developers.meethue.com/develop/hue-api/5-sensors-api/#get-all-sensors
 func (c *Client) GetSensors(sensorSelection options.SensorSelection) ([]interface{}, error) {
 	body, err := c.get("/sensors")

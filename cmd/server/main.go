@@ -43,6 +43,7 @@ func main() {
 	mux.Handle("/api/temperature-sensors", http.HandlerFunc(env.GetTemperatureSensorsHandler))
 	mux.Handle("/api/temperature-sensor", http.HandlerFunc(env.GetTemperatureSensorHandler))
 	mux.Handle("/api/temperature-sensors/live", http.HandlerFunc(env.GetTemperatureSensorsLiveHandler))
+	mux.Handle("/api/live/groups", http.HandlerFunc(env.GetGroupsLiveHandler))
 
 	server := &http.Server{
 		Addr:    options.Address(),

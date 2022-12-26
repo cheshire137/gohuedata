@@ -21,6 +21,13 @@ type TemperatureSensorsLiveResponse struct {
 	TotalCount         int                          `json:"totalCount"`
 }
 
+type GroupsLiveResponse struct {
+	Groups     []*Group `json:"groups"`
+	Page       int      `json:"page"`
+	TotalPages int      `json:"totalPages"`
+	TotalCount int      `json:"totalCount"`
+}
+
 type TemperatureReading struct {
 	ID                  string             `json:"id"`
 	TemperatureSensor   *TemperatureSensor `json:"temperatureSensor"`
@@ -47,4 +54,14 @@ type HueBridge struct {
 	ID        string `json:"id"`
 	IPAddress string `json:"ipAddress"`
 	Name      string `json:"name"`
+}
+
+type Group struct {
+	ID           string     `json:"id"`
+	Name         string     `json:"name"`
+	Type         string     `json:"type"`
+	TotalLights  int        `json:"totalLights"`
+	TotalSensors int        `json:"totalSensors"`
+	Bridge       *HueBridge `json:"bridge"`
+	Class        string     `json:"class"`
 }
