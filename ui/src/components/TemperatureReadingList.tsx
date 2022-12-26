@@ -3,7 +3,7 @@ import { Box, Heading } from '@primer/react';
 import useGetTemperatureReadings from '../hooks/use-get-temperature-readings';
 import type TemperatureReadingFilter from '../types/TemperatureReadingFilter';
 
-const TemperatureReadings = (filter?: TemperatureReadingFilter) => {
+const TemperatureReadingList = (filter?: TemperatureReadingFilter) => {
   const { temperatureReadings, fetching, error } = useGetTemperatureReadings(filter);
 
   if (fetching) {
@@ -25,4 +25,4 @@ const TemperatureReadings = (filter?: TemperatureReadingFilter) => {
   </Box>;
 };
 
-export default TemperatureReadings;
+export default TemperatureReadingList;

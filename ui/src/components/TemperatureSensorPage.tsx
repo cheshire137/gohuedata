@@ -4,7 +4,7 @@ import TemperatureSensorExtended from '../models/TemperatureSensorExtended';
 import TemperatureReadingDisplay from './TemperatureReadingDisplay';
 import { useLoaderData } from 'react-router-dom';
 import { PageContext } from '../contexts/PageContext';
-import TemperatureReadings from './TemperatureReadings';
+import TemperatureReadingList from './TemperatureReadingList';
 
 const TemperatureSensorPage = () => {
   const { setPageTitle } = useContext(PageContext);
@@ -17,7 +17,7 @@ const TemperatureSensorPage = () => {
     <Box fontSize={1} color="fg.muted">
       {sensor.bridge.name}
     </Box>
-    <TemperatureReadings sensorID={sensor.id} />
+    <TemperatureReadingList sensorID={sensor.id} />
   </Box>;
 };
 
