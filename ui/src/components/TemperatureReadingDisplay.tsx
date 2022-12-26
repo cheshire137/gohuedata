@@ -8,7 +8,7 @@ interface Props {
 
 const TemperatureReadingDisplay = ({ reading }: Props) => {
   return <span>
-    <span>{Math.round(reading.temperature)}&deg; {reading.units} </span>
+    <span>{Math.round(reading.temperature)}&deg;{reading.units} </span>
     <Text
       display="inline-block"
       fontSize={1}

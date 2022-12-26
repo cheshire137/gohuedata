@@ -38,12 +38,14 @@ const chartOptions = {
 
 const TemperatureReadingGraph = () => {
   const { temperatureReadings } = useContext(TemperatureReadingsContext);
+  const units = temperatureReadings.length > 0 ? temperatureReadings[0].units : 'F';
+  const thermScale = units === 'F' ? 'Fahrenheit' : 'Celsius';
   const labels = useMemo(() => temperatureReadings.map(tempReading => tempReading.timestamp), [temperatureReadings]);
   const data = {
     labels,
     datasets: [
       {
-        label: 'Temperature',
+        label: `Temperature in ${thermScale}`,
         data: temperatureReadings.map(tempReading => tempReading.temperature),
         borderColor: 'rgb(53, 162, 235)',
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
