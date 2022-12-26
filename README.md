@@ -130,4 +130,4 @@ different port) will serve up the static frontend.
 Thanks to the developers of these libraries that gohuedata is built with:
 
 - [mattn/go-sqlite3](https://github.com/mattn/go-sqlite3)
-- [React Charts](https://react-charts.tanstack.com/)
+- [react-chartjs-2](https://react-chartjs-2.js.org/)

@@ -1,37 +1,56 @@
 import React, { useContext, useMemo } from 'react';
 import { Box } from '@primer/react';
 import { TemperatureReadingsContext } from '../contexts/TemperatureReadingsContext';
-import { AxisOptions, Chart, ChartOptions } from 'react-charts';
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 
-type HistoricalTemp = {
-  date: Date | string;
-  temperature: number;
-}
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-type Series = {
-  label: string;
-  data: HistoricalTemp[];
+const chartOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top' as const,
+    },
+    title: {
+      display: true,
+      text: 'Temperatures over time',
+    },
+  },
 };
 
 const TemperatureReadingGraph = () => {
   const { temperatureReadings } = useContext(TemperatureReadingsContext);
-  const data: Series[] = [{
-    label: 'Temperatures',
-    data: temperatureReadings.map(tempReading => {
-      const date = tempReading.timestampAsDate() || tempReading.timestamp;
-      const historicalTemp: HistoricalTemp = { date, temperature: tempReading.temperature };
-      return historicalTemp;
-    }),
-  }];
-  const primaryAxis = useMemo((): AxisOptions<HistoricalTemp> => ({ getValue: datum => datum.date }), []);
-  const secondaryAxes = useMemo((): AxisOptions<HistoricalTemp>[] => [{
-    getValue: datum => datum.temperature,
-    elementType: 'line',
-  }], []);
-  const chartOptions: ChartOptions<HistoricalTemp> = { data, primaryAxis, secondaryAxes, initialHeight: 300 };
+  const labels = useMemo(() => temperatureReadings.map(tempReading => tempReading.timestamp), [temperatureReadings]);
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Temperature',
+        data: temperatureReadings.map(tempReading => tempReading.temperature),
+      }
+    ]
+  };
 
   return <Box mb={2}>
-    <Chart options={chartOptions} />
+    <Line data={data} options={chartOptions} />
   </Box>;
 };
 
