@@ -15,11 +15,12 @@ interface Results {
 
 function useGetTemperatureReadings(filter?: TemperatureReadingFilter): Results {
   const [results, setResults] = useState<Results>({ fetching: true });
+  const { page, perPage, sensorID, bridge } = filter || {};
 
   useEffect(() => {
     async function fetchTemperatureReadings() {
       try {
-        const result = await GoHueDataApi.getTemperatureReadings(filter);
+        const result = await GoHueDataApi.getTemperatureReadings({ page, perPage, sensorID, bridge });
         setResults({ ...result, fetching: false })
       } catch (err: any) {
         console.error('failed to fetch temperature readings', err);
@@ -28,7 +29,7 @@ function useGetTemperatureReadings(filter?: TemperatureReadingFilter): Results {
     }
 
     fetchTemperatureReadings()
-  }, [filter, setResults]);
+  }, [page, perPage, sensorID, bridge, setResults]);
 
   return results;
 }
