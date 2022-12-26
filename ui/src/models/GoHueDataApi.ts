@@ -6,6 +6,11 @@ class GoHueDataApi {
     return `http://localhost:${process.env.REACT_APP_BACKEND_PORT}/api`;
   }
 
+  static async getTemperatureSensor(id: string) {
+    const data = await this.get(`/temperature-sensor?id=${encodeURIComponent(id)}`);
+    return new TemperatureSensorExtended(data);
+  }
+
   static async getTemperatureSensors() {
     const result = await this.get('/temperature-sensors/live');
     const tempSensors: TemperatureSensorExtended[] = result.temperatureSensors.map(
