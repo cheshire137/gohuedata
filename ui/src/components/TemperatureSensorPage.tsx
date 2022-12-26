@@ -4,6 +4,7 @@ import TemperatureSensorExtended from '../models/TemperatureSensorExtended';
 import TemperatureReadingDisplay from './TemperatureReadingDisplay';
 import { useLoaderData } from 'react-router-dom';
 import { PageContext } from '../contexts/PageContext';
+import { TemperatureReadingsContextProvider } from '../contexts/TemperatureReadingsContext';
 import TemperatureReadingList from './TemperatureReadingList';
 
 const TemperatureSensorPage = () => {
@@ -17,7 +18,9 @@ const TemperatureSensorPage = () => {
     <Box fontSize={1} color="fg.muted">
       {sensor.bridge.name}
     </Box>
-    <TemperatureReadingList sensorID={sensor.id} />
+    <TemperatureReadingsContextProvider filter={{ sensorID: sensor.id }}>
+      <TemperatureReadingList />
+    </TemperatureReadingsContextProvider>
   </Box>;
 };
 
