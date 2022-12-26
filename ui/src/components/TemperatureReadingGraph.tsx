@@ -23,19 +23,6 @@ ChartJS.register(
   Legend
 );
 
-const chartOptions = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top' as const,
-    },
-    title: {
-      display: true,
-      text: 'Temperatures over time',
-    },
-  },
-};
-
 const TemperatureReadingGraph = () => {
   const { temperatureReadings } = useContext(TemperatureReadingsContext);
   const units = temperatureReadings.length > 0 ? temperatureReadings[0].units : 'F';
@@ -54,7 +41,22 @@ const TemperatureReadingGraph = () => {
   };
 
   return <Box mb={2}>
-    <Line data={data} options={chartOptions} />
+    <Line data={data} options={{
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top' as const,
+        },
+        title: {
+          display: true,
+          text: 'Temperatures over time',
+        },
+      },
+      scales: {
+        x: { ticks: { autoSkip: true } },
+        y: { ticks: { callback: value => Number.isInteger(value) ? value : null } }
+      },
+    }} />
   </Box>;
 };
 
