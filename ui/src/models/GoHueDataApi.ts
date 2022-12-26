@@ -29,9 +29,6 @@ class GoHueDataApi {
     if (typeof filter?.perPage === 'number') {
       params.append('per_page', filter.perPage.toString());
     }
-    if (typeof filter?.perPage === 'number') {
-      params.append('per_page', filter.perPage.toString());
-    }
     if (typeof filter?.sensorID === 'string' && filter.sensorID.length > 0) {
       params.append('sensor_id', filter.sensorID);
     }

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import GoHueDataApi from '../models/GoHueDataApi';
 import TemperatureReading from '../models/TemperatureReading';
 import type TemperatureReadingFilter from '../types/TemperatureReadingFilter';
-import type TemperatureReadingsResult from '../types/TemperatureReadingsResult';
 
 interface Results {
   temperatureReadings?: TemperatureReading[];
