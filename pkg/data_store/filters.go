@@ -4,6 +4,7 @@ type TemperatureReadingFilter struct {
 	Page          int
 	PerPage       int
 	BridgeName    string
+	SensorID      string
 	UpdatedSince  string
 	UpdatedBefore string
 }

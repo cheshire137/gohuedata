@@ -179,6 +179,11 @@ func buildTemperatureReadingWhereConditions(filter *TemperatureReadingFilter) (s
 		values = append(values, filter.UpdatedBefore)
 	}
 
+	if filter.SensorID != "" {
+		conditions = append(conditions, "temperature_readings.temperature_sensor_id = ?")
+		values = append(values, filter.SensorID)
+	}
+
 	if len(conditions) == 0 {
 		return "", []interface{}{}
 	}

@@ -29,12 +29,14 @@ func (e *Env) GetTemperatureReadingsHandler(w http.ResponseWriter, r *http.Reque
 	bridgeName := r.URL.Query().Get("bridge")
 	updatedSince := r.URL.Query().Get("updated_since")
 	updatedBefore := r.URL.Query().Get("updated_before")
+	sensorID := r.URL.Query().Get("sensor_id")
 	filter := &data_store.TemperatureReadingFilter{
 		Page:          pageInfo.Page,
 		PerPage:       pageInfo.PerPage,
 		BridgeName:    bridgeName,
 		UpdatedSince:  updatedSince,
 		UpdatedBefore: updatedBefore,
+		SensorID:      sensorID,
 	}
 
 	tempReadings, err := e.ds.LoadTemperatureReadings(filter)
