@@ -9,7 +9,11 @@ interface Props {
 const TemperatureReadingDisplay = ({ reading }: Props) => {
   return <span>
     <span>{Math.round(reading.temperature)}&deg; {reading.units} </span>
-    <Text display="inline-block" fontSize={1} color="fg.muted">as of <RelativeTime date={reading.timestampAsDate()} /></Text>
+    <Text
+      display="inline-block"
+      fontSize={1}
+      color="fg.muted"
+    >as of <RelativeTime threshold="P1D" date={reading.timestampAsDate()} /></Text>
   </span>;
 };
 

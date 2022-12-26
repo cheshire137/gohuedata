@@ -19,7 +19,7 @@ const TemperatureSensorPage = () => {
     <Box fontSize={1} color="fg.muted">
       {sensor.bridge.name}
     </Box>
-    <TemperatureReadingsContextProvider filter={{ sensorID: sensor.id }}>
+    <TemperatureReadingsContextProvider filter={{ sensorID: sensor.id, perPage: 30 }}>
       <TemperatureReadingGraph />
       <TemperatureReadingList />
     </TemperatureReadingsContextProvider>
