@@ -7,12 +7,6 @@ import (
 	"github.com/cheshire137/gohuedata/pkg/pagination"
 )
 
-type TemperatureSensorFilter struct {
-	Page       int
-	PerPage    int
-	BridgeName string
-}
-
 const temperatureSensorJoins = `
 	INNER JOIN hue_bridges ON temperature_sensors.bridge_ip_address = hue_bridges.ip_address `
 

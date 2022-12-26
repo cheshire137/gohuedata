@@ -8,14 +8,6 @@ import (
 	"github.com/cheshire137/gohuedata/pkg/pagination"
 )
 
-type TemperatureReadingFilter struct {
-	Page          int
-	PerPage       int
-	BridgeName    string
-	UpdatedSince  string
-	UpdatedBefore string
-}
-
 const temperatureReadingJoins = `
 	INNER JOIN temperature_sensors ON temperature_readings.temperature_sensor_id = temperature_sensors.id
 	INNER JOIN hue_bridges ON temperature_sensors.bridge_ip_address = hue_bridges.ip_address `
