@@ -1,6 +1,7 @@
 import TemperatureReading from './TemperatureReading';
 import TemperatureSensorExtended from './TemperatureSensorExtended';
 import type TemperatureReadingFilter from '../types/TemperatureReadingFilter';
+import type TemperatureReadingsResult from '../types/TemperatureReadingsResult';
 
 class GoHueDataApi {
   static apiUrl() {
@@ -20,7 +21,7 @@ class GoHueDataApi {
     return tempSensors;
   }
 
-  static async getTemperatureReadings(filter?: TemperatureReadingFilter) {
+  static async getTemperatureReadings(filter?: TemperatureReadingFilter): Promise<TemperatureReadingsResult> {
     const params = new URLSearchParams();
     if (typeof filter?.page === 'number') {
       params.append('page', filter.page.toString());
@@ -43,10 +44,11 @@ class GoHueDataApi {
       path += `?${queryString}`;
     }
     const result = await this.get(path);
-    const tempReadings: TemperatureReading[] = result.temperatureReadings.map(
+    const { temperatureReadings, ...rest } = result;
+    const tempReadings: TemperatureReading[] = temperatureReadings.map(
       (data: any) => new TemperatureReading(data)
     );
-    return tempReadings;
+    return { temperatureReadings: tempReadings, ...rest };
   }
 
   static async get(path: string) {
