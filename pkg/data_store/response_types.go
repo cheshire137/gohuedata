@@ -1,5 +1,26 @@
 package data_store
 
+type TemperatureReadingsResponse struct {
+	TemperatureReadings []*TemperatureReading `json:"temperatureReadings"`
+	Page                int                   `json:"page"`
+	TotalPages          int                   `json:"totalPages"`
+	TotalCount          int                   `json:"totalCount"`
+}
+
+type TemperatureSensorsResponse struct {
+	TemperatureSensors []*TemperatureSensor `json:"temperatureSensors"`
+	Page               int                  `json:"page"`
+	TotalPages         int                  `json:"totalPages"`
+	TotalCount         int                  `json:"totalCount"`
+}
+
+type TemperatureSensorsLiveResponse struct {
+	TemperatureSensors []*TemperatureSensorExtended `json:"temperatureSensors"`
+	Page               int                          `json:"page"`
+	TotalPages         int                          `json:"totalPages"`
+	TotalCount         int                          `json:"totalCount"`
+}
+
 type TemperatureReading struct {
 	ID                  string             `json:"id"`
 	TemperatureSensor   *TemperatureSensor `json:"temperatureSensor"`

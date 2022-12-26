@@ -9,13 +9,6 @@ import (
 	"github.com/cheshire137/gohuedata/pkg/util"
 )
 
-type TemperatureSensorsResponse struct {
-	TemperatureSensors []*data_store.TemperatureSensor `json:"temperatureSensors"`
-	Page               int                             `json:"page"`
-	TotalPages         int                             `json:"totalPages"`
-	TotalCount         int                             `json:"totalCount"`
-}
-
 func (e *Env) GetTemperatureSensorsHandler(w http.ResponseWriter, r *http.Request) {
 	e.enableCors(&w)
 	util.LogRequest(r)
@@ -45,7 +38,7 @@ func (e *Env) GetTemperatureSensorsHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	response := TemperatureSensorsResponse{
+	response := data_store.TemperatureSensorsResponse{
 		TemperatureSensors: tempSensors,
 		Page:               pageInfo.Page,
 		TotalPages:         util.TotalPages(totalTempSensors, pageInfo.PerPage),
