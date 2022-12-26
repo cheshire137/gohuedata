@@ -19,7 +19,7 @@ func (e *Env) GetTemperatureSensorsLiveHandler(w http.ResponseWriter, r *http.Re
 
 	config, err := config.NewConfig(e.options.ConfigPath)
 	if err != nil {
-		util.LogError("Failed to load configuration:", err)
+		util.ErrorJson(w, err)
 		return
 	}
 
