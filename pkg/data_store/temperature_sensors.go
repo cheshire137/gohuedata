@@ -21,6 +21,25 @@ func (ds *DataStore) TotalTemperatureSensors(filter *TemperatureSensorFilter) (i
 	return count, nil
 }
 
+func (ds *DataStore) LoadMaxRecordedTemperatureForSensor(sensorID string, fahrenheit bool) (*float32, error) {
+	units := "C"
+	if fahrenheit {
+		units = "F"
+	}
+	queryStr := `SELECT MAX(temperature_readings.temperature) AS temperature
+		FROM temperature_readings` + temperatureReadingJoins + `
+		WHERE temperature_readings.temperature_sensor_id = ?
+			AND temperature_readings.units = ?`
+
+	var maxTemp float32
+	err := ds.db.QueryRow(queryStr, sensorID, units).Scan(&maxTemp)
+	if err != nil {
+		return nil, err
+	}
+
+	return &maxTemp, nil
+}
+
 func (ds *DataStore) LoadTemperatureSensor(id string) (*TemperatureSensorExtended, error) {
 	queryStr := `SELECT temperature_sensors.id AS sensor_id,
 			temperature_sensors.name AS sensor_name,
