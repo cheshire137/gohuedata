@@ -1,6 +1,8 @@
 import React from 'react';
 import TemperatureSensorExtended from '../models/TemperatureSensorExtended';
 import useGetTemperatureSensors from '../hooks/use-get-temperature-sensors';
+import PageHeader from '../components/PageHeader';
+import { PageLayout } from '@primer/react';
 
 export type TemperatureSensorsContextProps = {
   temperatureSensors: TemperatureSensorExtended[];
@@ -22,7 +24,12 @@ export const TemperatureSensorsContextProvider = ({ children }: Props) => {
   }
 
   if (error) {
-    return <p>Error loading temperature sensors: {error}</p>;
+    return <PageLayout>
+      <PageHeader />
+      <PageLayout.Content>
+        <p>Error loading temperature sensors: {error}</p>
+      </PageLayout.Content>
+    </PageLayout>;
   }
 
   return <TemperatureSensorsContext.Provider value={{
