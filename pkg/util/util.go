@@ -33,7 +33,11 @@ func LogError(a ...interface{}) {
 func ErrorJson(w http.ResponseWriter, err error) {
 	w.Header().Set("Content-Type", "application/json")
 	var statusCode int
+	if err == sql.ErrNoRows {
+		statusCode = http.StatusNotFound
+	} else {
 		statusCode = http.StatusInternalServerError
+	}
 	w.WriteHeader(statusCode)
 	response := data_store.ErrorResponse{Error: err.Error()}
 	json.NewEncoder(w).Encode(response)
