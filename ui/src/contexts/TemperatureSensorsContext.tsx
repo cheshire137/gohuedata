@@ -20,7 +20,12 @@ export const TemperatureSensorsContextProvider = ({ children }: Props) => {
   const { temperatureSensors, fetching, error } = useGetTemperatureSensors();
 
   if (fetching) {
-    return <p>Loading temperature sensors...</p>;
+    return <PageLayout>
+      <PageHeader />
+      <PageLayout.Content>
+        <p>Loading temperature sensors...</p>
+      </PageLayout.Content>
+    </PageLayout>;
   }
 
   if (error) {
