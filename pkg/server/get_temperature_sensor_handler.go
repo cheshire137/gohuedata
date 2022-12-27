@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/cheshire137/gohuedata/pkg/data_store"
 	"github.com/cheshire137/gohuedata/pkg/util"
 )
 
@@ -18,6 +19,10 @@ func (e *Env) GetTemperatureSensorHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	response := data_store.TemperatureSensorResponse{
+		TemperatureSensor: tempSensor,
+	}
+
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(tempSensor)
+	json.NewEncoder(w).Encode(response)
 }

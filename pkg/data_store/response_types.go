@@ -14,6 +14,10 @@ type TemperatureSensorsResponse struct {
 	TotalCount         int                  `json:"totalCount"`
 }
 
+type TemperatureSensorResponse struct {
+	TemperatureSensor *TemperatureSensorExtended `json:"temperatureSensor"`
+}
+
 type TemperatureSensorsLiveResponse struct {
 	TemperatureSensors []*TemperatureSensorExtended `json:"temperatureSensors"`
 	Page               int                          `json:"page"`

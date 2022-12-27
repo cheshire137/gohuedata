@@ -12,7 +12,8 @@ class GoHueDataApi {
 
   static async getTemperatureSensor(id: string) {
     const data = await this.get(`/temperature-sensor?id=${encodeURIComponent(id)}`);
-    return new TemperatureSensorExtended(data);
+    const { temperatureSensor: tempSensorData } = data;
+    return new TemperatureSensorExtended(tempSensorData);
   }
 
   static async getLiveTemperatureSensors() {
