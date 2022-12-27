@@ -19,8 +19,23 @@ func (e *Env) GetTemperatureSensorHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	fahrenheit := r.URL.Query().Get("fahrenheit") != "0"
+	maxTemp, err := e.ds.LoadMaxRecordedTemperatureForSensor(sensorID, fahrenheit)
+	if err != nil {
+		util.ErrorJson(w, err)
+		return
+	}
+
+	minTemp, err := e.ds.LoadMinRecordedTemperatureForSensor(sensorID, fahrenheit)
+	if err != nil {
+		util.ErrorJson(w, err)
+		return
+	}
+
 	response := data_store.TemperatureSensorResponse{
 		TemperatureSensor: tempSensor,
+		MaxTemperature:    maxTemp,
+		MinTemperature:    minTemp,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
