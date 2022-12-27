@@ -40,6 +40,25 @@ func (ds *DataStore) LoadMaxRecordedTemperatureForSensor(sensorID string, fahren
 	return &maxTemp, nil
 }
 
+func (ds *DataStore) LoadMinRecordedTemperatureForSensor(sensorID string, fahrenheit bool) (*float32, error) {
+	units := "C"
+	if fahrenheit {
+		units = "F"
+	}
+	queryStr := `SELECT MIN(temperature_readings.temperature) AS temperature
+		FROM temperature_readings` + temperatureReadingJoins + `
+		WHERE temperature_readings.temperature_sensor_id = ?
+			AND temperature_readings.units = ?`
+
+	var minTemp float32
+	err := ds.db.QueryRow(queryStr, sensorID, units).Scan(&minTemp)
+	if err != nil {
+		return nil, err
+	}
+
+	return &minTemp, nil
+}
+
 func (ds *DataStore) LoadTemperatureSensor(id string) (*TemperatureSensorExtended, error) {
 	queryStr := `SELECT temperature_sensors.id AS sensor_id,
 			temperature_sensors.name AS sensor_name,
