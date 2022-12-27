@@ -71,3 +71,7 @@ type Group struct {
 	Bridge       *HueBridge `json:"bridge"`
 	Class        string     `json:"class"`
 }
+
+type ErrorResponse struct {
+	Error string `json:"error"`
+}

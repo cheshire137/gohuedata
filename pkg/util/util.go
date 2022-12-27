@@ -1,9 +1,13 @@
 package util
 
 import (
+	"database/sql"
+	"encoding/json"
 	"fmt"
 	"math"
 	"net/http"
+
+	"github.com/cheshire137/gohuedata/pkg/data_store"
 )
 
 func Pluralize(count int, singular string, plural string) string {
@@ -28,7 +32,11 @@ func LogError(a ...interface{}) {
 
 func ErrorJson(w http.ResponseWriter, err error) {
 	w.Header().Set("Content-Type", "application/json")
-	http.Error(w, err.Error(), http.StatusInternalServerError)
+	var statusCode int
+		statusCode = http.StatusInternalServerError
+	w.WriteHeader(statusCode)
+	response := data_store.ErrorResponse{Error: err.Error()}
+	json.NewEncoder(w).Encode(response)
 }
 
 func TotalPages(count int, perPage int) int {
