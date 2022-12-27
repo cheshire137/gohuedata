@@ -16,7 +16,9 @@ function App() {
       <Route
         path="/sensor/:id"
         loader={async ({ params }) => {
-          return await GoHueDataApi.getTemperatureSensor(params.id!);
+          const fahrenheit = true;
+          const sensorID = params.id!;
+          return await GoHueDataApi.getTemperatureSensor(sensorID, fahrenheit);
         }}
         element={<TemperatureSensorPage />}
         errorElement={<ErrorPage />}

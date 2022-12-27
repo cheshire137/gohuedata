@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Box } from '@primer/react';
-import TemperatureSensorExtended from '../models/TemperatureSensorExtended';
+import type TemperatureSensorResult from '../types/TemperatureSensorResult';
 import { useLoaderData } from 'react-router-dom';
 import { PageContext } from '../contexts/PageContext';
 import { TemperatureReadingsContextProvider } from '../contexts/TemperatureReadingsContext';
@@ -11,7 +11,8 @@ import LiveTemperatureReadingBadge from './LiveTemperatureReadingBadge';
 
 const TemperatureSensorPage = () => {
   const { setPageTitle } = useContext(PageContext);
-  const sensor = useLoaderData() as TemperatureSensorExtended;
+  const data = useLoaderData() as TemperatureSensorResult;
+  const sensor = data.temperatureSensor;
 
   useEffect(() => setPageTitle(`${sensor.bridge.name} / ${sensor.name}`),
     [sensor.name, sensor.bridge.name, setPageTitle]);

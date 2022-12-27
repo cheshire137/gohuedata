@@ -3,6 +3,7 @@ import TemperatureSensorExtended from './TemperatureSensorExtended';
 import Group from './Group';
 import type TemperatureReadingFilter from '../types/TemperatureReadingFilter';
 import type TemperatureReadingsResult from '../types/TemperatureReadingsResult';
+import type TemperatureSensorResult from '../types/TemperatureSensorResult';
 import type GroupsResult from '../types/GroupsResult';
 
 class GoHueDataApi {
@@ -10,10 +11,14 @@ class GoHueDataApi {
     return `http://localhost:${process.env.REACT_APP_BACKEND_PORT}/api`;
   }
 
-  static async getTemperatureSensor(id: string) {
-    const data = await this.get(`/temperature-sensor?id=${encodeURIComponent(id)}`);
-    const { temperatureSensor: tempSensorData } = data;
-    return new TemperatureSensorExtended(tempSensorData);
+  static async getTemperatureSensor(id: string, fahrenheit: boolean): Promise<TemperatureSensorResult> {
+    const queryParams = new URLSearchParams();
+    queryParams.append('fahrenheit', fahrenheit ? '1' : '0');
+    queryParams.append('id', id);
+    const data = await this.get(`/temperature-sensor?${queryParams.toString()}`);
+    const { temperatureSensor: tempSensorData, ...rest } = data;
+    const temperatureSensor = new TemperatureSensorExtended(tempSensorData);
+    return { temperatureSensor, ...rest };
   }
 
   static async getLiveTemperatureSensors() {
