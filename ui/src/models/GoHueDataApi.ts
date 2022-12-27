@@ -65,10 +65,15 @@ class GoHueDataApi {
 
   static async get(path: string) {
     const response = await fetch(`${this.apiUrl()}${path}`);
+    const json = await response.json();
     if (response.status >= 200 && response.status < 300) {
-      return await response.json();
+      return json;
     }
-    throw new Error(response.statusText);
+    let errorMessage = response.statusText
+    if (json && json.error) {
+      errorMessage += `: ${json.error}`;
+    }
+    throw new Error(errorMessage);
   }
 }
 
