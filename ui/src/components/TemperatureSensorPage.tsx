@@ -8,19 +8,30 @@ import { LiveTemperatureReadingContextProvider } from '../contexts/LiveTemperatu
 import TemperatureReadingList from './TemperatureReadingList';
 import TemperatureReadingGraph from './TemperatureReadingGraph';
 import LiveTemperatureReadingBadge from './LiveTemperatureReadingBadge';
+import TemperatureBadge from './TemperatureBadge';
 
 const TemperatureSensorPage = () => {
   const { setPageTitle } = useContext(PageContext);
   const data = useLoaderData() as TemperatureSensorResult;
-  const sensor = data.temperatureSensor;
+  const { temperatureSensor, minTemperature, maxTemperature } = data;
 
-  useEffect(() => setPageTitle(`${sensor.bridge.name} / ${sensor.name}`),
-    [sensor.name, sensor.bridge.name, setPageTitle]);
+  useEffect(() => setPageTitle(`${temperatureSensor.bridge.name} / ${temperatureSensor.name}`),
+    [temperatureSensor.name, temperatureSensor.bridge.name, setPageTitle]);
 
   return <Box mb={2}>
-    <LiveTemperatureReadingContextProvider sensorID={sensor.id}>
-      <LiveTemperatureReadingBadge />
-      <TemperatureReadingsContextProvider filter={{ sensorID: sensor.id, perPage: 30 }}>
+    <LiveTemperatureReadingContextProvider sensorID={temperatureSensor.id}>
+      <Box display="flex" alignItems="center" justifyContent="space-around" mb={3}>
+        <LiveTemperatureReadingBadge />
+        {minTemperature && <TemperatureBadge
+          temperature={minTemperature}
+          units="F"
+        >Min</TemperatureBadge>}
+        {maxTemperature && <TemperatureBadge
+          temperature={maxTemperature}
+          units="F"
+        >Max</TemperatureBadge>}
+      </Box>
+      <TemperatureReadingsContextProvider filter={{ sensorID: temperatureSensor.id, perPage: 30 }}>
         <TemperatureReadingGraph />
         <TemperatureReadingList />
       </TemperatureReadingsContextProvider>
