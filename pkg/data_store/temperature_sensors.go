@@ -22,21 +22,21 @@ func (ds *DataStore) TotalTemperatureSensors(filter *TemperatureSensorFilter) (i
 }
 
 func (ds *DataStore) LoadMaxRecordedTemperatureForSensor(sensorID string, fahrenheit bool) (*float32, error) {
-	units := "C"
-	if fahrenheit {
-		units = "F"
-	}
-	queryStr := `SELECT MAX(temperature_readings.temperature) AS temperature
+	queryStr := `SELECT temperature_readings.units, MAX(temperature_readings.temperature) AS max_temperature
 		FROM temperature_readings` + temperatureReadingJoins + `
 		WHERE temperature_readings.temperature_sensor_id = ?
-			AND temperature_readings.units = ?`
+		GROUP BY temperature_readings.units
+		ORDER BY 2 DESC
+		LIMIT 1`
 
+	var units string
 	var maxTemp float32
-	err := ds.db.QueryRow(queryStr, sensorID, units).Scan(&maxTemp)
+	err := ds.db.QueryRow(queryStr, sensorID).Scan(&units, &maxTemp)
 	if err != nil {
 		return nil, err
 	}
 
+	maxTemp = hue_api.ConvertTemperature(maxTemp, units, fahrenheit)
 	return &maxTemp, nil
 }
 
