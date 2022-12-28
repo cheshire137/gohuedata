@@ -50,3 +50,7 @@ func CelsiusToFahrenheit(celsius float32) float32 {
 func (s *SensorState) FahrenheitTemperature() float32 {
 	return CelsiusToFahrenheit(s.CelsiusTemperature())
 }
+
+func FahrenheitToCelsius(fahrenheit float32) float32 {
+	return (fahrenheit - 32) * 5 / 9
+}
