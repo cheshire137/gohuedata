@@ -60,21 +60,20 @@ func (ds *DataStore) LoadMinRecordedTemperatureForSensor(sensorID string, fahren
 }
 
 func (ds *DataStore) LoadAvgRecordedTemperatureForSensor(sensorID string, fahrenheit bool) (*float32, error) {
-	units := "C"
-	if fahrenheit {
-		units = "F"
-	}
-	queryStr := `SELECT AVG(temperature_readings.temperature) AS temperature
+	queryStr := `SELECT temperature_readings.units, AVG(temperature_readings.temperature) AS avg_temperature
 		FROM temperature_readings` + temperatureReadingJoins + `
 		WHERE temperature_readings.temperature_sensor_id = ?
-			AND temperature_readings.units = ?`
+		GROUP BY temperature_readings.units
+		LIMIT 1`
 
+	var units string
 	var averageTemp float32
-	err := ds.db.QueryRow(queryStr, sensorID, units).Scan(&averageTemp)
+	err := ds.db.QueryRow(queryStr, sensorID).Scan(&units, &averageTemp)
 	if err != nil {
 		return nil, err
 	}
 
+	averageTemp = hue_api.ConvertTemperature(averageTemp, units, fahrenheit)
 	return &averageTemp, nil
 }
 
