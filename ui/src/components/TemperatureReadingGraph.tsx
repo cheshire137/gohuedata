@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useState, useEffect } from 'react';
 import { Box } from '@primer/react';
 import { TemperatureReadingsContext } from '../contexts/TemperatureReadingsContext';
 import { Line } from 'react-chartjs-2';
@@ -23,31 +23,53 @@ ChartJS.register(
   Legend
 );
 
+const defaultUnits = 'F';
+const thermScaleFor = (units: string) => units === 'F' ? 'Fahrenheit' : 'Celsius';
+
 const TemperatureReadingGraph = () => {
   const { temperatureReadings } = useContext(TemperatureReadingsContext);
-  const units = temperatureReadings.length > 0 ? temperatureReadings[0].units : 'F';
-  const thermScale = units === 'F' ? 'Fahrenheit' : 'Celsius';
-  const labels = useMemo(() => temperatureReadings.map(tempReading => {
-    const date = tempReading.timestampAsDate();
-    if (date) {
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric' });
-    }
-    return tempReading.timestamp;
-  }), [temperatureReadings]);
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: `Temperature in ${thermScale}`,
-        data: temperatureReadings.map(tempReading => tempReading.temperature),
-        borderColor: 'rgb(53, 162, 235)',
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+  const [units, setUnits] = useState(defaultUnits);
+  const [thermScale, setThermScale] = useState(thermScaleFor(units));
+  const [sortedReadings, setSortedReadings] = useState(temperatureReadings);
+  const [labels, setLabels] = useState(temperatureReadings.map(tempReading => tempReading.timestamp));
+
+  useEffect(() => {
+    setUnits(temperatureReadings.length > 0 ? temperatureReadings[0].units : defaultUnits);
+  }, [temperatureReadings, setUnits]);
+
+  useEffect(() => {
+    setThermScale(thermScaleFor(units));
+  }, [units, setThermScale]);
+
+  useEffect(() => {
+    const newSortedReadings = [...temperatureReadings].sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+    setSortedReadings(newSortedReadings);
+  }, [temperatureReadings]);
+
+  useEffect(() => {
+    const newLabels = sortedReadings.map(tempReading => {
+      const date = tempReading.timestampAsDate();
+      if (date) {
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric' });
       }
-    ]
-  };
+      return tempReading.timestamp;
+    });
+    setLabels(newLabels);
+  }, [sortedReadings]);
 
   return <Box mb={2} height="400px">
-    <Line data={data} options={{
+    <Line data={{
+      labels,
+      datasets: [
+        {
+          label: `Temperature in ${thermScale}`,
+          data: sortedReadings.map(tempReading => tempReading.temperature),
+          borderColor: 'rgb(53, 162, 235)',
+          backgroundColor: 'rgba(53, 162, 235, 0.5)',
+          tension: 0.4,
+        }
+      ]
+    }} options={{
       responsive: true,
       plugins: {
         legend: {
