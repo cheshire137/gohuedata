@@ -83,7 +83,7 @@ const TemperatureReadingGraph = () => {
     }
   }
 
-  return <Box mb={2} height="400px">
+  return <Box display="flex" justifyContent="center" mb={2} height="450px">
     <Line data={{
       labels,
       datasets: [
@@ -97,18 +97,20 @@ const TemperatureReadingGraph = () => {
       ]
     }} plugins={[dayHighlighter]} options={{
       responsive: true,
-      plugins: {
-        legend: {
-          position: 'top' as const,
-        },
-        title: {
-          display: true,
-          text: 'Temperatures over time',
-        },
-      },
+      plugins: { legend: { display: false } },
       scales: {
-        x: { ticks: { autoSkip: true } },
+        x: {
+          ticks: { autoSkip: true },
+          title: {
+            display: true,
+            text: 'Time',
+          },
+        },
         y: {
+          title: {
+            text: 'Temperature',
+            display: true,
+          },
           ticks: {
             callback: value => {
               if (!Number.isInteger(value)) return null;
