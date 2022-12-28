@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import TemperatureReading from '../models/TemperatureReading';
 import type TemperatureReadingFilter from '../types/TemperatureReadingFilter';
 import useGetTemperatureReadings from '../hooks/use-get-temperature-readings';
+import { SettingsContext } from './SettingsContext';
 
 export type TemperatureReadingsContextProps = {
   temperatureReadings: TemperatureReading[];
@@ -10,8 +11,6 @@ export type TemperatureReadingsContextProps = {
   totalPages: number;
   totalCount: number;
   setPage(page: number): void;
-  setFahrenheit(fahrenheit: boolean): void;
-  units: string;
 };
 
 export const TemperatureReadingsContext = React.createContext<TemperatureReadingsContextProps>({
@@ -21,8 +20,6 @@ export const TemperatureReadingsContext = React.createContext<TemperatureReading
   totalPages: 1,
   totalCount: 0,
   setPage: () => { },
-  setFahrenheit: () => { },
-  units: 'F',
 });
 
 interface Props {
@@ -32,8 +29,7 @@ interface Props {
 
 export const TemperatureReadingsContextProvider = ({ filter, children }: Props) => {
   const [page, setPage] = useState(filter?.page || 1);
-  const [fahrenheit, setFahrenheit] = useState(true);
-  const [units, setUnits] = useState('F');
+  const { fahrenheit, setFahrenheit } = useContext(SettingsContext);
   const { temperatureReadings, totalPages, perPage, totalCount, fetching, error } = useGetTemperatureReadings({
     page, fahrenheit, ...filter
   });
@@ -43,12 +39,8 @@ export const TemperatureReadingsContextProvider = ({ filter, children }: Props) 
   useEffect(() => {
     if (typeof filter?.fahrenheit === 'boolean') {
       setFahrenheit(filter.fahrenheit);
-    } else {
-      setFahrenheit(true);
     }
-  }, [filter?.fahrenheit]);
-
-  useEffect(() => setUnits(fahrenheit ? 'F' : 'C'), [fahrenheit]);
+  }, [filter?.fahrenheit, setFahrenheit]);
 
   if (fetching) {
     return <p>Loading temperature history...</p>;
@@ -65,7 +57,5 @@ export const TemperatureReadingsContextProvider = ({ filter, children }: Props) 
     perPage: perPage!,
     totalCount: totalCount!,
     setPage,
-    setFahrenheit,
-    units,
   }}>{children}</TemperatureReadingsContext.Provider>;
 };

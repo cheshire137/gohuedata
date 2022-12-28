@@ -1,6 +1,7 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Box } from '@primer/react';
 import { TemperatureReadingsContext } from '../contexts/TemperatureReadingsContext';
+import { SettingsContext } from '../contexts/SettingsContext';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -26,7 +27,8 @@ ChartJS.register(
 const thermScaleFor = (units: string) => units === 'F' ? 'Fahrenheit' : 'Celsius';
 
 const TemperatureReadingGraph = () => {
-  const { temperatureReadings: rawTempReadings, units } = useContext(TemperatureReadingsContext);
+  const { temperatureReadings: rawTempReadings } = useContext(TemperatureReadingsContext);
+  const { units } = useContext(SettingsContext);
   const [thermScale, setThermScale] = useState(thermScaleFor(units));
   const [normalizedTempReadings, setNormalizedTempReadings] = useState(rawTempReadings);
   const [labels, setLabels] = useState(rawTempReadings.map(tempReading => tempReading.timestamp));

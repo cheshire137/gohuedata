@@ -8,6 +8,7 @@ import TemperatureSensorPage from './components/TemperatureSensorPage';
 import AppLayout from './components/AppLayout';
 import ErrorPage from './components/ErrorPage';
 import GoHueDataApi from './models/GoHueDataApi';
+import { SettingsContextProvider } from './contexts/SettingsContext';
 
 function App() {
   const router = createHashRouter(createRoutesFromElements(
@@ -29,9 +30,11 @@ function App() {
   return <ThemeProvider>
     <BaseStyles>
       <PageContextProvider>
-        <TemperatureSensorsContextProvider>
-          <RouterProvider router={router} />
-        </TemperatureSensorsContextProvider>
+        <SettingsContextProvider>
+          <TemperatureSensorsContextProvider>
+            <RouterProvider router={router} />
+          </TemperatureSensorsContextProvider>
+        </SettingsContextProvider>
       </PageContextProvider>
     </BaseStyles>
   </ThemeProvider>;
