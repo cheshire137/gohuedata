@@ -43,6 +43,10 @@ func (s *SensorState) CelsiusTemperature() float32 {
 	return float32(s.Temperature) / 100 // API returns a value like 2277 for 22.77°C
 }
 
+func CelsiusToFahrenheit(celsius float32) float32 {
+	return (celsius * 9 / 5) + 32
+}
+
 func (s *SensorState) FahrenheitTemperature() float32 {
-	return (s.CelsiusTemperature() * 9 / 5) + 32
+	return CelsiusToFahrenheit(s.CelsiusTemperature())
 }
