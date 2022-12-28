@@ -27,57 +27,53 @@ const defaultUnits = 'F';
 const thermScaleFor = (units: string) => units === 'F' ? 'Fahrenheit' : 'Celsius';
 
 const TemperatureReadingGraph = () => {
-  const { temperatureReadings } = useContext(TemperatureReadingsContext);
+  const { temperatureReadings: rawTempReadings } = useContext(TemperatureReadingsContext);
   const [units, setUnits] = useState(defaultUnits);
   const [thermScale, setThermScale] = useState(thermScaleFor(units));
-  const [sortedReadings, setSortedReadings] = useState(temperatureReadings);
-  const [labels, setLabels] = useState(temperatureReadings.map(tempReading => tempReading.timestamp));
+  const [normalizedTempReadings, setNormalizedTempReadings] = useState(rawTempReadings);
+  const [labels, setLabels] = useState(rawTempReadings.map(tempReading => tempReading.timestamp));
+
+  useEffect(() => setUnits(rawTempReadings.length > 0 ? rawTempReadings[0].units : defaultUnits),
+    [rawTempReadings, setUnits]);
+
+  useEffect(() => setThermScale(thermScaleFor(units)), [units, setThermScale]);
 
   useEffect(() => {
-    setUnits(temperatureReadings.length > 0 ? temperatureReadings[0].units : defaultUnits);
-  }, [temperatureReadings, setUnits]);
+    const newNormalizedReadings = [...rawTempReadings].filter(reading => reading.timestampAsDate())
+      .sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+    setNormalizedTempReadings(newNormalizedReadings);
+  }, [rawTempReadings]);
 
   useEffect(() => {
-    setThermScale(thermScaleFor(units));
-  }, [units, setThermScale]);
+    if (normalizedTempReadings.length < 1) return;
 
-  useEffect(() => {
-    const newSortedReadings = [...temperatureReadings].sort((a, b) => a.timestamp.localeCompare(b.timestamp));
-    setSortedReadings(newSortedReadings);
-  }, [temperatureReadings]);
-
-  useEffect(() => {
-    const newLabels = sortedReadings.map(tempReading => {
-      const date = tempReading.timestampAsDate();
-      if (date) {
-        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric' });
+    let dayIndex = 0;
+    let day = normalizedTempReadings[dayIndex].timestampAsDate()!.toDateString();
+    const newLabels = normalizedTempReadings.map((tempReading, i) => {
+      const date = tempReading.timestampAsDate()!;
+      if (date.toDateString() === day && dayIndex !== i) {
+        return date.toLocaleTimeString('en-US', { hour: 'numeric' });
       }
-      return tempReading.timestamp;
+      dayIndex = i;
+      day = date.toDateString();
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric' });
     });
     setLabels(newLabels);
-  }, [sortedReadings]);
+  }, [normalizedTempReadings, setLabels]);
 
   const dayDivider = {
     id: 'dayDivider',
     beforeDatasetsDraw: (chart: ChartJS) => {
       const { ctx, data: { labels }, chartArea: { top, height }, scales: { x } } = chart;
-      if (!labels) return;
+      if (!labels || labels.length < 1) return;
 
       const stringLabels = labels as string[];
-      const dayLabels = stringLabels.map((label: string) => label.split(', ')[0]);
-      if (dayLabels.length < 1) return;
-
-      let dayIndex = 0;
-      let day = dayLabels[dayIndex];
-      for (let nextDayIndex=0; nextDayIndex < dayLabels.length; nextDayIndex++) {
-        const nextDay = dayLabels[nextDayIndex];
-        if (day === nextDay) continue;
-
+      (labels as string[]).forEach((label, i) => {
+        if (!label.includes(', ')) return; // 'Dec 28, 11 AM' (start of a new day) vs '11 AM' (continuing same day)
+        if (i === 0) return; // Don't draw a line on the left edge of the graph
         ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-        ctx.fillRect(x.getPixelForValue(nextDayIndex)-2, top, 4, height);
-
-        day = nextDay;
-      }
+        ctx.fillRect(x.getPixelForValue(i) - 2, top, 4, height);
+      });
     }
   }
 
@@ -87,7 +83,7 @@ const TemperatureReadingGraph = () => {
       datasets: [
         {
           label: `Temperature in ${thermScale}`,
-          data: sortedReadings.map(tempReading => tempReading.temperature),
+          data: normalizedTempReadings.map(tempReading => tempReading.temperature),
           borderColor: 'rgb(53, 162, 235)',
           backgroundColor: 'rgba(53, 162, 235, 0.5)',
           tension: 0.4,
