@@ -5,7 +5,7 @@ import { useLoaderData } from 'react-router-dom';
 import { PageContext } from '../contexts/PageContext';
 import { TemperatureReadingsContextProvider } from '../contexts/TemperatureReadingsContext';
 import { LiveTemperatureReadingContextProvider } from '../contexts/LiveTemperatureReadingContext';
-import TemperatureReadingList from './TemperatureReadingList';
+import TemperatureReadingPagination from './TemperatureReadingPagination';
 import TemperatureReadingGraph from './TemperatureReadingGraph';
 import LiveTemperatureReadingBadge from './LiveTemperatureReadingBadge';
 import TemperatureBadge from './TemperatureBadge';
@@ -37,7 +37,7 @@ const TemperatureSensorPage = () => {
       </Box>
       <TemperatureReadingsContextProvider filter={{ sensorID: temperatureSensor.id, perPage: 30 }}>
         <TemperatureReadingGraph />
-        <TemperatureReadingList />
+        <TemperatureReadingPagination />
       </TemperatureReadingsContextProvider>
     </LiveTemperatureReadingContextProvider>
   </Box>;

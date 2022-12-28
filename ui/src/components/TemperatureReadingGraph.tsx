@@ -65,9 +65,8 @@ const TemperatureReadingGraph = () => {
     id: 'dayDivider',
     beforeDatasetsDraw: (chart: ChartJS) => {
       const { ctx, data: { labels }, chartArea: { top, height }, scales: { x } } = chart;
-      if (!labels || labels.length < 1) return;
+      if (!labels) return;
 
-      const stringLabels = labels as string[];
       (labels as string[]).forEach((label, i) => {
         if (!label.includes(', ')) return; // 'Dec 28, 11 AM' (start of a new day) vs '11 AM' (continuing same day)
         if (i === 0) return; // Don't draw a line on the left edge of the graph
