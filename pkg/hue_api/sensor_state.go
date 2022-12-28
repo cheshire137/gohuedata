@@ -2,6 +2,7 @@ package hue_api
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -53,4 +54,15 @@ func (s *SensorState) FahrenheitTemperature() float32 {
 
 func FahrenheitToCelsius(fahrenheit float32) float32 {
 	return (fahrenheit - 32) * 5 / 9
+}
+
+func ConvertTemperature(temperature float32, units string, fahrenheit bool) float32 {
+	units = strings.ToUpper(units)
+	if fahrenheit && units == "C" {
+		return CelsiusToFahrenheit(temperature)
+	}
+	if !fahrenheit && units == "F" {
+		return FahrenheitToCelsius(temperature)
+	}
+	return temperature
 }
