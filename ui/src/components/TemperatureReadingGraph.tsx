@@ -31,10 +31,10 @@ const afternoonHours = ['12 PM', '1 PM', '2 PM', '3 PM', '4 PM'];
 const eveningHours = ['5 PM', '6 PM', '7 PM', '8 PM'];
 const nightHours = ['9 PM', '10 PM', '11 PM', '12 AM', '1 AM', '2 AM', '3 AM', '4 AM', '5 AM'];
 
-const morningColor = 'rgba(255,206,173, 0.2)';
-const afternoonColor = 'rgba(254,249,157, 0.2)';
-const eveningColor = 'rgba(104,122,194, 0.2)';
-const nightColor = 'rgba(0,62,95, 0.2)';
+const morningColor = 'rgba(255,249,200)';
+const afternoonColor = 'rgba(255,230,200)';
+const eveningColor = 'rgba(234,200,255)';
+const nightColor = 'rgba(217,217,217)';
 
 const TemperatureReadingGraph = () => {
   const { temperatureReadings } = useContext(TemperatureReadingsContext);
