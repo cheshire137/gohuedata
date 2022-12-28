@@ -1,13 +1,22 @@
 import React from 'react';
-import { PageLayout } from '@primer/react';
-import { useHref, Outlet } from 'react-router-dom';
+import { PageLayout, NavList } from '@primer/react';
+import { useHref, Outlet, useLocation } from 'react-router-dom';
 import PageHeader from './PageHeader';
 
-const AppLayout = () => <PageLayout>
-  <PageHeader homeUrl={useHref('/')} />
-  <PageLayout.Content sx={{ fontSize: 2 }}>
-    <Outlet />
-  </PageLayout.Content>
-</PageLayout>;
+const AppLayout = () => {
+  const { pathname } = useLocation();
+
+  return <PageLayout>
+    <PageHeader homeUrl={useHref('/')} />
+    <PageLayout.Pane position="start">
+      <NavList>
+        <NavList.Item href={useHref('/')} aria-current={pathname === '/'}>Temperature sensors</NavList.Item>
+      </NavList>
+    </PageLayout.Pane>
+    <PageLayout.Content sx={{ fontSize: 2 }}>
+      <Outlet />
+    </PageLayout.Content>
+  </PageLayout>;
+};
 
 export default AppLayout;
