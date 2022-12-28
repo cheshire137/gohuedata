@@ -23,18 +23,13 @@ ChartJS.register(
   Legend
 );
 
-const defaultUnits = 'F';
 const thermScaleFor = (units: string) => units === 'F' ? 'Fahrenheit' : 'Celsius';
 
 const TemperatureReadingGraph = () => {
-  const { temperatureReadings: rawTempReadings } = useContext(TemperatureReadingsContext);
-  const [units, setUnits] = useState(defaultUnits);
+  const { temperatureReadings: rawTempReadings, units } = useContext(TemperatureReadingsContext);
   const [thermScale, setThermScale] = useState(thermScaleFor(units));
   const [normalizedTempReadings, setNormalizedTempReadings] = useState(rawTempReadings);
   const [labels, setLabels] = useState(rawTempReadings.map(tempReading => tempReading.timestamp));
-
-  useEffect(() => setUnits(rawTempReadings.length > 0 ? rawTempReadings[0].units : defaultUnits),
-    [rawTempReadings, setUnits]);
 
   useEffect(() => setThermScale(thermScaleFor(units)), [units, setThermScale]);
 

@@ -13,11 +13,12 @@ export const TemperatureSensorsContext = React.createContext<TemperatureSensorsC
 });
 
 interface Props {
+  fahrenheit?: boolean;
   children: React.ReactNode;
 }
 
-export const TemperatureSensorsContextProvider = ({ children }: Props) => {
-  const { temperatureSensors, fetching, error } = useGetTemperatureSensors();
+export const TemperatureSensorsContextProvider = ({ fahrenheit, children }: Props) => {
+  const { temperatureSensors, fetching, error } = useGetTemperatureSensors(fahrenheit);
 
   if (fetching) {
     return <PageLayout>

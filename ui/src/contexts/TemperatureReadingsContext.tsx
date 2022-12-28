@@ -10,6 +10,8 @@ export type TemperatureReadingsContextProps = {
   totalPages: number;
   totalCount: number;
   setPage(page: number): void;
+  setFahrenheit(fahrenheit: boolean): void;
+  units: string;
 };
 
 export const TemperatureReadingsContext = React.createContext<TemperatureReadingsContextProps>({
@@ -19,6 +21,8 @@ export const TemperatureReadingsContext = React.createContext<TemperatureReading
   totalPages: 1,
   totalCount: 0,
   setPage: () => { },
+  setFahrenheit: () => { },
+  units: 'F',
 });
 
 interface Props {
@@ -28,11 +32,23 @@ interface Props {
 
 export const TemperatureReadingsContextProvider = ({ filter, children }: Props) => {
   const [page, setPage] = useState(filter?.page || 1);
+  const [fahrenheit, setFahrenheit] = useState(true);
+  const [units, setUnits] = useState('F');
   const { temperatureReadings, totalPages, perPage, totalCount, fetching, error } = useGetTemperatureReadings({
-    page, ...filter
+    page, fahrenheit, ...filter
   });
 
   useEffect(() => setPage(filter?.page || 1), [filter?.page]);
+
+  useEffect(() => {
+    if (typeof filter?.fahrenheit === 'boolean') {
+      setFahrenheit(filter.fahrenheit);
+    } else {
+      setFahrenheit(true);
+    }
+  }, [filter?.fahrenheit]);
+
+  useEffect(() => setUnits(fahrenheit ? 'F' : 'C'), [fahrenheit]);
 
   if (fetching) {
     return <p>Loading temperature history...</p>;
@@ -49,5 +65,7 @@ export const TemperatureReadingsContextProvider = ({ filter, children }: Props) 
     perPage: perPage!,
     totalCount: totalCount!,
     setPage,
+    setFahrenheit,
+    units,
   }}>{children}</TemperatureReadingsContext.Provider>;
 };
