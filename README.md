@@ -87,7 +87,9 @@ example, your home temperatures have changed over time.
 
 1. `go run cmd/server/main.go`
 
-    This will start a server at http://localhost:8080. This part is a work in progress with the goal of providing an API to surface the data the gohuedata command has recorded in the database.
+    This will start a server at http://localhost:8080. The goal of this web server is to provide an API to surface the
+    historical data the gohuedata command has recorded in the database, as well as provide visualizations of that
+    data via a React frontend (see below).
 
 #### Options for the server
 
@@ -102,6 +104,48 @@ example, your home temperatures have changed over time.
 - **`-fp`** - Port the frontend will run on. Defaults to 4000. Example:
 
     `go run cmd/server/main.go -fp 3456`
+
+#### API endpoints
+
+Responses will be in JSON.
+
+- `/api/temperature-sensor`
+
+    Parameters:
+
+    - `id` - specify which temperature sensor to load
+    - `fahrenheit` - optional; pass '1' to get temperatures in Fahrenheit, '0' for Celsius; defaults to '1'
+
+- `/api/temperature-sensors`
+
+    Parameters:
+
+    - `bridge` - optional; name of the Philips Hue bridge whose sensors should be returned; case insensitive; if omitted, sensors from all bridges will be returned
+    - `page` - optional integer page of sensors to load; defaults to 1
+    - `per_page` - optional integer number of sensors to load per page; defaults to 10
+
+- `/api/live/temperature-sensors`
+
+    Parameters:
+
+    - `bridge` - optional; name of the Philips Hue bridge whose sensors should be returned; case insensitive; if omitted, sensors from all bridges will be returned
+    - `fahrenheit` - optional; pass '1' to get temperatures in Fahrenheit, '0' for Celsius; defaults to '1'
+
+- `/api/temperature-readings`
+
+    Parameters:
+
+    - `bridge` - optional; name of the Philips Hue bridge whose sensors' readings should be returned; case insensitive; if omitted, readings from all bridges will be returned
+    - `sensor_id` - specify which temperature sensor's temperature readings to load
+    - `fahrenheit` - optional; pass '1' to get temperatures in Fahrenheit, '0' for Celsius; defaults to '1'
+    - `updated_since` - optional; specify a timestamp for when a reading was made; only those on or after this time will be included
+    - `updated_before` - optional; specify a timestamp for when a reading was made; only those from before this time will be included
+
+- `/api/live/groups`
+
+    Parameters:
+
+    - `bridge` - optional; name of the Philips Hue bridge whose groups should be returned; case insensitive; if omitted, groups from all bridges will be returned
 
 ### Start frontend to view your data
 
