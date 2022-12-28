@@ -10,6 +10,8 @@ I built this using Go version 1.19.4 on macOS.
 
 ### Fetch data from your Hue devices and record in database
 
+![Screenshot of the gohuedata command-line script being run and prompting the viewer to select a Philips Hue bridge from the list of those configured via the configuration file.](./screenshot-backend-gohuedata-bridge-prompt.png)
+
 You need to start recording your Philips Hue data so that you capture, for example, temperature readings from your
 temperature sensors over time. This is done via the gohuedata script:
 
@@ -77,6 +79,8 @@ Choose between `F` for Fahrenheit and `C` for Celsius. Defaults to the config fi
     `go run cmd/gohuedata/main.go -quiet=true`
 
 ### Start API server to surface the data you've logged
+
+![Screenshot of the backend server output showing that it was started on port 8080 and that a few endpoints were hit, based on log output.](./screenshot-backend-server.png)
 
 Once you've logged some data from your Philips Hue devices, you can expose that data via an API to see how, for
 example, your home temperatures have changed over time.
