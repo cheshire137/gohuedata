@@ -3,6 +3,7 @@ import { Box } from '@primer/react';
 import type TemperatureSensorResult from '../types/TemperatureSensorResult';
 import { useLoaderData } from 'react-router-dom';
 import { PageContext } from '../contexts/PageContext';
+import { SettingsContext } from '../contexts/SettingsContext';
 import { TemperatureReadingsContextProvider } from '../contexts/TemperatureReadingsContext';
 import { LiveTemperatureReadingContextProvider } from '../contexts/LiveTemperatureReadingContext';
 import TemperatureReadingPagination from './TemperatureReadingPagination';
@@ -12,6 +13,7 @@ import TemperatureBadge from './TemperatureBadge';
 
 const TemperatureSensorPage = () => {
   const { setPageTitle } = useContext(PageContext);
+  const { units } = useContext(SettingsContext);
   const data = useLoaderData() as TemperatureSensorResult;
   const { temperatureSensor, minTemperature, maxTemperature, avgTemperature } = data;
 
@@ -24,15 +26,15 @@ const TemperatureSensorPage = () => {
         <LiveTemperatureReadingBadge />
         {minTemperature && <TemperatureBadge
           temperature={minTemperature}
-          units="F"
+          units={units}
         >Min</TemperatureBadge>}
         {avgTemperature && <TemperatureBadge
           temperature={avgTemperature}
-          units="F"
+          units={units}
         >Average</TemperatureBadge>}
         {maxTemperature && <TemperatureBadge
           temperature={maxTemperature}
-          units="F"
+          units={units}
         >Max</TemperatureBadge>}
       </Box>
       <TemperatureReadingsContextProvider filter={{ sensorID: temperatureSensor.id, perPage: 30 }}>
