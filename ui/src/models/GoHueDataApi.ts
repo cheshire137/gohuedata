@@ -21,8 +21,12 @@ class GoHueDataApi {
     return { temperatureSensor, ...rest };
   }
 
-  static async getLiveTemperatureSensors() {
-    const result = await this.get('/live/temperature-sensors');
+  static async getLiveTemperatureSensors(fahrenheit?: boolean) {
+    let path = '/live/temperature-sensors';
+    if (typeof fahrenheit === 'boolean') {
+      path += `?fahrenheit=${fahrenheit ? '1' : '0'}`;
+    }
+    const result = await this.get(path);
     const tempSensors: TemperatureSensorExtended[] = result.temperatureSensors.map(
       (data: any) => new TemperatureSensorExtended(data)
     );
@@ -49,6 +53,9 @@ class GoHueDataApi {
     }
     if (typeof filter?.bridge === 'string' && filter.bridge.length > 0) {
       params.append('bridge', filter.bridge);
+    }
+    if (typeof filter?.fahrenheit === 'boolean') {
+      params.append('fahrenheit', filter.fahrenheit ? '1' : '0');
     }
     const queryString = params.toString();
     let path = '/temperature-readings';

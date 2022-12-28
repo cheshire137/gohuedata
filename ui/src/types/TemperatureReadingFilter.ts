@@ -3,6 +3,7 @@ type TemperatureReadingFilter = {
   page?: number;
   sensorID?: string;
   bridge?: string;
+  fahrenheit?: boolean;
 }
 
 export default TemperatureReadingFilter;
