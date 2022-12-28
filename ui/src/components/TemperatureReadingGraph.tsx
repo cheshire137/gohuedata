@@ -108,7 +108,14 @@ const TemperatureReadingGraph = () => {
       },
       scales: {
         x: { ticks: { autoSkip: true } },
-        y: { ticks: { callback: value => Number.isInteger(value) ? value : null } }
+        y: {
+          ticks: {
+            callback: value => {
+              if (!Number.isInteger(value)) return null;
+              return `${value}°${units}`;
+            }
+          }
+        }
       },
     }} />
   </Box>;
