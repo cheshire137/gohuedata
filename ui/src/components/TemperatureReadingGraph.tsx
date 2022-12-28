@@ -61,7 +61,7 @@ const TemperatureReadingGraph = () => {
   const dayHighlighter = {
     id: 'dayHighlighter',
     beforeDatasetsDraw: (chart: ChartJS) => {
-      const { ctx, data: { labels }, chartArea: { top, left, bottom, right, width, height }, scales: { x, y } } = chart;
+      const { ctx, data: { labels }, chartArea: { top, height }, scales: { x } } = chart;
       if (!labels) return;
 
       const stringLabels = labels as string[];
@@ -77,7 +77,8 @@ const TemperatureReadingGraph = () => {
       const startLabelX = x.getPixelForValue(startLabelIndex);
       const endLabelX = x.getPixelForValue(endLabelIndex);
       const highlightWidth = endLabelX - startLabelX;
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+
+      ctx.fillStyle = 'rgba(53, 162, 235, 0.1)';
       ctx.fillRect(startLabelX, top, highlightWidth, height);
     }
   }
