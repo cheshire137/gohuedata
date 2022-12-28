@@ -18,6 +18,7 @@ type TemperatureSensorResponse struct {
 	TemperatureSensor *TemperatureSensorExtended `json:"temperatureSensor"`
 	MaxTemperature    *float32                   `json:"maxTemperature"`
 	MinTemperature    *float32                   `json:"minTemperature"`
+	AvgTemperature    *float32                   `json:"avgTemperature"`
 }
 
 type TemperatureSensorsLiveResponse struct {

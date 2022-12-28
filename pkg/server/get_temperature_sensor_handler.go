@@ -32,10 +32,17 @@ func (e *Env) GetTemperatureSensorHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	avgTemp, err := e.ds.LoadAvgRecordedTemperatureForSensor(sensorID, fahrenheit)
+	if err != nil {
+		util.ErrorJson(w, err)
+		return
+	}
+
 	response := data_store.TemperatureSensorResponse{
 		TemperatureSensor: tempSensor,
 		MaxTemperature:    maxTemp,
 		MinTemperature:    minTemp,
+		AvgTemperature:    avgTemp,
 	}
 
 	w.Header().Set("Content-Type", "application/json")

@@ -13,7 +13,7 @@ import TemperatureBadge from './TemperatureBadge';
 const TemperatureSensorPage = () => {
   const { setPageTitle } = useContext(PageContext);
   const data = useLoaderData() as TemperatureSensorResult;
-  const { temperatureSensor, minTemperature, maxTemperature } = data;
+  const { temperatureSensor, minTemperature, maxTemperature, avgTemperature } = data;
 
   useEffect(() => setPageTitle(`${temperatureSensor.bridge.name} / ${temperatureSensor.name}`),
     [temperatureSensor.name, temperatureSensor.bridge.name, setPageTitle]);
@@ -26,6 +26,10 @@ const TemperatureSensorPage = () => {
           temperature={minTemperature}
           units="F"
         >Min</TemperatureBadge>}
+        {avgTemperature && <TemperatureBadge
+          temperature={avgTemperature}
+          units="F"
+        >Average</TemperatureBadge>}
         {maxTemperature && <TemperatureBadge
           temperature={maxTemperature}
           units="F"

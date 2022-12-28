@@ -59,6 +59,25 @@ func (ds *DataStore) LoadMinRecordedTemperatureForSensor(sensorID string, fahren
 	return &minTemp, nil
 }
 
+func (ds *DataStore) LoadAvgRecordedTemperatureForSensor(sensorID string, fahrenheit bool) (*float32, error) {
+	units := "C"
+	if fahrenheit {
+		units = "F"
+	}
+	queryStr := `SELECT AVG(temperature_readings.temperature) AS temperature
+		FROM temperature_readings` + temperatureReadingJoins + `
+		WHERE temperature_readings.temperature_sensor_id = ?
+			AND temperature_readings.units = ?`
+
+	var averageTemp float32
+	err := ds.db.QueryRow(queryStr, sensorID, units).Scan(&averageTemp)
+	if err != nil {
+		return nil, err
+	}
+
+	return &averageTemp, nil
+}
+
 func (ds *DataStore) LoadTemperatureSensor(id string) (*TemperatureSensorExtended, error) {
 	queryStr := `SELECT temperature_sensors.id AS sensor_id,
 			temperature_sensors.name AS sensor_name,
