@@ -26,6 +26,16 @@ ChartJS.register(
 const defaultUnits = 'F';
 const thermScaleFor = (units: string) => units === 'F' ? 'Fahrenheit' : 'Celsius';
 
+const morningHours = ['6 AM', '7 AM', '8 AM', '9 AM', '10 AM', '11 AM'];
+const afternoonHours = ['12 PM', '1 PM', '2 PM', '3 PM', '4 PM'];
+const eveningHours = ['5 PM', '6 PM', '7 PM', '8 PM'];
+const nightHours = ['9 PM', '10 PM', '11 PM', '12 AM', '1 AM', '2 AM', '3 AM', '4 AM', '5 AM'];
+
+const morningColor = 'rgba(255,206,173, 0.2)';
+const afternoonColor = 'rgba(254,249,157, 0.2)';
+const eveningColor = 'rgba(104,122,194, 0.2)';
+const nightColor = 'rgba(0,62,95, 0.2)';
+
 const TemperatureReadingGraph = () => {
   const { temperatureReadings } = useContext(TemperatureReadingsContext);
   const [units, setUnits] = useState(defaultUnits);
@@ -57,7 +67,6 @@ const TemperatureReadingGraph = () => {
     setLabels(newLabels);
   }, [sortedReadings]);
 
-  const hoursToHighlight = ['8 PM', '9 PM', '10 PM', '11 PM', '12 AM', '1 AM', '2 AM', '3 AM', '4 AM', '5 AM', '6 AM', '7 AM'];
   const dayHighlighter = {
     id: 'dayHighlighter',
     beforeDatasetsDraw: (chart: ChartJS) => {
@@ -66,20 +75,26 @@ const TemperatureReadingGraph = () => {
 
       const stringLabels = labels as string[];
       const labelHours = stringLabels.map((label: string) => label.split(', ')[1]);
-      const startLabel = stringLabels.find((_, i) => hoursToHighlight.includes(labelHours[i]));
-      if (!startLabel) return;
 
-      const startLabelIndex = stringLabels.indexOf(startLabel);
-      const endLabel = stringLabels.find((_, i) => i > startLabelIndex && !hoursToHighlight.includes(labelHours[i]));
-      if (!endLabel) return;
-
-      const endLabelIndex = stringLabels.indexOf(endLabel);
-      const startLabelX = x.getPixelForValue(startLabelIndex);
-      const endLabelX = x.getPixelForValue(endLabelIndex);
-      const highlightWidth = endLabelX - startLabelX;
-
-      ctx.fillStyle = 'rgba(53, 162, 235, 0.1)';
-      ctx.fillRect(startLabelX, top, highlightWidth, height);
+      for (let startLabelIndex=0; startLabelIndex<labelHours.length; startLabelIndex++) {
+        const startLabelHour = labelHours[startLabelIndex];
+        if (morningHours.includes(startLabelHour)) {
+          ctx.fillStyle = morningColor;
+        } else if (afternoonHours.includes(startLabelHour)) {
+          ctx.fillStyle = afternoonColor;
+        } else if (eveningHours.includes(startLabelHour)) {
+          ctx.fillStyle = eveningColor;
+        } else if (nightHours.includes(startLabelHour)) {
+          ctx.fillStyle = nightColor;
+        } else {
+          continue;
+        }
+        const startLabelX = x.getPixelForValue(startLabelIndex);
+        const endLabelIndex = Math.min(startLabelIndex + 1, labelHours.length);
+        const endLabelX = x.getPixelForValue(endLabelIndex);
+        const highlightWidth = Math.min(endLabelX - startLabelX, x.width - startLabelX);
+        ctx.fillRect(startLabelX, top, highlightWidth, height);
+      }
     }
   }
 
