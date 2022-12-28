@@ -22,7 +22,6 @@ func (e *Env) GetGroupsLiveHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	bridgeName := r.URL.Query().Get("bridge")
-	fahrenheit := r.URL.Query().Get("fahrenheit") != "0"
 
 	allBridges := config.Bridges
 	var selectedBridges []*hue_api.Bridge
@@ -47,7 +46,7 @@ func (e *Env) GetGroupsLiveHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		hueClient := hue_api.NewClient(bridgeApiUrl, fahrenheit)
+		hueClient := hue_api.NewClient(bridgeApiUrl, true)
 		hueApiGroups, err := hueClient.GetGroups()
 		if err != nil {
 			util.ErrorJson(w, err)
