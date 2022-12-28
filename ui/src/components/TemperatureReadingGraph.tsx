@@ -26,16 +26,6 @@ ChartJS.register(
 const defaultUnits = 'F';
 const thermScaleFor = (units: string) => units === 'F' ? 'Fahrenheit' : 'Celsius';
 
-const morningHours = ['6 AM', '7 AM', '8 AM', '9 AM', '10 AM', '11 AM'];
-const afternoonHours = ['12 PM', '1 PM', '2 PM', '3 PM', '4 PM'];
-const eveningHours = ['5 PM', '6 PM', '7 PM', '8 PM'];
-const nightHours = ['9 PM', '10 PM', '11 PM', '12 AM', '1 AM', '2 AM', '3 AM', '4 AM', '5 AM'];
-
-const morningColor = 'rgba(255,249,200)';
-const afternoonColor = 'rgba(255,230,200)';
-const eveningColor = 'rgba(234,200,255)';
-const nightColor = 'rgba(217,217,217)';
-
 const TemperatureReadingGraph = () => {
   const { temperatureReadings } = useContext(TemperatureReadingsContext);
   const [units, setUnits] = useState(defaultUnits);
@@ -67,33 +57,26 @@ const TemperatureReadingGraph = () => {
     setLabels(newLabels);
   }, [sortedReadings]);
 
-  const dayHighlighter = {
-    id: 'dayHighlighter',
+  const dayDivider = {
+    id: 'dayDivider',
     beforeDatasetsDraw: (chart: ChartJS) => {
       const { ctx, data: { labels }, chartArea: { top, height }, scales: { x } } = chart;
       if (!labels) return;
 
       const stringLabels = labels as string[];
-      const labelHours = stringLabels.map((label: string) => label.split(', ')[1]);
+      const dayLabels = stringLabels.map((label: string) => label.split(', ')[0]);
+      if (dayLabels.length < 1) return;
 
-      for (let startLabelIndex=0; startLabelIndex<labelHours.length; startLabelIndex++) {
-        const startLabelHour = labelHours[startLabelIndex];
-        if (morningHours.includes(startLabelHour)) {
-          ctx.fillStyle = morningColor;
-        } else if (afternoonHours.includes(startLabelHour)) {
-          ctx.fillStyle = afternoonColor;
-        } else if (eveningHours.includes(startLabelHour)) {
-          ctx.fillStyle = eveningColor;
-        } else if (nightHours.includes(startLabelHour)) {
-          ctx.fillStyle = nightColor;
-        } else {
-          continue;
-        }
-        const startLabelX = x.getPixelForValue(startLabelIndex);
-        const endLabelIndex = Math.min(startLabelIndex + 1, labelHours.length);
-        const endLabelX = x.getPixelForValue(endLabelIndex);
-        const highlightWidth = Math.min(endLabelX - startLabelX, x.width - startLabelX);
-        ctx.fillRect(startLabelX, top, highlightWidth, height);
+      let dayIndex = 0;
+      let day = dayLabels[dayIndex];
+      for (let nextDayIndex=0; nextDayIndex < dayLabels.length; nextDayIndex++) {
+        const nextDay = dayLabels[nextDayIndex];
+        if (day === nextDay) continue;
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.fillRect(x.getPixelForValue(nextDayIndex)-2, top, 4, height);
+
+        day = nextDay;
       }
     }
   }
@@ -110,7 +93,7 @@ const TemperatureReadingGraph = () => {
           tension: 0.4,
         }
       ]
-    }} plugins={[dayHighlighter]} options={{
+    }} plugins={[dayDivider]} options={{
       responsive: true,
       plugins: { legend: { display: false } },
       scales: {
