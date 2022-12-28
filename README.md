@@ -101,6 +101,10 @@ example, your home temperatures have changed over time.
 
 ### Start frontend to view your data
 
+|Temperature sensors list|Single temperature sensor|
+|---|---|
+|![Screenshot of the gohuedata frontend app showing the page that lists all temperature sensors detected on your Philips Hue bridges. It lists the most current temperature for each sensor as well as the name of the sensor and the Philips Hue bridge it's associated with.](./screenshot-frontend-sensors-page.png)|![Screenshot of the gohuedata frontend app showing the page for a single Philips Hue temperature sensor. It shows minimum, maximum, average, and current temperatures as well as a graph of temperatures that gohuedata has recorded hourly over a couple of days.](./screenshot-frontend-sensor-page.png)|
+
 #### With live updates
 
 If you want to change the frontend and see your changes live:
