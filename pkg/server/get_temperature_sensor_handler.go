@@ -13,13 +13,14 @@ func (e *Env) GetTemperatureSensorHandler(w http.ResponseWriter, r *http.Request
 	util.LogRequest(r)
 
 	sensorID := r.URL.Query().Get("id")
-	tempSensor, err := e.ds.LoadTemperatureSensor(sensorID)
+	fahrenheit := r.URL.Query().Get("fahrenheit") != "0"
+
+	tempSensor, err := e.ds.LoadTemperatureSensor(sensorID, fahrenheit)
 	if err != nil {
 		util.ErrorJson(w, err)
 		return
 	}
 
-	fahrenheit := r.URL.Query().Get("fahrenheit") != "0"
 	maxTemp, err := e.ds.LoadMaxRecordedTemperatureForSensor(sensorID, fahrenheit)
 	if err != nil {
 		util.ErrorJson(w, err)

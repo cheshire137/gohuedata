@@ -77,7 +77,7 @@ func (ds *DataStore) LoadAvgRecordedTemperatureForSensor(sensorID string, fahren
 	return &averageTemp, nil
 }
 
-func (ds *DataStore) LoadTemperatureSensor(id string) (*TemperatureSensorExtended, error) {
+func (ds *DataStore) LoadTemperatureSensor(id string, fahrenheit bool) (*TemperatureSensorExtended, error) {
 	queryStr := `SELECT temperature_sensors.id AS sensor_id,
 			temperature_sensors.name AS sensor_name,
 			temperature_sensors.bridge_ip_address AS bridge_ip_address,
@@ -101,7 +101,7 @@ func (ds *DataStore) LoadTemperatureSensor(id string) (*TemperatureSensorExtende
 	bridge.IPAddress = sensor.bridgeIPAddress
 	sensor.Bridge = &bridge
 
-	latestReading, err := ds.LoadTemperatureReading(sensor.ID, sensor.LastUpdated)
+	latestReading, err := ds.LoadTemperatureReading(sensor.ID, sensor.LastUpdated, fahrenheit)
 	if err != nil {
 		return nil, err
 	}

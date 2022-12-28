@@ -7,6 +7,7 @@ type TemperatureReadingFilter struct {
 	SensorID      string
 	UpdatedSince  string
 	UpdatedBefore string
+	Fahrenheit    bool
 }
 
 type TemperatureSensorFilter struct {

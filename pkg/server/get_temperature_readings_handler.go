@@ -23,6 +23,8 @@ func (e *Env) GetTemperatureReadingsHandler(w http.ResponseWriter, r *http.Reque
 	updatedSince := r.URL.Query().Get("updated_since")
 	updatedBefore := r.URL.Query().Get("updated_before")
 	sensorID := r.URL.Query().Get("sensor_id")
+	fahrenheit := r.URL.Query().Get("fahrenheit") != "0"
+
 	filter := &data_store.TemperatureReadingFilter{
 		Page:          pageInfo.Page,
 		PerPage:       pageInfo.PerPage,
@@ -30,6 +32,7 @@ func (e *Env) GetTemperatureReadingsHandler(w http.ResponseWriter, r *http.Reque
 		UpdatedSince:  updatedSince,
 		UpdatedBefore: updatedBefore,
 		SensorID:      sensorID,
+		Fahrenheit:    fahrenheit,
 	}
 
 	tempReadings, err := e.ds.LoadTemperatureReadings(filter)

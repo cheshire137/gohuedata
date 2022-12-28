@@ -23,7 +23,7 @@ func (ds *DataStore) TotalTemperatureReadings(filter *TemperatureReadingFilter) 
 	return count, nil
 }
 
-func (ds *DataStore) LoadTemperatureReading(sensorID string, timestamp string) (*TemperatureReading, error) {
+func (ds *DataStore) LoadTemperatureReading(sensorID string, timestamp string, fahrenheit bool) (*TemperatureReading, error) {
 	queryStr := `SELECT temperature_readings.last_updated AS timestamp,
 			temperature_readings.temperature,
 			temperature_readings.units,
@@ -46,6 +46,12 @@ func (ds *DataStore) LoadTemperatureReading(sensorID string, timestamp string) (
 		return nil, err
 	}
 
+	reading.Temperature = hue_api.ConvertTemperature(reading.Temperature, reading.Units, fahrenheit)
+	if fahrenheit {
+		reading.Units = "F"
+	} else {
+		reading.Units = "C"
+	}
 	reading.ID = fmt.Sprintf("%s%s%.1f%s", reading.temperatureSensorID, reading.Timestamp, reading.Temperature,
 		reading.Units)
 	sensor.ID = reading.temperatureSensorID
@@ -96,6 +102,15 @@ func (ds *DataStore) LoadTemperatureReadings(filter *TemperatureReadingFilter) (
 
 		reading.ID = fmt.Sprintf("%s%s%.1f%s", reading.temperatureSensorID, reading.Timestamp, reading.Temperature,
 			reading.Units)
+
+		if filter != nil {
+			reading.Temperature = hue_api.ConvertTemperature(reading.Temperature, reading.Units, filter.Fahrenheit)
+			if filter.Fahrenheit {
+				reading.Units = "F"
+			} else {
+				reading.Units = "C"
+			}
+		}
 
 		sensor, ok := sensorsByID[reading.temperatureSensorID]
 		if !ok {
