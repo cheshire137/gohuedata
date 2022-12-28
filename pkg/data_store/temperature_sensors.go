@@ -41,21 +41,21 @@ func (ds *DataStore) LoadMaxRecordedTemperatureForSensor(sensorID string, fahren
 }
 
 func (ds *DataStore) LoadMinRecordedTemperatureForSensor(sensorID string, fahrenheit bool) (*float32, error) {
-	units := "C"
-	if fahrenheit {
-		units = "F"
-	}
-	queryStr := `SELECT MIN(temperature_readings.temperature) AS temperature
+	queryStr := `SELECT temperature_readings.units, MIN(temperature_readings.temperature) AS min_temperature
 		FROM temperature_readings` + temperatureReadingJoins + `
 		WHERE temperature_readings.temperature_sensor_id = ?
-			AND temperature_readings.units = ?`
+		GROUP BY temperature_readings.units
+		ORDER BY 2 ASC
+		LIMIT 1`
 
+	var units string
 	var minTemp float32
-	err := ds.db.QueryRow(queryStr, sensorID, units).Scan(&minTemp)
+	err := ds.db.QueryRow(queryStr, sensorID).Scan(&units, &minTemp)
 	if err != nil {
 		return nil, err
 	}
 
+	minTemp = hue_api.ConvertTemperature(minTemp, units, fahrenheit)
 	return &minTemp, nil
 }
 
