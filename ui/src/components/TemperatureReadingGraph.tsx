@@ -57,6 +57,31 @@ const TemperatureReadingGraph = () => {
     setLabels(newLabels);
   }, [sortedReadings]);
 
+  const hoursToHighlight = ['8 PM', '9 PM', '10 PM', '11 PM', '12 AM', '1 AM', '2 AM', '3 AM', '4 AM', '5 AM', '6 AM', '7 AM'];
+  const dayHighlighter = {
+    id: 'dayHighlighter',
+    beforeDatasetsDraw: (chart: ChartJS) => {
+      const { ctx, data: { labels }, chartArea: { top, left, bottom, right, width, height }, scales: { x, y } } = chart;
+      if (!labels) return;
+
+      const stringLabels = labels as string[];
+      const labelHours = stringLabels.map((label: string) => label.split(', ')[1]);
+      const startLabel = stringLabels.find((_, i) => hoursToHighlight.includes(labelHours[i]));
+      if (!startLabel) return;
+
+      const startLabelIndex = stringLabels.indexOf(startLabel);
+      const endLabel = stringLabels.find((_, i) => i > startLabelIndex && !hoursToHighlight.includes(labelHours[i]));
+      if (!endLabel) return;
+
+      const endLabelIndex = stringLabels.indexOf(endLabel);
+      const startLabelX = x.getPixelForValue(startLabelIndex);
+      const endLabelX = x.getPixelForValue(endLabelIndex);
+      const highlightWidth = endLabelX - startLabelX;
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.fillRect(startLabelX, top, highlightWidth, height);
+    }
+  }
+
   return <Box mb={2} height="400px">
     <Line data={{
       labels,
@@ -69,7 +94,7 @@ const TemperatureReadingGraph = () => {
           tension: 0.4,
         }
       ]
-    }} options={{
+    }} plugins={[dayHighlighter]} options={{
       responsive: true,
       plugins: {
         legend: {
