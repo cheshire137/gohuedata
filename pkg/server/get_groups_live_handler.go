@@ -55,9 +55,10 @@ func (e *Env) GetGroupsLiveHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		for _, hueApiGroup := range groupLoader.GroupsByID {
+		for id, hueApiGroup := range groupLoader.GroupsByID {
 			totalLights := len(hueApiGroup.LightIDs)
 			lightsInGroup := make([]*data_store.Light, totalLights)
+			hueApiGroup.ID = id
 
 			for i, lightID := range hueApiGroup.LightIDs {
 				light, ok := lightLoader.LightsByID[lightID]
