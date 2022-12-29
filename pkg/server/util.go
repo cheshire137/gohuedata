@@ -42,3 +42,10 @@ func ErrorJson(w http.ResponseWriter, err error) {
 	response := data_store.ErrorResponse{Error: err.Error()}
 	json.NewEncoder(w).Encode(response)
 }
+
+func ErrorMessageJson(w http.ResponseWriter, message string) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusInternalServerError)
+	response := data_store.ErrorResponse{Error: message}
+	json.NewEncoder(w).Encode(response)
+}
