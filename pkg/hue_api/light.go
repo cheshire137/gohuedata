@@ -23,5 +23,9 @@ type Light struct {
 }
 
 func (l *Light) String() string {
-	return fmt.Sprintf("%s -- %s, %s (%s)", l.Name, l.Type, l.ModelID, l.UniqueID)
+	onEmoji := ""
+	if l.State.On {
+		onEmoji = " 💡"
+	}
+	return fmt.Sprintf("%s%s -- %s, %s (%s)", l.Name, onEmoji, l.Type, l.ModelID, l.UniqueID)
 }
