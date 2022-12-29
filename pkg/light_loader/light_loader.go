@@ -28,7 +28,7 @@ func (ll *LightLoader) TotalLights() int {
 }
 
 func (ll *LightLoader) SortedLightIDs() ([]string, error) {
-	intIDs := make([]int, 0, len(ll.LightsByID))
+	intIDs := make([]int, 0, ll.TotalLights())
 	for id := range ll.LightsByID {
 		idInt, err := strconv.Atoi(id)
 		if err != nil {
@@ -45,7 +45,7 @@ func (ll *LightLoader) SortedLightIDs() ([]string, error) {
 }
 
 func (ll *LightLoader) DisplayLights(quietMode bool) error {
-	count := len(ll.LightsByID)
+	count := ll.TotalLights()
 	units := util.Pluralize(count, "light", "lights")
 	util.LogSuccess("Got %d %s%s", count, units, util.LinePunctuation(quietMode))
 	if !quietMode {
