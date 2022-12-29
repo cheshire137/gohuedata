@@ -13,7 +13,29 @@ func (ds *DataStore) CreateTables() error {
 	if err != nil {
 		return err
 	}
+	err = ds.createLightStatesTable()
+	if err != nil {
+		return err
+	}
 	return ds.createHueBridgesTable()
+}
+
+func (ds *DataStore) createLightStatesTable() error {
+	createTableQuery := `CREATE TABLE IF NOT EXISTS light_states (
+		light_unique_id TEXT NOT NULL,
+		timestamp TEXT NOT NULL,
+		on BOOLEAN NOT NULL,
+		PRIMARY KEY (light_unique_id, timestamp)
+	)`
+	stmt, err := ds.db.Prepare(createTableQuery)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (ds *DataStore) createTemperatureReadingsTable() error {
