@@ -53,7 +53,8 @@ func (ds *DataStore) createHueBridgesTable() error {
 
 func (ds *DataStore) createLightsTable() error {
 	createTableQuery := `CREATE TABLE IF NOT EXISTS lights (
-		id TEXT PRIMARY KEY,
+		unique_id TEXT PRIMARY KEY,
+		id TEXT,
 		name TEXT NOT NULL,
 		bridge_ip_address TEXT NOT NULL
 	)`
