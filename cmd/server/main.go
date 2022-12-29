@@ -42,6 +42,7 @@ func main() {
 	mux.Handle("/api/temperature-readings", http.HandlerFunc(env.GetTemperatureReadingsHandler))
 	mux.Handle("/api/temperature-sensors", http.HandlerFunc(env.GetTemperatureSensorsHandler))
 	mux.Handle("/api/temperature-sensor", http.HandlerFunc(env.GetTemperatureSensorHandler))
+	mux.Handle("/api/group", http.HandlerFunc(env.GetGroupHandler))
 	mux.Handle("/api/live/temperature-sensors", http.HandlerFunc(env.GetTemperatureSensorsLiveHandler))
 	mux.Handle("/api/live/groups", http.HandlerFunc(env.GetGroupsLiveHandler))
 

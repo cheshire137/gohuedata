@@ -147,6 +147,13 @@ Responses will be in JSON.
 
     - `bridge` - optional; name of the Philips Hue bridge whose groups should be returned; case insensitive; if omitted, groups from all bridges will be returned
 
+- `/api/group`
+
+    Parameters:
+
+    - `bridge` - required; name of the Philips Hue bridge associated with the group to be returned; case insensitive
+    - `id` - specify which group to load
+
 ### Start frontend to view your data
 
 |Temperature sensors list|Single temperature sensor|

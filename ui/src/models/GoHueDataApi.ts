@@ -21,6 +21,14 @@ class GoHueDataApi {
     return { temperatureSensor, ...rest };
   }
 
+  static async getGroup(id: string, bridgeName: string): Promise<Group> {
+    const queryParams = new URLSearchParams();
+    queryParams.append('bridge', bridgeName);
+    queryParams.append('id', id);
+    const data = await this.get(`/group?${queryParams.toString()}`);
+    return new Group(data.group);
+  }
+
   static async getLiveTemperatureSensors(fahrenheit?: boolean) {
     let path = '/live/temperature-sensors';
     if (typeof fahrenheit === 'boolean') {
