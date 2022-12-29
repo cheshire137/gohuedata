@@ -21,7 +21,7 @@ type SensorState struct {
 
 func (s *SensorState) LastUpdatedAt() (*time.Time, error) {
 	if s.LastUpdated == "" {
-		return nil, fmt.Errorf("No last update time")
+		return nil, fmt.Errorf("no last update time")
 	}
 	lastUpdatedTime, err := time.Parse(LastUpdatedFormat, s.LastUpdated)
 	if err != nil {
