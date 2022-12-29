@@ -1,4 +1,5 @@
 import HueBridge from './HueBridge';
+import Light from './Light';
 
 class Group {
   id: string;
@@ -8,6 +9,7 @@ class Group {
   totalLights: number;
   totalSensors: number;
   groupClass: string;
+  lights: Light[];
 
   constructor(data: any) {
     this.id = data.id;
@@ -17,6 +19,7 @@ class Group {
     this.totalLights = data.totalLights;
     this.totalSensors = data.totalSensors;
     this.groupClass = data.class;
+    this.lights = data.lights.map((lightData: any) => new Light(lightData));
   }
 }
 
