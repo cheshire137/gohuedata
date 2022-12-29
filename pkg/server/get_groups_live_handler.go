@@ -3,7 +3,6 @@ package server
 import (
 	"encoding/json"
 	"net/http"
-	"strings"
 
 	"github.com/cheshire137/gohuedata/pkg/config"
 	"github.com/cheshire137/gohuedata/pkg/data_store"
@@ -24,19 +23,7 @@ func (e *Env) GetGroupsLiveHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	bridgeName := r.URL.Query().Get("bridge")
-
-	allBridges := config.Bridges
-	var selectedBridges []*hue_api.Bridge
-	if bridgeName == "" {
-		selectedBridges = allBridges
-	} else {
-		bridgeName = strings.ToLower(bridgeName)
-		for _, bridge := range allBridges {
-			if strings.ToLower(bridge.Name) == bridgeName {
-				selectedBridges = append(selectedBridges, bridge)
-			}
-		}
-	}
+	selectedBridges := GetSelectedBridges(bridgeName, config)
 
 	var groups []*data_store.Group
 	totalGroups := 0
