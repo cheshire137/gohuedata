@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box } from '@primer/react';
 import Group from '../models/Group';
+import BridgeDisplay from './BridgeDisplay';
 
 interface Props {
   group: Group;
@@ -9,9 +10,7 @@ interface Props {
 const GroupListItem = ({ group }: Props) => {
   return <Box as="li" mb={2}>
     {group.name}
-    <Box fontSize={1} color="fg.muted">
-      {group.bridge.name}
-    </Box>
+    <BridgeDisplay bridge={group.bridge} />
   </Box>;
 };
 
