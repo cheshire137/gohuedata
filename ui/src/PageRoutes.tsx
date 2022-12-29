@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { TemperatureSensorsContextProvider } from './contexts/TemperatureSensorsContext';
 import { createHashRouter, RouterProvider, createRoutesFromElements, Route } from 'react-router-dom';
 import TemperatureSensorsPage from './components/TemperatureSensorsPage';
+import GroupsPage from './components/GroupsPage';
 import TemperatureSensorPage from './components/TemperatureSensorPage';
 import AppLayout from './components/AppLayout';
 import ErrorPage from './components/ErrorPage';
@@ -22,6 +23,7 @@ const PageRoutes = () => {
         element={<TemperatureSensorPage />}
         errorElement={<ErrorPage />}
       />
+      <Route path="/groups" element={<GroupsPage />} errorElement={<ErrorPage />} />
     </Route>
   ));
 

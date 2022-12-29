@@ -12,6 +12,9 @@ const AppLayout = () => {
       <NavList>
         <NavList.Item href={useHref('/')} aria-current={pathname === '/'}>Temperature sensors</NavList.Item>
       </NavList>
+      <NavList>
+        <NavList.Item href={useHref('/groups')} aria-current={pathname === '/groups'}>Groups</NavList.Item>
+      </NavList>
     </PageLayout.Pane>
     <PageLayout.Content sx={{ fontSize: 2 }}>
       <Outlet />
