@@ -71,8 +71,28 @@ type Group struct {
 	TotalSensors int        `json:"totalSensors"`
 	Bridge       *HueBridge `json:"bridge"`
 	Class        string     `json:"class"`
+	Lights       []*Light   `json:"lights"`
 }
 
 type ErrorResponse struct {
 	Error string `json:"error"`
+}
+
+type Light struct {
+	UniqueID string     `json:"uniqueID"`
+	ID       string     `json:"id"`
+	Name     string     `json:"name"`
+	Bridge   *HueBridge `json:"bridge"`
+}
+
+type LightExtended struct {
+	Light
+	LatestState *LightState `json:"latestState"`
+}
+
+type LightState struct {
+	Timestamp     string `json:"timestamp"`
+	On            bool   `json:"on"`
+	Light         *Light `json:"light"`
+	lightUniqueID string
 }
