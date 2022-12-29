@@ -8,6 +8,7 @@ import (
 	"github.com/cheshire137/gohuedata/pkg/config"
 	"github.com/cheshire137/gohuedata/pkg/data_store"
 	"github.com/cheshire137/gohuedata/pkg/hue_api"
+	"github.com/cheshire137/gohuedata/pkg/light_loader"
 	"github.com/cheshire137/gohuedata/pkg/util"
 )
 
@@ -60,15 +61,37 @@ func (e *Env) GetGroupsLiveHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		totalGroups += len(hueApiGroups)
 
+		lightLoader, err := light_loader.NewLightLoader(hueClient)
+		if err != nil {
+			util.ErrorJson(w, err)
+			return
+		}
+
 		for _, hueApiGroup := range hueApiGroups {
+			totalLights := len(hueApiGroup.LightIDs)
+			lightsInGroup := make([]*data_store.Light, totalLights)
+
+			for i, lightID := range hueApiGroup.LightIDs {
+				light, ok := lightLoader.LightsByID[lightID]
+				if ok {
+					lightsInGroup[i] = &data_store.Light{
+						UniqueID: light.UniqueID,
+						ID:       lightID,
+						Name:     light.Name,
+						Bridge:   bridgeForResponse,
+					}
+				}
+			}
+
 			groupForResponse := &data_store.Group{
 				ID:           hueApiGroup.ID,
 				Name:         hueApiGroup.Name,
 				Bridge:       bridgeForResponse,
 				Type:         hueApiGroup.Type,
-				TotalLights:  len(hueApiGroup.LightIDs),
+				TotalLights:  totalLights,
 				TotalSensors: len(hueApiGroup.SensorIDs),
 				Class:        hueApiGroup.Class,
+				Lights:       lightsInGroup,
 			}
 			groups = append(groups, groupForResponse)
 		}
