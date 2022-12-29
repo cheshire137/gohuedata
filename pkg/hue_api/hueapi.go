@@ -34,7 +34,7 @@ func (c *Client) GetLights() (map[string]Light, error) {
 }
 
 // https://developers.meethue.com/develop/hue-api/groupds-api/#get-all-groups
-func (c *Client) GetGroups() ([]*Group, error) {
+func (c *Client) GetGroups() (map[string]Group, error) {
 	body, err := c.get("/groups")
 	if err != nil {
 		return nil, err
@@ -44,12 +44,7 @@ func (c *Client) GetGroups() ([]*Group, error) {
 	if err != nil {
 		return nil, err
 	}
-	groups := []*Group{}
-	for id, group := range groupResponse {
-		group.ID = id
-		groups = append(groups, &group)
-	}
-	return groups, nil
+	return groupResponse, nil
 }
 
 // https://developers.meethue.com/develop/hue-api/5-sensors-api/#get-all-sensors

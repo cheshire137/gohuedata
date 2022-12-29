@@ -7,6 +7,7 @@ import (
 
 	"github.com/cheshire137/gohuedata/pkg/config"
 	"github.com/cheshire137/gohuedata/pkg/data_store"
+	"github.com/cheshire137/gohuedata/pkg/group_loader"
 	"github.com/cheshire137/gohuedata/pkg/hue_api"
 	"github.com/cheshire137/gohuedata/pkg/light_loader"
 	"github.com/cheshire137/gohuedata/pkg/util"
@@ -48,7 +49,7 @@ func (e *Env) GetGroupsLiveHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		hueClient := hue_api.NewClient(bridgeApiUrl, true)
-		hueApiGroups, err := hueClient.GetGroups()
+		groupLoader, err := group_loader.NewGroupLoader(hueClient)
 		if err != nil {
 			util.ErrorJson(w, err)
 			return
@@ -59,7 +60,7 @@ func (e *Env) GetGroupsLiveHandler(w http.ResponseWriter, r *http.Request) {
 			Name:      bridge.Name,
 			IPAddress: bridge.IPAddress,
 		}
-		totalGroups += len(hueApiGroups)
+		totalGroups += groupLoader.TotalGroups()
 
 		lightLoader, err := light_loader.NewLightLoader(hueClient)
 		if err != nil {
@@ -67,7 +68,7 @@ func (e *Env) GetGroupsLiveHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		for _, hueApiGroup := range hueApiGroups {
+		for _, hueApiGroup := range groupLoader.GroupsByID {
 			totalLights := len(hueApiGroup.LightIDs)
 			lightsInGroup := make([]*data_store.Light, totalLights)
 
