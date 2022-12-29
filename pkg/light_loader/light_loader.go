@@ -22,6 +22,10 @@ func NewLightLoader(hueClient *hue_api.Client) (*LightLoader, error) {
 	return &LightLoader{LightsByID: lightsByID}, nil
 }
 
+func (ll *LightLoader) TotalLights() int {
+	return len(ll.LightsByID)
+}
+
 func (ll *LightLoader) SortedLightIDs() ([]string, error) {
 	intIDs := make([]int, 0, len(ll.LightsByID))
 	for id := range ll.LightsByID {
