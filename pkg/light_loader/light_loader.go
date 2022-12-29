@@ -5,6 +5,7 @@ import (
 	"sort"
 	"strconv"
 
+	"github.com/cheshire137/gohuedata/pkg/data_store"
 	"github.com/cheshire137/gohuedata/pkg/hue_api"
 	"github.com/cheshire137/gohuedata/pkg/util"
 )
@@ -55,6 +56,20 @@ func (ll *LightLoader) DisplayLights(quietMode bool) error {
 		for _, id := range sortedIDs {
 			light := ll.LightsByID[id]
 			fmt.Printf("%s. %s\n", id, light.String())
+		}
+	}
+	return nil
+}
+
+func (ll *LightLoader) SaveLightStates(bridge *hue_api.Bridge, dataStore *data_store.DataStore, fahrenheit bool) error {
+	for id, light := range ll.LightsByID {
+		err := dataStore.AddLight(bridge, id, &light)
+		if err != nil {
+			return err
+		}
+		err = dataStore.AddLightState(bridge, &light)
+		if err != nil {
+			return err
 		}
 	}
 	return nil
