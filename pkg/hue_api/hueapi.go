@@ -33,6 +33,20 @@ func (c *Client) GetLights() (map[string]Light, error) {
 	return lightResponse, nil
 }
 
+// https://developers.meethue.com/develop/hue-api/groupds-api/#get-group-attr
+func (c *Client) GetGroup(id string) (*Group, error) {
+	body, err := c.get(fmt.Sprintf("/groups/%s", id))
+	if err != nil {
+		return nil, err
+	}
+	var group Group
+	err = json.Unmarshal(body, &group)
+	if err != nil {
+		return nil, err
+	}
+	return &group, nil
+}
+
 // https://developers.meethue.com/develop/hue-api/groupds-api/#get-all-groups
 func (c *Client) GetGroups() (map[string]Group, error) {
 	body, err := c.get("/groups")
