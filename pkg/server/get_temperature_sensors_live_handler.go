@@ -19,7 +19,7 @@ func (e *Env) GetTemperatureSensorsLiveHandler(w http.ResponseWriter, r *http.Re
 
 	config, err := config.NewConfig(e.options.ConfigPath)
 	if err != nil {
-		util.ErrorJson(w, err)
+		ErrorJson(w, err)
 		return
 	}
 
@@ -45,14 +45,14 @@ func (e *Env) GetTemperatureSensorsLiveHandler(w http.ResponseWriter, r *http.Re
 	for _, bridge := range selectedBridges {
 		bridgeApiUrl, err := bridge.GetApiUrl()
 		if err != nil {
-			util.ErrorJson(w, err)
+			ErrorJson(w, err)
 			return
 		}
 
 		hueClient := hue_api.NewClient(bridgeApiUrl, fahrenheit)
 		sensorLoader, err := sensor_loader.NewSensorLoader(hueClient, "temperature")
 		if err != nil {
-			util.ErrorJson(w, err)
+			ErrorJson(w, err)
 			return
 		}
 

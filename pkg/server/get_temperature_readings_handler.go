@@ -15,7 +15,7 @@ func (e *Env) GetTemperatureReadingsHandler(w http.ResponseWriter, r *http.Reque
 
 	pageInfo, err := pagination.GetPageInfoParams(r.URL)
 	if err != nil {
-		util.ErrorJson(w, err)
+		ErrorJson(w, err)
 		return
 	}
 
@@ -37,13 +37,13 @@ func (e *Env) GetTemperatureReadingsHandler(w http.ResponseWriter, r *http.Reque
 
 	tempReadings, err := e.ds.LoadTemperatureReadings(filter)
 	if err != nil {
-		util.ErrorJson(w, err)
+		ErrorJson(w, err)
 		return
 	}
 
 	totalTempReadings, err := e.ds.TotalTemperatureReadings(filter)
 	if err != nil {
-		util.ErrorJson(w, err)
+		ErrorJson(w, err)
 		return
 	}
 

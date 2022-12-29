@@ -15,7 +15,7 @@ func (e *Env) GetTemperatureSensorsHandler(w http.ResponseWriter, r *http.Reques
 
 	pageInfo, err := pagination.GetPageInfoParams(r.URL)
 	if err != nil {
-		util.ErrorJson(w, err)
+		ErrorJson(w, err)
 		return
 	}
 
@@ -28,13 +28,13 @@ func (e *Env) GetTemperatureSensorsHandler(w http.ResponseWriter, r *http.Reques
 
 	tempSensors, err := e.ds.LoadTemperatureSensors(filter)
 	if err != nil {
-		util.ErrorJson(w, err)
+		ErrorJson(w, err)
 		return
 	}
 
 	totalTempSensors, err := e.ds.TotalTemperatureSensors(filter)
 	if err != nil {
-		util.ErrorJson(w, err)
+		ErrorJson(w, err)
 		return
 	}
 

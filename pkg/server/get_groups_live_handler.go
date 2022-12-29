@@ -18,7 +18,7 @@ func (e *Env) GetGroupsLiveHandler(w http.ResponseWriter, r *http.Request) {
 
 	config, err := config.NewConfig(e.options.ConfigPath)
 	if err != nil {
-		util.ErrorJson(w, err)
+		ErrorJson(w, err)
 		return
 	}
 
@@ -31,14 +31,14 @@ func (e *Env) GetGroupsLiveHandler(w http.ResponseWriter, r *http.Request) {
 	for _, bridge := range selectedBridges {
 		bridgeApiUrl, err := bridge.GetApiUrl()
 		if err != nil {
-			util.ErrorJson(w, err)
+			ErrorJson(w, err)
 			return
 		}
 
 		hueClient := hue_api.NewClient(bridgeApiUrl, true)
 		groupLoader, err := group_loader.NewGroupLoader(hueClient)
 		if err != nil {
-			util.ErrorJson(w, err)
+			ErrorJson(w, err)
 			return
 		}
 
@@ -51,7 +51,7 @@ func (e *Env) GetGroupsLiveHandler(w http.ResponseWriter, r *http.Request) {
 
 		lightLoader, err := light_loader.NewLightLoader(hueClient)
 		if err != nil {
-			util.ErrorJson(w, err)
+			ErrorJson(w, err)
 			return
 		}
 

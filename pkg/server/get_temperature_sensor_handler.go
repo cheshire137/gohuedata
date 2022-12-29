@@ -17,25 +17,25 @@ func (e *Env) GetTemperatureSensorHandler(w http.ResponseWriter, r *http.Request
 
 	tempSensor, err := e.ds.LoadTemperatureSensor(sensorID, fahrenheit)
 	if err != nil {
-		util.ErrorJson(w, err)
+		ErrorJson(w, err)
 		return
 	}
 
 	maxTemp, err := e.ds.LoadMaxRecordedTemperatureForSensor(sensorID, fahrenheit)
 	if err != nil {
-		util.ErrorJson(w, err)
+		ErrorJson(w, err)
 		return
 	}
 
 	minTemp, err := e.ds.LoadMinRecordedTemperatureForSensor(sensorID, fahrenheit)
 	if err != nil {
-		util.ErrorJson(w, err)
+		ErrorJson(w, err)
 		return
 	}
 
 	avgTemp, err := e.ds.LoadAvgRecordedTemperatureForSensor(sensorID, fahrenheit)
 	if err != nil {
-		util.ErrorJson(w, err)
+		ErrorJson(w, err)
 		return
 	}
 
