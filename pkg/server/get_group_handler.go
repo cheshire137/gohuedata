@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/cheshire137/gohuedata/pkg/config"
 	"github.com/cheshire137/gohuedata/pkg/data_store"
@@ -40,8 +41,6 @@ func (e *Env) GetGroupHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	bridge := selectedBridges[0]
-	var groupForResponse data_store.Group
-
 	bridgeApiUrl, err := bridge.GetApiUrl()
 	if err != nil {
 		ErrorJson(w, err)
@@ -62,29 +61,38 @@ func (e *Env) GetGroupHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	totalLights := len(hueGroup.LightIDs)
-	var lightsInGroup []*data_store.Light
+	var lightsInGroup []*data_store.LightExtended
 
 	if totalLights > 0 {
-		lightsInGroup = make([]*data_store.Light, totalLights)
+		lightsInGroup = make([]*data_store.LightExtended, totalLights)
 		lightLoader, err := light_loader.NewLightLoader(hueClient)
 		if err != nil {
 			ErrorJson(w, err)
 			return
 		}
+		timestamp := time.Now().Format(time.RFC3339)
 		for i, lightID := range hueGroup.LightIDs {
-			light, ok := lightLoader.LightsByID[lightID]
+			hueLight, ok := lightLoader.LightsByID[lightID]
 			if ok {
-				lightsInGroup[i] = &data_store.Light{
-					UniqueID: light.UniqueID,
+				light := data_store.Light{
+					UniqueID: hueLight.UniqueID,
 					ID:       lightID,
-					Name:     light.Name,
+					Name:     hueLight.Name,
 					Bridge:   bridgeForResponse,
+				}
+				lightsInGroup[i] = &data_store.LightExtended{
+					Light: light,
+					LatestState: &data_store.LightState{
+						Timestamp: timestamp,
+						On:        hueLight.State.On,
+						Light:     &light,
+					},
 				}
 			}
 		}
 	}
 
-	groupForResponse = data_store.Group{
+	groupExtended := data_store.GroupExtended{
 		ID:           groupID,
 		Name:         hueGroup.Name,
 		Type:         hueGroup.Type,
@@ -96,5 +104,5 @@ func (e *Env) GetGroupHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(groupForResponse)
+	json.NewEncoder(w).Encode(groupExtended)
 }
