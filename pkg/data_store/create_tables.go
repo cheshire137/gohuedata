@@ -11,6 +11,10 @@ func (ds *DataStore) CreateTables() error {
 	if err != nil {
 		return err
 	}
+	err = createLightsTable(ds.db)
+	if err != nil {
+		return err
+	}
 	return createHueBridgesTable(ds.db)
 }
 
@@ -39,6 +43,32 @@ func createHueBridgesTable(db *sql.DB) error {
 		name TEXT NOT NULL
 	)`
 	stmt, err := db.Prepare(createTableQuery)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func createLightsTable(db *sql.DB) error {
+	createTableQuery := `CREATE TABLE IF NOT EXISTS lights (
+		id TEXT PRIMARY KEY,
+		name TEXT NOT NULL,
+		bridge_ip_address TEXT NOT NULL
+	)`
+	stmt, err := db.Prepare(createTableQuery)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec()
+	if err != nil {
+		return err
+	}
+	createIndexQuery := `CREATE UNIQUE INDEX IF NOT EXISTS idx_lights_id_bridge_ip ON lights (id, bridge_ip_address)`
+	stmt, err = db.Prepare(createIndexQuery)
 	if err != nil {
 		return err
 	}
