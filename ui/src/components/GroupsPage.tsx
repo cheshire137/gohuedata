@@ -6,9 +6,9 @@ import GroupList from './GroupList';
 
 const GroupsPage = () => {
   const { setPageTitle } = useContext(PageContext);
-  const { groups, fetching, error } = useGetGroups();
+  const { groups, totalCount: totalGroups, fetching, error } = useGetGroups();
 
-  useEffect(() => setPageTitle('Groups'), [setPageTitle]);
+  useEffect(() => setPageTitle(`Groups (${totalGroups})`), [setPageTitle, totalGroups]);
 
   if (fetching) {
     return <p>Loading groups...</p>;
