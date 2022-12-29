@@ -87,7 +87,11 @@ func main() {
 				return
 			}
 
-			lightLoader.DisplayLights(options.QuietMode)
+			err = lightLoader.DisplayLights(options.QuietMode)
+			if err != nil {
+				util.LogError("Failed to display lights:", err)
+				return
+			}
 		}
 
 		if options.LoadSensors() {

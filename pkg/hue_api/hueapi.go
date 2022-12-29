@@ -20,7 +20,7 @@ func NewClient(apiURL string, fahrenheit bool) *Client {
 }
 
 // https://developers.meethue.com/develop/hue-api/lights-api/#get-all-lights
-func (c *Client) GetLights() ([]Light, error) {
+func (c *Client) GetLights() (map[string]Light, error) {
 	body, err := c.get("/lights")
 	if err != nil {
 		return nil, err
@@ -30,13 +30,7 @@ func (c *Client) GetLights() ([]Light, error) {
 	if err != nil {
 		return nil, err
 	}
-	lights := []Light{}
-	for _, light := range lightResponse {
-		if light.UniqueID != "" {
-			lights = append(lights, light)
-		}
-	}
-	return lights, nil
+	return lightResponse, nil
 }
 
 // https://developers.meethue.com/develop/hue-api/groupds-api/#get-all-groups
