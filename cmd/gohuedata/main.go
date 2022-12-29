@@ -92,6 +92,17 @@ func main() {
 				util.LogError("Failed to display lights:", err)
 				return
 			}
+
+			lightCount := lightLoader.TotalLights()
+			if lightCount > 0 {
+				err = lightLoader.SaveLightStates(bridge, dataStore)
+				if err != nil {
+					util.LogError("Failed to save light states:", err)
+					return
+				}
+				units := util.Pluralize(lightCount, "state", "states")
+				util.LogSuccess("Recorded %d light %s", lightCount, units)
+			}
 		}
 
 		if options.LoadSensors() {
