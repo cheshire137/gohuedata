@@ -61,7 +61,7 @@ func (ll *LightLoader) DisplayLights(quietMode bool) error {
 	return nil
 }
 
-func (ll *LightLoader) SaveLightStates(bridge *hue_api.Bridge, dataStore *data_store.DataStore, fahrenheit bool) error {
+func (ll *LightLoader) SaveLightStates(bridge *hue_api.Bridge, dataStore *data_store.DataStore) error {
 	for id, light := range ll.LightsByID {
 		err := dataStore.AddLight(bridge, id, &light)
 		if err != nil {
