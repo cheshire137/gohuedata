@@ -9,7 +9,7 @@ interface Props {
 
 const GroupListItem = ({ group }: Props) => {
   return <Box as="li" mb={2}>
-    {group.name}
+    {group.name} &mdash; {group.totalLights} {group.totalLights === 1 ? 'light' : 'lights'}
     <BridgeDisplay bridge={group.bridge} />
   </Box>;
 };
