@@ -24,7 +24,7 @@ func (ds *DataStore) createLightStatesTable() error {
 	createTableQuery := `CREATE TABLE IF NOT EXISTS light_states (
 		light_unique_id TEXT NOT NULL,
 		timestamp TEXT NOT NULL,
-		on BOOLEAN NOT NULL,
+		is_on BOOLEAN NOT NULL,
 		PRIMARY KEY (light_unique_id, timestamp)
 	)`
 	stmt, err := ds.db.Prepare(createTableQuery)

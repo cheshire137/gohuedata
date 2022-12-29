@@ -7,8 +7,8 @@ import (
 )
 
 func (ds *DataStore) AddLightState(bridge *hue_api.Bridge, light *hue_api.Light) error {
-	insertQuery := `INSERT INTO light_states (light_unique_id, timestamp, on)
-		VALUES (?, ?, ?) ON CONFLICT(light_unique_id, timestamp) DO UPDATE SET on = excluded.on`
+	insertQuery := `INSERT INTO light_states (light_unique_id, timestamp, is_on)
+		VALUES (?, ?, ?) ON CONFLICT(light_unique_id, timestamp) DO UPDATE SET is_on = excluded.is_on`
 	stmt, err := ds.db.Prepare(insertQuery)
 	if err != nil {
 		return err
