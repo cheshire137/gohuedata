@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/cheshire137/gohuedata/pkg/config"
@@ -74,6 +75,7 @@ func (e *Env) GetGroupsLiveHandler(w http.ResponseWriter, r *http.Request) {
 
 			groupForResponse := &data_store.Group{
 				ID:           hueApiGroup.ID,
+				UniqueID:     fmt.Sprintf("%s-%s", bridge.IPAddress, hueApiGroup.ID),
 				Name:         hueApiGroup.Name,
 				Bridge:       bridgeForResponse,
 				Type:         hueApiGroup.Type,

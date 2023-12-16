@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -94,6 +95,7 @@ func (e *Env) GetGroupHandler(w http.ResponseWriter, r *http.Request) {
 
 	groupExtended := data_store.GroupExtended{
 		ID:           groupID,
+		UniqueID:     fmt.Sprintf("%s-%s", bridge.IPAddress, hueGroup.ID),
 		Name:         hueGroup.Name,
 		Type:         hueGroup.Type,
 		Class:        hueGroup.Class,
