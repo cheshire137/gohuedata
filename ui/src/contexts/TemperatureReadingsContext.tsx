@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext, useMemo } from 'react';
+import React, { createContext, PropsWithChildren, useState, useEffect, useContext, useMemo } from 'react';
 import TemperatureReading from '../models/TemperatureReading';
 import type TemperatureReadingFilter from '../types/TemperatureReadingFilter';
 import useGetTemperatureReadings from '../hooks/use-get-temperature-readings';
@@ -23,9 +23,8 @@ export const TemperatureReadingsContext = createContext<TemperatureReadingsConte
   setPage: () => { },
 });
 
-interface Props {
+interface Props extends PropsWithChildren {
   filter?: TemperatureReadingFilter;
-  children: React.ReactNode;
 }
 
 export const TemperatureReadingsContextProvider = ({ filter, children }: Props) => {

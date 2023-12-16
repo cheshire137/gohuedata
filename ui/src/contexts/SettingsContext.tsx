@@ -1,4 +1,4 @@
-import React, { createContext, useMemo, useState, useEffect } from 'react';
+import React, { createContext, PropsWithChildren, useMemo, useState, useEffect } from 'react';
 
 export type SettingsContextProps = {
   setFahrenheit: (fahrenheit: boolean) => void;
@@ -12,9 +12,8 @@ export const SettingsContext = createContext<SettingsContextProps>({
   fahrenheit: true,
 });
 
-interface Props {
+interface Props extends PropsWithChildren {
   fahrenheit?: boolean;
-  children: React.ReactNode;
 }
 
 export const SettingsContextProvider = ({ fahrenheit, children }: Props) => {
