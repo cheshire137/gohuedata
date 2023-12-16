@@ -1,4 +1,4 @@
-import React, { createContext, PropsWithChildren } from 'react';
+import React, { createContext, PropsWithChildren, useMemo } from 'react';
 import TemperatureSensorExtended from '../models/TemperatureSensorExtended';
 import useGetTemperatureSensors from '../hooks/use-get-temperature-sensors';
 import PageHeader from '../components/PageHeader';
@@ -18,6 +18,7 @@ interface Props extends PropsWithChildren {
 
 export const TemperatureSensorsContextProvider = ({ fahrenheit, children }: Props) => {
   const { temperatureSensors, fetching, error } = useGetTemperatureSensors(fahrenheit);
+  const contextProps = useMemo(() => ({ temperatureSensors: temperatureSensors! }), [temperatureSensors]);
 
   if (fetching) {
     return <PageLayout>
@@ -37,7 +38,5 @@ export const TemperatureSensorsContextProvider = ({ fahrenheit, children }: Prop
     </PageLayout>;
   }
 
-  return <TemperatureSensorsContext.Provider value={{
-    temperatureSensors: temperatureSensors!,
-  }}>{children}</TemperatureSensorsContext.Provider>;
+  return <TemperatureSensorsContext.Provider value={contextProps}>{children}</TemperatureSensorsContext.Provider>;
 };
