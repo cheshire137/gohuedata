@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { createContext, useMemo, useState, useEffect } from 'react';
 
 export type SettingsContextProps = {
   setFahrenheit: (fahrenheit: boolean) => void;
@@ -6,7 +6,7 @@ export type SettingsContextProps = {
   fahrenheit: boolean;
 };
 
-export const SettingsContext = React.createContext<SettingsContextProps>({
+export const SettingsContext = createContext<SettingsContextProps>({
   setFahrenheit: () => { },
   units: 'F',
   fahrenheit: true,
@@ -19,6 +19,11 @@ interface Props {
 
 export const SettingsContextProvider = ({ fahrenheit, children }: Props) => {
   const [units, setUnits] = useState('F');
+  const contextProps = useMemo(() => ({
+    units,
+    fahrenheit: units === 'F',
+    setFahrenheit: (fahrenheit) => setUnits(fahrenheit ? 'F' : 'C'),
+  } satisfies SettingsContextProps), [units]);
 
   useEffect(() => {
     if (typeof fahrenheit === 'boolean') {
@@ -28,9 +33,5 @@ export const SettingsContextProvider = ({ fahrenheit, children }: Props) => {
     }
   }, [fahrenheit]);
 
-  return <SettingsContext.Provider value={{
-    units,
-    fahrenheit: units === 'F',
-    setFahrenheit: (fahrenheit) => setUnits(fahrenheit ? 'F' : 'C'),
-  }}>{children}</SettingsContext.Provider>;
+  return <SettingsContext.Provider value={contextProps}>{children}</SettingsContext.Provider>;
 };
