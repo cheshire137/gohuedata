@@ -3,6 +3,7 @@ import TemperatureReading from '../models/TemperatureReading';
 import type TemperatureReadingFilter from '../types/TemperatureReadingFilter';
 import useGetTemperatureReadings from '../hooks/use-get-temperature-readings';
 import { SettingsContext } from './SettingsContext';
+import { Flash } from '@primer/react';
 
 export type TemperatureReadingsContextProps = {
   temperatureReadings: TemperatureReading[];
@@ -50,13 +51,8 @@ export const TemperatureReadingsContextProvider = ({ filter, children }: Props) 
     }
   }, [filter?.fahrenheit, setFahrenheit]);
 
-  if (fetching) {
-    return <p>Loading temperature history...</p>;
-  }
-
-  if (error) {
-    return <p>Error loading temperature history: {error}</p>;
-  }
+  if (fetching) return <p>Loading temperature history...</p>;
+  if (error) return <Flash variant="danger">Error loading temperature history: {error}</Flash>;
 
   return <TemperatureReadingsContext.Provider value={contextProps}>{children}</TemperatureReadingsContext.Provider>;
 };
