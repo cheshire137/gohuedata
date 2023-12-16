@@ -1,4 +1,4 @@
-import React, { createContext, PropsWithChildren } from 'react';
+import React, { createContext, PropsWithChildren, useMemo } from 'react';
 import useGetGroups from '../hooks/use-get-groups';
 import Group from '../models/Group';
 import PageHeader from '../components/PageHeader';
@@ -16,6 +16,7 @@ export const GroupsContext = createContext<GroupsContextProps>({
 
 export const GroupsContextProvider = ({ children }: PropsWithChildren) => {
   const { groups, totalCount, fetching, error } = useGetGroups();
+  const contextProps = useMemo(() => ({ groups: groups!, totalCount: totalCount! }), [groups, totalCount]);
 
   if (fetching) {
     return <PageLayout>
@@ -35,8 +36,5 @@ export const GroupsContextProvider = ({ children }: PropsWithChildren) => {
     </PageLayout>;
   }
 
-  return <GroupsContext.Provider value={{
-    groups: groups!,
-    totalCount: totalCount!,
-  }}>{children}</GroupsContext.Provider>;
+  return <GroupsContext.Provider value={contextProps}>{children}</GroupsContext.Provider>;
 };
