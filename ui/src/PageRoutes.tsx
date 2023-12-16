@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { TemperatureSensorsContextProvider } from './contexts/TemperatureSensorsContext';
+import { GroupsContextProvider } from './contexts/GroupsContext';
 import { createHashRouter, RouterProvider, createRoutesFromElements, Route } from 'react-router-dom';
 import TemperatureSensorsPage from './components/TemperatureSensorsPage';
 import GroupsPage from './components/GroupsPage';
@@ -28,7 +29,9 @@ const PageRoutes = () => {
   ));
 
   return <TemperatureSensorsContextProvider fahrenheit={fahrenheit}>
-    <RouterProvider router={router} />
+    <GroupsContextProvider>
+      <RouterProvider router={router} />
+    </GroupsContextProvider>
   </TemperatureSensorsContextProvider>;
 }
 
