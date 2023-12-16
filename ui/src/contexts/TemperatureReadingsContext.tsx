@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useMemo } from 'react';
 import TemperatureReading from '../models/TemperatureReading';
 import type TemperatureReadingFilter from '../types/TemperatureReadingFilter';
 import useGetTemperatureReadings from '../hooks/use-get-temperature-readings';
@@ -13,7 +13,7 @@ export type TemperatureReadingsContextProps = {
   setPage(page: number): void;
 };
 
-export const TemperatureReadingsContext = React.createContext<TemperatureReadingsContextProps>({
+export const TemperatureReadingsContext = createContext<TemperatureReadingsContextProps>({
   temperatureReadings: [],
   page: 1,
   perPage: 10,
@@ -33,6 +33,14 @@ export const TemperatureReadingsContextProvider = ({ filter, children }: Props) 
   const { temperatureReadings, totalPages, perPage, totalCount, fetching, error } = useGetTemperatureReadings({
     page, fahrenheit, ...filter
   });
+  const contextProps = useMemo(() => ({
+    temperatureReadings: temperatureReadings!,
+    totalPages: totalPages!,
+    page,
+    perPage: perPage!,
+    totalCount: totalCount!,
+    setPage,
+  }), [temperatureReadings, totalPages, page, perPage, totalCount, setPage]);
 
   useEffect(() => setPage(filter?.page || 1), [filter?.page]);
 
@@ -50,12 +58,5 @@ export const TemperatureReadingsContextProvider = ({ filter, children }: Props) 
     return <p>Error loading temperature history: {error}</p>;
   }
 
-  return <TemperatureReadingsContext.Provider value={{
-    temperatureReadings: temperatureReadings!,
-    totalPages: totalPages!,
-    page,
-    perPage: perPage!,
-    totalCount: totalCount!,
-    setPage,
-  }}>{children}</TemperatureReadingsContext.Provider>;
+  return <TemperatureReadingsContext.Provider value={contextProps}>{children}</TemperatureReadingsContext.Provider>;
 };
