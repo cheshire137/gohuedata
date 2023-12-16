@@ -65,6 +65,7 @@ type HueBridge struct {
 
 type Group struct {
 	ID           string     `json:"id"`
+	UniqueID     string     `json:"uniqueID"`
 	Name         string     `json:"name"`
 	Type         string     `json:"type"`
 	TotalLights  int        `json:"totalLights"`
@@ -76,6 +77,7 @@ type Group struct {
 
 type GroupExtended struct {
 	ID           string           `json:"id"`
+	UniqueID     string           `json:"uniqueID"`
 	Name         string           `json:"name"`
 	Type         string           `json:"type"`
 	TotalLights  int              `json:"totalLights"`
