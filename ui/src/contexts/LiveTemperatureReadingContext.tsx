@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { createContext, PropsWithChildren, useMemo, useState, useEffect, useContext } from 'react';
 import TemperatureReading from '../models/TemperatureReading';
 import { TemperatureSensorsContext } from '../contexts/TemperatureSensorsContext';
 
@@ -6,18 +6,20 @@ export type LiveTemperatureReadingContextProps = {
   liveTemperatureReading: TemperatureReading | null;
 };
 
-export const LiveTemperatureReadingContext = React.createContext<LiveTemperatureReadingContextProps>({
+export const LiveTemperatureReadingContext = createContext<LiveTemperatureReadingContextProps>({
   liveTemperatureReading: null,
 });
 
-interface Props {
+interface Props extends PropsWithChildren {
   sensorID: string;
-  children: React.ReactNode;
 }
 
 export const LiveTemperatureReadingContextProvider = ({ sensorID, children }: Props) => {
   const { temperatureSensors: liveTempSensors } = useContext(TemperatureSensorsContext);
   const [liveReading, setLiveReading] = useState<null | TemperatureReading>(null);
+  const contextProps = useMemo(() => ({
+    liveTemperatureReading: liveReading,
+  } satisfies LiveTemperatureReadingContextProps), [liveReading]);
 
   useEffect(() => {
     const liveTempSensor = liveTempSensors.find(tempSensor => tempSensor.id === sensorID);
@@ -28,7 +30,7 @@ export const LiveTemperatureReadingContextProvider = ({ sensorID, children }: Pr
     }
   }, [liveTempSensors, sensorID]);
 
-  return <LiveTemperatureReadingContext.Provider value={{
-    liveTemperatureReading: liveReading,
-  }}>{children}</LiveTemperatureReadingContext.Provider>;
+  return <LiveTemperatureReadingContext.Provider value={contextProps}>
+    {children}
+  </LiveTemperatureReadingContext.Provider>;
 };
