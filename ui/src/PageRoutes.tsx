@@ -4,6 +4,7 @@ import { GroupsContextProvider } from './contexts/GroupsContext';
 import { createHashRouter, RouterProvider, createRoutesFromElements, Route } from 'react-router-dom';
 import TemperatureSensorsPage from './components/TemperatureSensorsPage';
 import GroupsPage from './components/GroupsPage';
+import GroupPage from './components/GroupPage';
 import TemperatureSensorPage from './components/TemperatureSensorPage';
 import AppLayout from './components/AppLayout';
 import ErrorPage from './components/ErrorPage';
@@ -25,6 +26,17 @@ const PageRoutes = () => {
         errorElement={<ErrorPage />}
       />
       <Route path="/groups" element={<GroupsPage />} errorElement={<ErrorPage />} />
+      <Route
+        path="/group/:id"
+        loader={async ({ params }) => {
+          console.log(params)
+          const groupID = params.id!;
+          const bridgeName = params.bridge!;
+          return await GoHueDataApi.getGroup(bridgeName, groupID);
+        }}
+        element={<GroupPage />}
+        errorElement={<ErrorPage />}
+      />
     </Route>
   ));
 
