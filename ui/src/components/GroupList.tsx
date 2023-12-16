@@ -10,7 +10,7 @@ const GroupList = () => {
   useEffect(() => setPageTitle(`Groups (${totalCount})`), [setPageTitle, totalCount]);
 
   return <ul>
-    {groups.map(group => <GroupListItem key={group.id} group={group} />)}
+    {groups.map(group => <GroupListItem key={group.uniqueID} group={group} />)}
   </ul>;
 };
 

@@ -3,6 +3,7 @@ import Light from './Light';
 
 class Group {
   id: string;
+  uniqueID: string;
   name: string;
   type: string;
   bridge: HueBridge;
@@ -13,6 +14,7 @@ class Group {
 
   constructor(data: any) {
     this.id = data.id;
+    this.uniqueID = data.uniqueID;
     this.name = data.name;
     this.bridge = new HueBridge(data.bridge);
     this.type = data.type;
