@@ -1,20 +1,19 @@
-import React from 'react';
+import React, { createContext, PropsWithChildren } from 'react';
 import TemperatureSensorExtended from '../models/TemperatureSensorExtended';
 import useGetTemperatureSensors from '../hooks/use-get-temperature-sensors';
 import PageHeader from '../components/PageHeader';
-import { PageLayout } from '@primer/react';
+import { Flash, PageLayout } from '@primer/react';
 
 export type TemperatureSensorsContextProps = {
   temperatureSensors: TemperatureSensorExtended[];
 };
 
-export const TemperatureSensorsContext = React.createContext<TemperatureSensorsContextProps>({
+export const TemperatureSensorsContext = createContext<TemperatureSensorsContextProps>({
   temperatureSensors: [],
 });
 
-interface Props {
+interface Props extends PropsWithChildren {
   fahrenheit?: boolean;
-  children: React.ReactNode;
 }
 
 export const TemperatureSensorsContextProvider = ({ fahrenheit, children }: Props) => {
@@ -33,7 +32,7 @@ export const TemperatureSensorsContextProvider = ({ fahrenheit, children }: Prop
     return <PageLayout>
       <PageHeader />
       <PageLayout.Content>
-        <p>Error loading temperature sensors: {error}</p>
+        <Flash variant="danger">Error loading temperature sensors: {error}</Flash>
       </PageLayout.Content>
     </PageLayout>;
   }
