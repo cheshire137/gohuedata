@@ -16,7 +16,8 @@ export const GroupsContext = createContext<GroupsContextProps>({
 
 export const GroupsContextProvider = ({ children }: PropsWithChildren) => {
   const { groups, totalCount, fetching, error } = useGetGroups();
-  const contextProps = useMemo(() => ({ groups: groups!, totalCount: totalCount! }), [groups, totalCount]);
+  const contextProps = useMemo(() => ({ groups: groups!, totalCount: totalCount! } satisfies GroupsContextProps),
+    [groups, totalCount]);
 
   if (fetching) {
     return <PageLayout>

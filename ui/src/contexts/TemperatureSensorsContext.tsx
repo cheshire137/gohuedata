@@ -18,7 +18,9 @@ interface Props extends PropsWithChildren {
 
 export const TemperatureSensorsContextProvider = ({ fahrenheit, children }: Props) => {
   const { temperatureSensors, fetching, error } = useGetTemperatureSensors(fahrenheit);
-  const contextProps = useMemo(() => ({ temperatureSensors: temperatureSensors! }), [temperatureSensors]);
+  const contextProps = useMemo(() => ({
+    temperatureSensors: temperatureSensors!
+  } satisfies TemperatureSensorsContextProps), [temperatureSensors]);
 
   if (fetching) {
     return <PageLayout>

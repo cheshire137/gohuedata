@@ -41,7 +41,8 @@ export const TemperatureReadingsContextProvider = ({ filter, children }: Props) 
     perPage: perPage!,
     totalCount: totalCount!,
     setPage,
-  }), [temperatureReadings, totalPages, page, perPage, totalCount, setPage]);
+  } satisfies TemperatureReadingsContextProps),
+    [temperatureReadings, totalPages, page, perPage, totalCount, setPage]);
 
   useEffect(() => setPage(filter?.page || 1), [filter?.page]);
 
