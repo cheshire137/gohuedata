@@ -170,7 +170,7 @@ npm install
 npm run dev
 ```
 
-This will launch the React app and open http://localhost:5173 in your browser. You can change the port used for the frontend via the `PORT` environment variable. If you do so, you'll want to pass the same port via the `-fp` option when launching the server.
+This will launch the React app and open http://localhost:4000 in your browser. You can change the port used for the frontend via the `PORT` environment variable. If you do so, you'll want to pass the same port via the `-fp` option when launching the server.
 
 #### Static
 
