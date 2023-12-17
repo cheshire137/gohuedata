@@ -9,7 +9,9 @@ import type GroupsResult from '../types/GroupsResult';
 
 class GoHueDataApi {
   static apiUrl() {
-    return `http://localhost:${process.env.REACT_APP_BACKEND_PORT}/api`;
+    const env = import.meta.env;
+    const port = env.VITE_BACKEND_PORT || 8080;
+    return `http://localhost:${port}/api`;
   }
 
   static async getTemperatureSensor(id: string, fahrenheit: boolean): Promise<TemperatureSensorResult> {
