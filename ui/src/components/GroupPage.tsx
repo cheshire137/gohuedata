@@ -3,7 +3,6 @@ import { Box, CounterLabel, Pagehead } from '@primer/react';
 import { PageContext } from '../contexts/PageContext';
 import { useLoaderData } from 'react-router-dom';
 import GroupExtended from '../models/GroupExtended';
-import BridgeDisplay from './BridgeDisplay';
 import LightList from './LightList';
 
 const GroupPage = () => {
@@ -17,7 +16,7 @@ const GroupPage = () => {
 
   return <div>
     <div>
-      Type: <Box fontSize={1} display="inline-block" color="fg.muted">{group.type}</Box> / Class: <Box fontSize={1} display="inline-block" color="fg.muted">{group.groupClass}</Box> / Bridge: <BridgeDisplay bridge={group.bridge} />
+      Type: <Box fontSize={1} display="inline-block" color="fg.muted">{group.type}</Box> / Class: <Box fontSize={1} display="inline-block" color="fg.muted">{group.groupClass}</Box> / Bridge: <Box fontSize={1} display="inline-block" color="fg.muted">{group.bridge.name}</Box>
     </div>
     <dl>
       <dt># lights</dt>
