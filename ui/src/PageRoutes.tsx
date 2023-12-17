@@ -28,10 +28,11 @@ const PageRoutes = () => {
       <Route path="/groups" element={<GroupsPage />} errorElement={<ErrorPage />} />
       <Route
         path="/group/:id"
-        loader={async ({ params }) => {
-          console.log(params)
+        loader={async ({ params, request}) => {
+          const url = new URL(request.url)
+          const bridgeName = url.searchParams.get('bridge');
+          if (!bridgeName) return null;
           const groupID = params.id!;
-          const bridgeName = params.bridge!;
           return await GoHueDataApi.getGroup(bridgeName, groupID);
         }}
         element={<GroupPage />}
