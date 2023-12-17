@@ -91,10 +91,9 @@ func (ds *DataStore) LoadDailyTemperatureReadings(filter *TemperatureReadingFilt
 		GROUP BY strftime('%Y-%m-%d', temperature_readings.last_updated), temperature_readings.units,
 			temperature_sensors.id, temperature_sensors.name, temperature_sensors.bridge_ip_address, hue_bridges.name
 		ORDER BY strftime('%Y-%m-%d', temperature_readings.last_updated) DESC, temperature_sensors.name ASC,
-			hue_bridges.name ASC;
+			hue_bridges.name ASC
 		LIMIT ? OFFSET ?`
 	values = append(values, limit, offset)
-	fmt.Println(queryStr)
 
 	rows, err := ds.db.Query(queryStr, values...)
 	if err != nil {
