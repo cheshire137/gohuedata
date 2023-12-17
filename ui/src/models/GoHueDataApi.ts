@@ -27,7 +27,7 @@ class GoHueDataApi {
     queryParams.append('bridge', bridgeName);
     queryParams.append('id', id);
     const data = await this.get(`/group?${queryParams.toString()}`);
-    return new GroupExtended(data.group);
+    return new GroupExtended(data);
   }
 
   static async getLiveTemperatureSensors(fahrenheit?: boolean) {
