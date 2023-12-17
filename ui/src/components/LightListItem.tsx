@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box } from '@primer/react';
+import { LightBulbIcon } from '@primer/octicons-react';
+import { Box, Octicon } from '@primer/react';
 import LightExtended from '../models/LightExtended';
 
 interface Props {
@@ -10,6 +11,8 @@ const LightListItem = ({ light }: Props) => {
   console.log('light', light)
   return <Box as="li" mb={2}>
     {light.name}
+    <Octicon icon={LightBulbIcon} sx={{ ml: 2 }} />
+    <Box sx={{ display: 'inline-block', ml: 2, fontSize: 1, color: 'fg.muted' }}>{light.latestState.timestamp}</Box>
   </Box>;
 };
 
