@@ -13,7 +13,7 @@ interface Results {
   error?: string;
 }
 
-function useGetTemperatureReadings(daily?: boolean, filter?: TemperatureReadingFilter): Results {
+function useGetTemperatureReadings(filter?: TemperatureReadingFilter): Results {
   const [results, setResults] = useState<Results>({ fetching: true });
   const { page, perPage, sensorID, bridge, fahrenheit, updatedBefore, updatedSince } = filter || {};
 
@@ -29,12 +29,7 @@ function useGetTemperatureReadings(daily?: boolean, filter?: TemperatureReadingF
           updatedBefore,
           updatedSince,
         } satisfies TemperatureReadingFilter;
-        let result;
-        if (daily) {
-          result = await GoHueDataApi.getDailyTemperatureReadings(apiFilter);
-        } else {
-          result = await GoHueDataApi.getTemperatureReadings(apiFilter);
-        }
+        const result = await GoHueDataApi.getTemperatureReadings(apiFilter);
         setResults({ ...result, fetching: false })
       } catch (err: any) {
         console.error('failed to fetch temperature readings', err);
