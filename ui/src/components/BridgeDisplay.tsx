@@ -6,7 +6,7 @@ interface Props {
   bridge: HueBridge;
 }
 
-const BridgeDisplay = ({ bridge }: Props) => <Box fontSize={1} color="fg.muted">
+const BridgeDisplay = ({ bridge }: Props) => <Box fontSize={1} display="inline-block" color="fg.muted">
   {bridge.name}
 </Box>;
 
