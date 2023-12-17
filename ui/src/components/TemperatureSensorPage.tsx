@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { Box } from '@primer/react';
 import type TemperatureSensorResult from '../types/TemperatureSensorResult';
 import { useLoaderData } from 'react-router-dom';
@@ -16,6 +16,7 @@ const TemperatureSensorPage = () => {
   const { units } = useContext(SettingsContext);
   const data = useLoaderData() as TemperatureSensorResult;
   const { temperatureSensor, minTemperature, maxTemperature, avgTemperature } = data;
+  const filter = useMemo(() => ({ sensorID: temperatureSensor.id, perPage: 30 }), [temperatureSensor.id])
 
   useEffect(() => setPageTitle(`${temperatureSensor.bridge.name} / ${temperatureSensor.name}`),
     [temperatureSensor.name, temperatureSensor.bridge.name, setPageTitle]);
@@ -37,7 +38,7 @@ const TemperatureSensorPage = () => {
           units={units}
         >Max</TemperatureBadge>}
       </Box>
-      <TemperatureReadingsContextProvider filter={{ sensorID: temperatureSensor.id, perPage: 30 }}>
+      <TemperatureReadingsContextProvider filter={filter}>
         <TemperatureReadingGraph />
         <TemperatureReadingPagination />
       </TemperatureReadingsContextProvider>
