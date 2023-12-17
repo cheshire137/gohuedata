@@ -40,6 +40,7 @@ func main() {
 
 	mux.Handle("/", http.FileServer(http.Dir("./ui/build/")))
 	mux.Handle("/api/temperature-readings", http.HandlerFunc(env.GetTemperatureReadingsHandler))
+	mux.Handle("/api/daily-temperature-readings", http.HandlerFunc(env.GetDailyTemperatureReadingsHandler))
 	mux.Handle("/api/temperature-sensors", http.HandlerFunc(env.GetTemperatureSensorsHandler))
 	mux.Handle("/api/temperature-sensor", http.HandlerFunc(env.GetTemperatureSensorHandler))
 	mux.Handle("/api/group", http.HandlerFunc(env.GetGroupHandler))

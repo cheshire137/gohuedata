@@ -7,6 +7,13 @@ type TemperatureReadingsResponse struct {
 	TotalCount          int                   `json:"totalCount"`
 }
 
+type TemperatureReadingSummariesResponse struct {
+	TemperatureReadingSummaries []*TemperatureReadingSummary `json:"temperatureReadingSummaries"`
+	Page                        int                          `json:"page"`
+	TotalPages                  int                          `json:"totalPages"`
+	TotalCount                  int                          `json:"totalCount"`
+}
+
 type TemperatureSensorsResponse struct {
 	TemperatureSensors []*TemperatureSensor `json:"temperatureSensors"`
 	Page               int                  `json:"page"`
@@ -40,6 +47,16 @@ type TemperatureReading struct {
 	TemperatureSensor   *TemperatureSensor `json:"temperatureSensor"`
 	Timestamp           string             `json:"timestamp"`
 	Temperature         float32            `json:"temperature"`
+	Units               string             `json:"units"`
+	temperatureSensorID string
+}
+
+type TemperatureReadingSummary struct {
+	TemperatureSensor   *TemperatureSensor `json:"temperatureSensor"`
+	Timestamp           string             `json:"timestamp"`
+	MinTemperature      float32            `json:"minTemperature"`
+	AvgTemperature      float32            `json:"avgTemperature"`
+	MaxTemperature      float32            `json:"maxTemperature"`
 	Units               string             `json:"units"`
 	temperatureSensorID string
 }
