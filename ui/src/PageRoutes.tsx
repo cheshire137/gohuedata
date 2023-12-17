@@ -33,7 +33,7 @@ const PageRoutes = () => {
           const bridgeName = url.searchParams.get('bridge');
           if (!bridgeName) return null;
           const groupID = params.id!;
-          return await GoHueDataApi.getGroup(bridgeName, groupID);
+          return await GoHueDataApi.getGroup(groupID, bridgeName);
         }}
         element={<GroupPage />}
         errorElement={<ErrorPage />}
