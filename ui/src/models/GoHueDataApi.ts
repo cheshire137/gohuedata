@@ -68,6 +68,12 @@ class GoHueDataApi {
     if (typeof filter?.fahrenheit === 'boolean') {
       params.append('fahrenheit', filter.fahrenheit ? '1' : '0');
     }
+    if (typeof filter?.updatedSince === 'string' && filter.updatedSince.length > 0) {
+      params.append('updated_since', filter.updatedSince);
+    }
+    if (typeof filter?.updatedBefore === 'string' && filter.updatedBefore.length > 0) {
+      params.append('updated_before', filter.updatedBefore);
+    }
     const queryString = params.toString();
     let path = '/temperature-readings';
     if (queryString.length > 0) {

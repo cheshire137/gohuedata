@@ -4,6 +4,8 @@ type TemperatureReadingFilter = {
   sensorID?: string;
   bridge?: string;
   fahrenheit?: boolean;
+  updatedSince?: string;
+  updatedBefore?: string;
 }
 
 export default TemperatureReadingFilter;
