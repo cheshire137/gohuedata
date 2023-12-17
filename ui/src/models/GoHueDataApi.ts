@@ -1,9 +1,11 @@
 import TemperatureReading from './TemperatureReading';
+import TemperatureReadingSummary from './TemperatureReadingSummary';
 import TemperatureSensorExtended from './TemperatureSensorExtended';
 import Group from './Group';
 import GroupExtended from './GroupExtended';
 import type TemperatureReadingFilter from '../types/TemperatureReadingFilter';
 import type TemperatureReadingsResult from '../types/TemperatureReadingsResult';
+import type TemperatureReadingSummariesResult from '../types/TemperatureReadingSummariesResult';
 import type TemperatureSensorResult from '../types/TemperatureSensorResult';
 import type GroupsResult from '../types/GroupsResult';
 
@@ -73,6 +75,23 @@ class GoHueDataApi {
     if (typeof filter?.updatedBefore === 'string' && filter.updatedBefore.length > 0) {
       params.append('updated_before', filter.updatedBefore);
     }
+  }
+
+  static async getDailyTemperatureReadings(filter?: TemperatureReadingFilter): Promise<TemperatureReadingSummariesResult> {
+    const params = new URLSearchParams();
+    this.applyFilter(params, filter);
+    const queryString = params.toString();
+    let path = '/daily-temperature-readings';
+    if (queryString.length > 0) {
+      path += `?${queryString}`;
+    }
+    const result = await this.get(path);
+    console.log(result)
+    const { temperatureReadingSummaries, ...rest } = result;
+    const tempReadingSummaries: TemperatureReadingSummary[] = temperatureReadingSummaries.map(
+      (data: any) => new TemperatureReadingSummary(data)
+    );
+    return { temperatureReadingSummaries: tempReadingSummaries, ...rest } satisfies TemperatureReadingSummariesResult;
   }
 
   static async getTemperatureReadings(filter?: TemperatureReadingFilter): Promise<TemperatureReadingsResult> {

@@ -13,14 +13,14 @@ interface Results {
   error?: string;
 }
 
-function useGetTemperatureReadings(filter?: TemperatureReadingFilter): Results {
+function useGetTemperatureReadings(daily?: boolean, filter?: TemperatureReadingFilter): Results {
   const [results, setResults] = useState<Results>({ fetching: true });
   const { page, perPage, sensorID, bridge, fahrenheit, updatedBefore, updatedSince } = filter || {};
 
   useEffect(() => {
     async function fetchTemperatureReadings() {
       try {
-        const result = await GoHueDataApi.getTemperatureReadings({
+        const apiFilter = {
           fahrenheit,
           page,
           perPage,
@@ -28,7 +28,13 @@ function useGetTemperatureReadings(filter?: TemperatureReadingFilter): Results {
           bridge,
           updatedBefore,
           updatedSince,
-        });
+        } satisfies TemperatureReadingFilter;
+        let result;
+        if (daily) {
+          result = await GoHueDataApi.getDailyTemperatureReadings(apiFilter);
+        } else {
+          result = await GoHueDataApi.getTemperatureReadings(apiFilter);
+        }
         setResults({ ...result, fetching: false })
       } catch (err: any) {
         console.error('failed to fetch temperature readings', err);
