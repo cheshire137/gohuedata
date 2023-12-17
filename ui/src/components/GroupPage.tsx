@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Box, Heading } from '@primer/react';
+import { Box, CounterLabel, Pagehead } from '@primer/react';
 import { PageContext } from '../contexts/PageContext';
 import { useLoaderData } from 'react-router-dom';
 import GroupExtended from '../models/GroupExtended';
@@ -25,9 +25,15 @@ const GroupPage = () => {
       <dt># sensors</dt>
       <dd>{group.totalSensors}</dd>
     </dl>
-    <Heading as="h2">On</Heading>
+    <Pagehead as="h2" sx={{ fontSize: 3, display: 'flex', alignItems: 'baseline' }}>
+      On
+      <CounterLabel sx={{ ml: 2, fontSize: 2 }}>{onLights.length}</CounterLabel>
+    </Pagehead>
     <LightList lights={onLights} />
-    <Heading as="h2">Off</Heading>
+    <Pagehead as="h2" sx={{ fontSize: 3, display: 'flex', alignItems: 'baseline' }}>
+      Off
+      <CounterLabel sx={{ ml: 2, fontSize: 2 }}>{offLights.length}</CounterLabel>
+    </Pagehead>
     <LightList lights={offLights} />
   </div>;
 };
