@@ -10,13 +10,17 @@ import TemperatureReadingPagination from './TemperatureReadingPagination';
 import TemperatureReadingGraph from './TemperatureReadingGraph';
 import LiveTemperatureReadingBadge from './LiveTemperatureReadingBadge';
 import TemperatureBadge from './TemperatureBadge';
+import type TemperatureReadingFilter from '../types/TemperatureReadingFilter';
 
 const TemperatureSensorPage = () => {
   const { setPageTitle } = useContext(PageContext);
   const { units } = useContext(SettingsContext);
   const data = useLoaderData() as TemperatureSensorResult;
   const { temperatureSensor, minTemperature, maxTemperature, avgTemperature } = data;
-  const filter = useMemo(() => ({ sensorID: temperatureSensor.id, perPage: 30 }), [temperatureSensor.id])
+  const filter = useMemo(() => ({
+    sensorID: temperatureSensor.id,
+    updatedSince: '2023-12-15',
+  } satisfies TemperatureReadingFilter), [temperatureSensor.id])
 
   useEffect(() => setPageTitle(`${temperatureSensor.bridge.name} / ${temperatureSensor.name}`),
     [temperatureSensor.name, temperatureSensor.bridge.name, setPageTitle]);
