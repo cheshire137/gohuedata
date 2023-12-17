@@ -51,8 +51,7 @@ class GoHueDataApi {
     return { groups, ...rest };
   }
 
-  static async getTemperatureReadings(filter?: TemperatureReadingFilter): Promise<TemperatureReadingsResult> {
-    const params = new URLSearchParams();
+  static applyFilter(params: URLSearchParams, filter?: TemperatureReadingFilter) {
     if (typeof filter?.page === 'number') {
       params.append('page', filter.page.toString());
     }
@@ -74,6 +73,11 @@ class GoHueDataApi {
     if (typeof filter?.updatedBefore === 'string' && filter.updatedBefore.length > 0) {
       params.append('updated_before', filter.updatedBefore);
     }
+  }
+
+  static async getTemperatureReadings(filter?: TemperatureReadingFilter): Promise<TemperatureReadingsResult> {
+    const params = new URLSearchParams();
+    this.applyFilter(params, filter);
     const queryString = params.toString();
     let path = '/temperature-readings';
     if (queryString.length > 0) {
